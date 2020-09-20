@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 trait UuidTrait
 {
-    public function generateUuid($save = false, $prefix = "") {
+    public function setUuid($save = false, $prefix = "") {
         // Si le préfixe est vide ...
         if ($prefix == "") {
             // ... on utilise l'id unique de PHP et l'id du modèle pour créer le code

@@ -3,6 +3,7 @@
 
 namespace App\Traits\Base;
 
+use App\Status;
 
 trait StatusTrait
 {
