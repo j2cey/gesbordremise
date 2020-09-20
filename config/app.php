@@ -41,6 +41,9 @@ return [
 
     'debug' => (bool) env('APP_DEBUG', false),
 
+    'bordereauremises_scans' => env('BORDEREAUREMISES_SCANS', 'uploads/bordereauremises/scans'),
+    'RAW_FOLDER' => env('RAW_FOLDER', '/var/www/gesbordremise/public'),
+
     /*
     |--------------------------------------------------------------------------
     | Application URL
