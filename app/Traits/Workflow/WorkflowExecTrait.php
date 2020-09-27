@@ -54,6 +54,8 @@ trait WorkflowExecTrait
                 if ($actions_count === 0) {
                     // la 1ere action
                     $new_action->current = 1;
+                    $new_action->save();
+                    $new_action->notifierActeur();
                 } else {
                     // la nème action
                     $prev_exec->next_exec_id = $new_action->id;
