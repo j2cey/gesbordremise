@@ -90,6 +90,7 @@ class WorkflowExecActionController extends Controller
                     'current' => 1,
                     'workflow_status_id' => WorkflowStatus::coded("2")->first()->id,
                 ]);
+                $nextexec->notifierActeur();
             }
             $new_state['workflow_status_id'] = WorkflowStatus::coded("4")->first()->id;
         } else {
@@ -100,6 +101,7 @@ class WorkflowExecActionController extends Controller
                 $prevexec->update([
                     'current' => 1
                 ]);
+                $prevexec->notifierActeur();
             }
             $new_state['workflow_status_id'] = WorkflowStatus::coded("5")->first()->id;
         }

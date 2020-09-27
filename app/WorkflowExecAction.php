@@ -2,7 +2,10 @@
 
 namespace App;
 
+use App\Mail\WorkflowActionNext;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use PHPUnit\Util\Json;
 
 /**
@@ -58,5 +61,19 @@ class WorkflowExecAction extends BaseModel
 
     public function nextexec() {
         return $this->belongsTo('App\WorkflowExecAction', 'next_exec_id');
+    }
+
+    public function notifierActeur() {
+        $actors_ids = DB::table('model_has_roles')->where('model_type', 'App\User')
+            ->pluck('model_id')->toArray();
+        $actors = User::whereIn('id', $actors_ids)->get();
+        if ($actors) {
+            foreach ($actors as $actor) {
+                if ($actor->email) {
+                    Mail::to($actor->email)
+                        ->send(new WorkflowActionNext($this->with['action']));
+                }
+            }
+        }
     }
 }
