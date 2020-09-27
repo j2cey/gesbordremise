@@ -17,13 +17,16 @@ class WorkflowStatusSeeder extends Seeder
                 'name' => "Nouveau", 'code' => "1", 'is_default' => 1
             ],
             [
-                'name' => "En Cours de Traitement", 'code' => "2", 'is_default' => 0
+                'name' => "Attente Traitement", 'code' => "2", 'is_default' => 0
             ],
             [
-                'name' => "Traitement Terminé", 'code' => "3", 'is_default' => 0
+                'name' => "En Cours de Traitement", 'code' => "3", 'is_default' => 0
             ],
             [
-                'name' => "Rejété", 'code' => "4", 'is_default' => 0
+                'name' => "Traitement Terminé", 'code' => "4", 'is_default' => 0
+            ],
+            [
+                'name' => "Rejété", 'code' => "5", 'is_default' => 0
             ]
         ];
         foreach ($statuses as $status) {

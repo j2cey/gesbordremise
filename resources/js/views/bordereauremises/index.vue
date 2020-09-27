@@ -44,57 +44,55 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <div id="campaignlist">
+                        <div id="bordereauremiselist">
 
-                            <div class="card card-widget" v-for="(campaign, index) in campaigns" v-if="campaigns">
-                                <div class="card-header">
-                                    <div class="user-block">
-                                        <span class="username text-primary">{{ campaign.titre }}</span>
-                                        <span class="description">{{ campaign.type.titre }}</span>
+                            <div class="card card-widget" >
+
+                                <div class="row">
+                                    <div class="col-12 table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Date Remise</th>
+                                                <th>Numéro Transaction</th>
+                                                <th>Localisation</th>
+                                                <th>Changement Dernier Tarif</th>
+                                                <th>Classe Paiement</th>
+                                                <th>Mode Paiement</th>
+                                                <th>Montant Total</th>
+                                                <!--<th>Scan Bordereau</th>
+                                                <th>Depot Agence</th>
+                                                <th>Date Effectif</th>
+                                                <th>Date Valeur</th>-->
+                                                <th>Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr v-for="(bordereauremise, index) in bordereauremises" v-if="bordereauremises">
+                                                <td>{{bordereauremise.id}}</td>
+                                                <td>{{bordereauremise.date_remise}}</td>
+                                                <td>{{bordereauremise.numero_transaction}}</td>
+                                                <td>{{bordereauremise.localisation}}</td>
+                                                <td>{{bordereauremise.changement_dernier_tarif}}</td>
+                                                <td>{{bordereauremise.classe_paiement}}</td>
+                                                <td>{{bordereauremise.mode_paiement}}</td>
+                                                <td>{{bordereauremise.montant_total}}</td>
+                                                <!--<td>{{bordereauremise.scan_bordereau}}</td>
+                                                <td>{{bordereauremise.date_depot_agence}}</td>
+                                                <td>{{bordereauremise.date_effectif}}</td>
+                                                <td>{{bordereauremise.date_valeur}}</td>-->
+                                                <td>
+                                                    <span v-if="bordereauremise.execaction[0]" class="badge badge-default"><a :href="'/workflowexecactions/' + bordereauremise.execaction[0].uuid">{{bordereauremise.execaction[0].action.titre}}</a></span>
+                                                    <span v-else class="badge badge-default">Aucune Action</span>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
-                                    <!-- /.user-block -->
-                                    <div class="card-tools">
-                                        <button type="button" class="btn btn-tool" data-toggle="tooltip" @click="editCampaign(campaign)">
-                                            <i class="fa fa-pencil-alt"></i></button>
-                                        <button type="button" class="btn btn-tool" data-toggle="collapse" data-parent="#campaignlist" :href="'#collapse-campaigns-'+index"><i class="fas fa-minus"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-tool" @click="deleteCampaign(campaign.uuid, index)"><i class="fas fa-times"></i>
-                                        </button>
-                                    </div>
-                                    <!-- /.card-tools -->
+                                    <!-- /.col -->
                                 </div>
-                                <!-- /.card-header -->
-                                <div :id="'collapse-campaigns-'+index" class="panel-collapse collapse in">
-                                    <div class="card-body" >
 
-
-                                        <div class="row">
-                                            <div class="col-md-6 col-sm-6 col-12">
-                                                <div class="info-box">
-
-                                                    <div class="info-box-content">
-                                                        <dt>Expéditeur</dt>
-                                                        <dd>{{ campaign.expediteur }}</dd>
-                                                        <dt>Message</dt>
-                                                        <dd>{{ campaign.message }}</dd>
-                                                        <dd class="col-sm-8 offset-sm-4"></dd>
-                                                        <dt>Description</dt>
-                                                        <dd>{{ campaign.description }}</dd>
-                                                    </div>
-                                                    <!-- /.info-box-content -->
-                                                </div>
-                                                <!-- /.info-box -->
-                                            </div>
-                                            <!-- /.col -->
-                                            <div class="col-md-3 col-sm-6 col-12">
-                                                <WorkflowResult></WorkflowResult>
-                                            </div>
-                                            <!-- /.col -->
-
-                                        </div>
-
-                                    </div>
-                                </div>
                                 <!-- /.card-body -->
                             </div>
 
@@ -116,73 +114,22 @@
 </template>
 
 <script>
-    import WorkflowResult from '../workflows/partials/wf_result'
     export default {
         name: "index",
         mounted() {
-            this.$on('new_campaign_created', (campaign) => {
-                window.noty({
-                    message: 'Campagne créée avec succès',
-                    type: 'success'
-                })
-                // insert la nouvelle campaign dans le tableau des campaigns
-                this.campaigns.push(campaign)
-            })
-
-            this.$on('campaign_updated', (campaign) => {
-                // on récupère l'index de la campaign modifiée
-                let campaignIndex = this.campaigns.findIndex(c => {
-                    return campaign.id == c.id
-                })
-
-                this.campaigns.splice(campaignIndex, 1, campaign)
-                window.noty({
-                    message: 'Campagne modifiée avec succès',
-                    type: 'success'
-                })
-
-            })
         },
         components: {
-            WorkflowResult
         },
         data() {
             return {
-                campaigntypes: [],
-                campaigns: []
+                bordereauremises: []
             }
         },
         created() {
-            /*axios.get('/smscampaigntypes')
-                .then(({data}) => this.campaigntypes = data);
-
-            axios.get('/smscampaigns')
-                .then(({data}) => this.campaigns = data);*/
+            axios.get('/bordereauremises')
+                .then(({data}) => this.bordereauremises = data);
         },
         methods: {
-            createNewCampaign() {
-                this.$emit('create_new_campaign')
-            },
-            editCampaign(campaign) {
-                this.$emit('edit_campaign', { campaign })
-            },
-            deleteCampaign(id, key) {
-                if(confirm('Voulez-vous vraiment supprimer ?')) {
-                    axios.delete(`/smscampaigns/${id}`)
-                        .then(resp => {
-                            this.campaigns.splice(key, 1)
-                            window.noty({
-                                message: 'Campagne supprimée avec succès',
-                                type: 'success'
-                            })
-                        }).catch(error => {
-                        window.handleErrors(error)
-                    })
-                }
-            },
-            getSendRate(result) {
-                return result ? result.send_rate : 0
-            }
         }
     }
 </script>

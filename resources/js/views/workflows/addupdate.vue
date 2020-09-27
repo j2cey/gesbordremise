@@ -14,16 +14,36 @@
                     <form class="form-horizontal" @submit.prevent @keydown="workflowForm.errors.clear()">
                         <div class="card-body">
                             <div class="form-group row">
-                                <label for="titre" class="col-sm-2 col-form-label">Titre</label>
+                                <label for="workflow_titre" class="col-sm-2 col-form-label">Titre</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="titre" name="titre" autocomplete="titre" autofocus placeholder="Titre" v-model="workflowForm.titre">
+                                    <input type="text" class="form-control" id="workflow_titre" name="titre" autocomplete="titre" autofocus placeholder="Titre" v-model="workflowForm.titre">
                                     <span class="invalid-feedback d-block" role="alert" v-if="workflowForm.errors.has('titre')" v-text="workflowForm.errors.get('titre')"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="description" class="col-sm-2 col-form-label">Description</label>
+                                <label for="m_select_workflow_object" class="col-sm-2 col-form-label">Objet</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="description" name="description" required autocomplete="description" autofocus placeholder="Description" v-model="workflowForm.description">
+                                    <multiselect
+                                        id="m_select_workflow_object"
+                                        v-model="workflowForm.object"
+                                        selected.sync="workflowForm.object"
+                                        value=""
+                                        :options="objects"
+                                        :searchable="true"
+                                        :multiple="false"
+                                        label="model_title"
+                                        track-by="id"
+                                        key="id"
+                                        placeholder="Objet"
+                                    >
+                                    </multiselect>
+                                    <span class="invalid-feedback d-block" role="alert" v-if="workflowForm.errors.has('object')" v-text="workflowForm.errors.get('object')"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="workflow_description" class="col-sm-2 col-form-label">Description</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="workflow_description" name="description" required autocomplete="description" autofocus placeholder="Description" v-model="workflowForm.description">
                                     <span class="invalid-feedback d-block" role="alert" v-if="workflowForm.errors.has('description')" v-text="workflowForm.errors.get('description')"></span>
                                 </div>
                             </div>
@@ -46,18 +66,20 @@
 </template>
 
 <script>
+    import Multiselect from 'vue-multiselect'
 
     class Workflow {
         constructor(workflow) {
             this.titre = workflow.titre || ''
+            this.object = workflow.object || ''
             this.description = workflow.description || ''
         }
     }
     export default {
-        name: "addupdate",
+        name: "addupdateWorkflow",
         props: {
-
         },
+        components: { Multiselect },
         mounted() {
             this.$parent.$on('create_new_workflow', () => {
 
@@ -78,7 +100,8 @@
             })
         },
         created() {
-
+            axios.get('/workflowobjects')
+                .then(({data}) => this.objects = data);
         },
         data() {
             return {
@@ -86,7 +109,8 @@
                 workflowForm: new Form(new Workflow({})),
                 workflowId: null,
                 editing: false,
-                loading: false
+                loading: false,
+                objects: []
             }
         },
         methods: {
@@ -94,7 +118,7 @@
                 this.loading = true
 
                 this.workflowForm
-                    .post('/smsworkflows',"")
+                    .post('/workflows')
                     .then(newworkflow => {
                         this.loading = false
                         this.$parent.$emit('new_workflow_created', newworkflow)
@@ -107,7 +131,7 @@
                 this.loading = true
 
                 this.workflowForm
-                    .put(`/smsworkflows/${this.workflowId}`,"")
+                    .put(`/workflows/${this.workflowId}`,"")
                     .then(updworkflow => {
                         this.loading = false
                         this.$parent.$emit('workflow_updated', updworkflow)
@@ -119,7 +143,7 @@
         },
         computed: {
             isValidCreateForm() {
-                return this.workflowForm.titre && this.workflowForm.type && this.workflowForm.expediteur && !this.loading
+                return !this.loading
             }
         }
     }

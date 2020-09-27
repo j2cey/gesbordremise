@@ -30,6 +30,7 @@ class CreateWorkflowObjectFieldsTable extends Migration
             $table->boolean('valuetype_integer')->default(false)->comment('determine si la valeur du champs est de type INTEGER');
             $table->boolean('valuetype_boolean')->default(false)->comment('determine si la valeur du champs est de type BOOLEAN');
             $table->boolean('valuetype_datetime')->default(false)->comment('determine si la valeur du champs est de type DATETIME');
+            $table->boolean('valuetype_image')->default(false)->comment('determine si la valeur du champs est de type IMAGE');
 
             $table->foreignId('workflow_object_id')->nullable()
                 ->comment('référence de l objet')

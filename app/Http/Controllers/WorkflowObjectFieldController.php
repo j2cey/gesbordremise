@@ -3,24 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\WorkflowObjectField;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class WorkflowObjectFieldController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return WorkflowObjectField[]|Collection
      */
     public function index()
     {
-        //
+        $workflowobjectfields = WorkflowObjectField::all();
+        $workflowobjectfields->load(['object']);
+        return $workflowobjectfields;
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -31,7 +35,7 @@ class WorkflowObjectFieldController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -41,10 +45,10 @@ class WorkflowObjectFieldController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\WorkflowObjectField  $workflowObjectField
-     * @return \Illuminate\Http\Response
+     * @param  \App\WorkflowObjectField  $workflowobjectfield
+     * @return Response
      */
-    public function show(WorkflowObjectField $workflowObjectField)
+    public function show(WorkflowObjectField $workflowobjectfield)
     {
         //
     }
@@ -52,10 +56,10 @@ class WorkflowObjectFieldController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\WorkflowObjectField  $workflowObjectField
-     * @return \Illuminate\Http\Response
+     * @param  \App\WorkflowObjectField  $workflowobjectfield
+     * @return Response
      */
-    public function edit(WorkflowObjectField $workflowObjectField)
+    public function edit(WorkflowObjectField $workflowobjectfield)
     {
         //
     }
@@ -64,10 +68,10 @@ class WorkflowObjectFieldController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\WorkflowObjectField  $workflowObjectField
-     * @return \Illuminate\Http\Response
+     * @param  \App\WorkflowObjectField  $workflowobjectfield
+     * @return Response
      */
-    public function update(Request $request, WorkflowObjectField $workflowObjectField)
+    public function update(Request $request, WorkflowObjectField $workflowobjectfield)
     {
         //
     }
@@ -75,10 +79,10 @@ class WorkflowObjectFieldController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\WorkflowObjectField  $workflowObjectField
-     * @return \Illuminate\Http\Response
+     * @param  \App\WorkflowObjectField  $workflowobjectfield
+     * @return Response
      */
-    public function destroy(WorkflowObjectField $workflowObjectField)
+    public function destroy(WorkflowObjectField $workflowobjectfield)
     {
         //
     }

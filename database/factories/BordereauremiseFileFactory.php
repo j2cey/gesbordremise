@@ -2,10 +2,10 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\WorkflowExecObject;
+use App\BordereauremiseFile;
 use Faker\Generator as Faker;
 
-$factory->define(WorkflowExecObject::class, function (Faker $faker) {
+$factory->define(BordereauremiseFile::class, function (Faker $faker) {
     return [
         //
     ];

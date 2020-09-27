@@ -25,6 +25,10 @@ class CreateWorkflowsTable extends Migration
 
             $table->string('titre')->comment('titre du workflow');
             $table->string('description')->nullable()->comment('description du workflow');
+
+            $table->foreignId('user_id')->nullable()
+                ->comment('référence de l utilisateur')
+                ->constrained()->onDelete('set null');
         });
         $this->setTableComment($this->table_name,$this->table_comment);
     }
@@ -38,6 +42,7 @@ class CreateWorkflowsTable extends Migration
     {
         Schema::table($this->table_name, function (Blueprint $table) {
             $table->dropBaseForeigns();
+            $table->dropForeign(['user_id']);
         });
         Schema::dropIfExists($this->table_name);
     }

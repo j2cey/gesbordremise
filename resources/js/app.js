@@ -14,6 +14,9 @@ import VueRouter from "vue-router";
 window.Vue = Vue;
 Vue.use(VueRouter);
 
+// draggable
+import rawDisplayer from "./utilities/infra/raw-displayer.vue";
+
 // Windows Notify
 window.events = new Vue();
 
@@ -40,6 +43,17 @@ window.Form = Form;
 
 import router from './routes';
 
+import moment from 'moment'
+
+Vue.filter('formatDate', function(value) {
+    if (value) {
+        return moment(String(value)).format('DD/MM/YYYY hh:mm')
+    }
+})
+
+import VueCtkDateTimePicker from 'vue-ctk-date-time-picker';
+import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -52,6 +66,9 @@ import router from './routes';
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('VueCtkDateTimePicker', VueCtkDateTimePicker);
+Vue.component('workflow-execaction', require('./views/workflowexecactions/show').default);
+Vue.component("rawDisplayer", rawDisplayer);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

@@ -9,6 +9,8 @@ class BaseModel extends Model
 {
     use BaseTrait;
 
+    public function getRouteKeyName() { return 'uuid'; }
+
     #region Eloquent Relationships
 
     public function status() {

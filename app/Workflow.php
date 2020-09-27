@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\Workflow\WorkflowExecTrait;
 use Illuminate\Support\Carbon;
 
 /**
@@ -17,17 +18,46 @@ use Illuminate\Support\Carbon;
  *
  * @property string $titre
  *
+ * @property integer|null $user_id
+ *
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
 class Workflow extends BaseModel
 {
+    use WorkflowExecTrait;
+
     protected $guarded = [];
 
     #region Eloquent Relationships
 
     public function steps() {
-        return $this->hasMany('App\WorkflowStep');
+        return $this->hasMany('App\WorkflowStep')->orderBy('posi');
+    }
+
+    public function user() {
+        return $this->belongsTo('App\User');
+    }
+
+    #endregion
+
+    #region Validation Rules
+
+    public static function defaultRules() {
+        return [
+            'titre' => 'required',
+            'object' => 'required',
+        ];
+    }
+    public static function createRules() {
+        return array_merge(self::defaultRules(), [
+
+        ]);
+    }
+    public static function updateRules($model) {
+        return array_merge(self::defaultRules(), [
+
+        ]);
     }
 
     #endregion

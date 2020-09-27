@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\WorkflowActionType;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class WorkflowActionTypeController extends Controller
@@ -10,11 +11,11 @@ class WorkflowActionTypeController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return WorkflowActionType[]|Collection
      */
     public function index()
     {
-        //
+        return WorkflowActionType::all();
     }
 
     /**
@@ -41,10 +42,10 @@ class WorkflowActionTypeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\WorkflowActionType  $workflowActionType
+     * @param  \App\WorkflowActionType  $workflowactiontype
      * @return \Illuminate\Http\Response
      */
-    public function show(WorkflowActionType $workflowActionType)
+    public function show(WorkflowActionType $workflowactiontype)
     {
         //
     }
@@ -52,10 +53,10 @@ class WorkflowActionTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\WorkflowActionType  $workflowActionType
+     * @param  \App\WorkflowActionType  $workflowactiontype
      * @return \Illuminate\Http\Response
      */
-    public function edit(WorkflowActionType $workflowActionType)
+    public function edit(WorkflowActionType $workflowactiontype)
     {
         //
     }
@@ -64,10 +65,10 @@ class WorkflowActionTypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\WorkflowActionType  $workflowActionType
+     * @param  \App\WorkflowActionType  $workflowactiontype
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, WorkflowActionType $workflowActionType)
+    public function update(Request $request, WorkflowActionType $workflowactiontype)
     {
         //
     }
@@ -75,10 +76,10 @@ class WorkflowActionTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\WorkflowActionType  $workflowActionType
+     * @param  \App\WorkflowActionType  $workflowactiontype
      * @return \Illuminate\Http\Response
      */
-    public function destroy(WorkflowActionType $workflowActionType)
+    public function destroy(WorkflowActionType $workflowactiontype)
     {
         //
     }

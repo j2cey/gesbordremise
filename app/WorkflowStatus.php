@@ -29,4 +29,10 @@ use Illuminate\Support\Carbon;
 class WorkflowStatus extends BaseModel
 {
     protected $guarded = [];
+
+    public function scopeCoded($query, $code) {
+        return $query
+            ->where('code', $code)
+            ;
+    }
 }

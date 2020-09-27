@@ -29,6 +29,19 @@ Route::get('/home', function () {
 
 Auth::routes();
 
+Route::get('permissions','RoleController@permissions')->middleware('auth');
+Route::resource('roles','RoleController')->middleware('auth');
+Route::resource('users','UserController')->middleware('auth');
 Route::resource('workflows','WorkflowController')->middleware('auth');
+Route::resource('workflowsteps','WorkflowStepController')->middleware('auth');
+Route::resource('workflowactions','WorkflowActionController')->middleware('auth');
+
+Route::resource('workflowactiontypes','WorkflowActionTypeController')->middleware('auth');
+Route::resource('workflowobjects','WorkflowObjectController')->middleware('auth');
+Route::resource('workflowobjectfields','WorkflowObjectFieldController')->middleware('auth');
+
+Route::resource('bordereauremises','BordereauremiseController')->middleware('auth');
+
+Route::resource('workflowexecactions','WorkflowExecActionController')->middleware('auth');
 
 //Route::get('/home', 'HomeController@index')->name('home');

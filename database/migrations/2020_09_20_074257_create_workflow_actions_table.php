@@ -24,6 +24,7 @@ class CreateWorkflowActionsTable extends Migration
             $table->baseFields();
 
             $table->string('titre')->comment('intitule de l action');
+            $table->string('description')->nullable()->comment('description de l action');
 
             $table->foreignId('workflow_action_type_id')->nullable()
                 ->comment('référence du type d action')

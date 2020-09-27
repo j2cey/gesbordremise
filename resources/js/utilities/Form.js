@@ -61,9 +61,10 @@ class Form {
      * Send a PUT request to the given URL.
      * .
      * @param {string} url
+     * @param fd
      */
     put(url, fd) {
-        return this.submit('put', url);
+        return this.submit('put', url, fd);
     }
 
 
@@ -92,6 +93,7 @@ class Form {
      *
      * @param {string} requestType
      * @param {string} url
+     * @param fd
      */
     submit(requestType, url, fd) {
         //axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -101,7 +103,9 @@ class Form {
             for (let property in this.originalData) {
                 fd.append(property, this[property]);
             }
+            console.log('fd is not undefined', fd)
         } else {
+            console.log('fd is undefined', fd)
             fd = this.data();
         }
 

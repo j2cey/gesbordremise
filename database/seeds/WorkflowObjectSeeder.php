@@ -1,5 +1,6 @@
 <?php
 
+use App\WorkflowObject;
 use Illuminate\Database\Seeder;
 
 class WorkflowObjectSeeder extends Seeder
@@ -11,6 +12,13 @@ class WorkflowObjectSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $statuses = [
+            [
+                'model_type' => "App\Bordereauremise", 'model_title' => "Bordereau Remise"
+            ],
+        ];
+        foreach ($statuses as $status) {
+            WorkflowObject::create($status);
+        }
     }
 }

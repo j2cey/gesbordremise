@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\WorkflowObject;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class WorkflowObjectController extends Controller
@@ -10,11 +11,13 @@ class WorkflowObjectController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return WorkflowObject[]|Collection
      */
     public function index()
     {
-        //
+        $workflowobjects = WorkflowObject::all();
+        $workflowobjects->load(['fields']);
+        return $workflowobjects;
     }
 
     /**

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Workflow\CreateWorkflowRequest;
 use App\Workflow;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class WorkflowController extends Controller
 {
@@ -17,7 +19,7 @@ class WorkflowController extends Controller
     public function index()
     {
         $workflows = Workflow::all();
-        $workflows->load(['steps']);
+        $workflows->load(['steps','steps.profile','steps.actions','steps.actions.type','steps.actions.objectfield']);
         return $workflows;
     }
 
@@ -34,12 +36,28 @@ class WorkflowController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param CreateWorkflowRequest $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(CreateWorkflowRequest $request)
     {
-        //
+        $user = auth()->user();
+
+        $formInput = $request->all();
+
+        $new_workflow = Workflow::create([
+            'titre' => $formInput['titre'],
+            'description' => $formInput['description'],
+            'user_id' => $user->id,
+        ]);
+
+        // Insert model_workflow
+        DB::table('model_has_workflow')->insert([
+            'workflow_id' => $new_workflow->id,
+            'model_type' => $formInput['object']['model_type'],
+        ]);
+
+        return $new_workflow->load(['steps','steps.profile','steps.actions']);
     }
 
     /**
@@ -73,7 +91,7 @@ class WorkflowController extends Controller
      */
     public function update(Request $request, Workflow $workflow)
     {
-        //
+
     }
 
     /**

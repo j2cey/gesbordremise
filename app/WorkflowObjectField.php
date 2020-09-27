@@ -22,6 +22,7 @@ use Illuminate\Support\Carbon;
  * @property boolean $valuetype_integer
  * @property boolean $valuetype_boolean
  * @property boolean $valuetype_datetime
+ * @property boolean $valuetype_image
  *
  * @property integer|null $workflow_object_id
  *
@@ -34,5 +35,14 @@ class WorkflowObjectField extends BaseModel
 
     public function object() {
         return $this->belongsTo('App\WorkflowObject', 'workflow_object_id');
+    }
+
+    public static function boot(){
+        parent::boot();
+
+        // Avant enregistrement
+        self::saving(function($model){
+            $model->field_label = $model->object->model_title . " | " . $model->field_label;
+        });
     }
 }

@@ -28,15 +28,36 @@ class WorkflowAction extends BaseModel
 {
     protected $guarded = [];
 
+    public function type() {
+        return $this->belongsTo('App\WorkflowActionType', 'workflow_action_type_id');
+    }
+
     public function step() {
         return $this->belongsTo('App\WorkflowStep', 'workflow_step_id');
     }
 
-    public function actiontype() {
-        return $this->belongsTo('App\WorkflowActionType', 'workflow_action_type_id');
+    public function objectfield() {
+        return $this->belongsTo('App\WorkflowObjectField', 'workflow_object_field_id');
     }
 
-    public function objectfield() {
-        return $this->belongsTo('App\WorkflowObject', 'workflow_object_field_id');
+    #region Validation Rules
+
+    public static function defaultRules() {
+        return [
+            'titre' => 'required',
+            'type' => 'required',
+        ];
     }
+    public static function createRules() {
+        return array_merge(self::defaultRules(), [
+
+        ]);
+    }
+    public static function updateRules($model) {
+        return array_merge(self::defaultRules(), [
+
+        ]);
+    }
+
+    #endregion
 }

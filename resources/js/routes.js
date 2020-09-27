@@ -8,6 +8,16 @@ let routes = [
         component: require('./views/dashboard').default
     },
     {
+        name: 'users.index',
+        path: '/users',
+        component: require('./views/users/index').default
+    },
+    {
+        name: 'roles.index',
+        path: '/roles',
+        component: require('./views/roles/index').default
+    },
+    {
         name: 'bordereauremises.index',
         path: '/bordereauremises',
         component: require('./views/bordereauremises/index').default

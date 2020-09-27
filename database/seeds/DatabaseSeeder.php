@@ -11,9 +11,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(PermissionSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(StatusSeeder::class);
         $this->call(WorkflowActionTypeSeeder::class);
         $this->call(WorkflowStatusSeeder::class);
+        $this->call(WorkflowObjectSeeder::class);
+        $this->call(WorkflowObjectFieldSeeder::class);
     }
 }

@@ -1,10 +1,145 @@
 <template>
 
+    <div id="actionlist">
+
+        <div class="card card-widget" v-for="(action, index) in workflowactions" v-if="workflowactions">
+            <div class="card-header">
+                <div class="user-block">
+                    <span class="text-green" data-toggle="collapse" data-parent="#actionlist" :href="'#collapse-actions-'+index">
+                        {{ action.titre }}
+                    </span>
+                </div>
+                <!-- /.user-block -->
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-toggle="tooltip" @click="editAction(action)">
+                        <i class="fa fa-pencil-alt"></i></button>
+                    <button type="button" class="btn btn-tool" data-toggle="collapse" data-parent="#actionlist" :href="'#collapse-actions-'+index"><i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" @click="deleteAction(action.id, index)"><i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div :id="'collapse-actions-'+index" class="panel-collapse collapse in">
+                <div class="card-body" >
+                    <dl class="row">
+                        <dt class="col-sm-4">Type</dt>
+                        <dd class="col-sm-8">{{ action.type.titre }}</dd>
+                        <dt class="col-sm-4" v-if="action.objectfield">Champs</dt>
+                        <dd class="col-sm-8" v-if="action.objectfield">{{ action.objectfield.field_label }}</dd>
+                        <dd class="col-sm-8 offset-sm-4" v-if="action.objectfield">
+                            <small>
+                              <span class="text-lighter hidden-sm-down">
+                                <span v-if="action.objectfield.valuetype_string == 1">chaine caractères</span>
+                                <span v-else-if="action.objectfield.valuetype_integer == 1">nombre entier</span>
+                                <span v-else-if="action.objectfield.valuetype_boolean == 1">booléen</span>
+                                <span v-else-if="action.objectfield.valuetype_datetime == 1">date & heure</span>
+                                <span v-else-if="action.objectfield.valuetype_image == 1">fichier image</span>
+                                <span v-else>type valeur non défini</span>
+                              </span>
+                            </small>
+                        </dd>
+                        <dt class="col-sm-4">Description</dt>
+                        <dd class="col-sm-8">{{ action.description }}</dd>
+                    </dl>
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+
+    </div>
+
 </template>
 
 <script>
+    //import EventBusStp from '../eventBus'
+    //import EventBusWfl from "../../eventBus";
+    import ActionBus from "./actionBus";
     export default {
-        name: "actions"
+        name: "actions",
+        props: {
+            workflowstepid_prop: 0,
+            workflowactions_prop: {}
+        },
+        components: {
+        },
+        mounted() {
+            this.$on('new_workflowaction_created', (workflowaction) => {
+                window.noty({
+                    message: 'Action créée avec succès',
+                    type: 'success'
+                })
+                // insert la nouvelle workflowaction dans le tableau des workflowactions
+                this.workflowactions.push(workflowaction)
+            })
+
+            this.$on('workflowaction_to_add', (add_data) => {
+                console.log('workflowaction_to_add received at actions', add_data)
+                window.noty({
+                    message: 'Action créée avec succès',
+                    type: 'success'
+                })
+                // insert la nouvelle workflowaction dans le tableau des workflowactions
+                if (this.workflowstepId === add_data.workflowstepId) {
+                    this.createAction(add_data.workflowaction)
+                }
+            })
+
+            ActionBus.$on('workflowaction_to_add', (add_data) => {
+                console.log('--- workflowaction_to_add received at actions ---', add_data)
+                if (this.workflowstepId === add_data.workflowstepId) {
+                    this.createAction(add_data.workflowaction)
+                }
+            })
+
+            /*EventBusStp.$on('workflowaction_to_add', (add_data) => {
+                // Action créée à insérer sur la liste
+                console.log('workflowaction_to_add received at actions', add_data)
+                if (this.workflowstepId === add_data.workflowstepId) {
+                    this.createAction(add_data.workflowaction)
+                }
+            })*/
+
+            this.$on('new_workflowaction_updated', (workflowaction) => {
+                // on récupère l'index de la workflowstep modifiée
+                let workflowactionIndex = this.workflowactions.findIndex(c => {
+                    return workflowaction.id == c.id
+                })
+
+                this.workflowactions.splice(workflowactionIndex, 1, workflowaction)
+                window.noty({
+                    message: 'Action modifiée avec succès',
+                    type: 'success'
+                })
+
+            })
+        },
+        data() {
+            return {
+                workflowstepId: this.workflowstepid_prop,
+                workflowactions: this.workflowactions_prop,
+            };
+        },
+        methods: {
+            createAction(workflowaction) {
+                let workflowactionIndex = this.workflowactions.findIndex(c => {
+                    return workflowaction.id === c.id
+                })
+
+                if (workflowactionIndex === -1) {
+                    window.noty({
+                        message: 'Action créée avec succès',
+                        type: 'success'
+                    })
+
+                    this.workflowactions.push(workflowaction)
+                }
+            },
+            editAction(workflowaction) {
+                this.$emit('edit_workflowaction', ({ workflowaction }))
+            },
+        }
     }
 </script>
 

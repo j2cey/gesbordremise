@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\WorkflowExecObject;
+use App\BordereauremiseFile;
 use Illuminate\Http\Request;
 
-class WorkflowExecObjectController extends Controller
+class BordereauremiseFileController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class WorkflowExecObjectController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\WorkflowExecObject  $workflowExecObject
+     * @param  \App\BordereauremiseFile  $bordereauremiseFile
      * @return \Illuminate\Http\Response
      */
-    public function show(WorkflowExecObject $workflowExecObject)
+    public function show(BordereauremiseFile $bordereauremiseFile)
     {
         //
     }
@@ -52,10 +52,10 @@ class WorkflowExecObjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\WorkflowExecObject  $workflowExecObject
+     * @param  \App\BordereauremiseFile  $bordereauremiseFile
      * @return \Illuminate\Http\Response
      */
-    public function edit(WorkflowExecObject $workflowExecObject)
+    public function edit(BordereauremiseFile $bordereauremiseFile)
     {
         //
     }
@@ -64,10 +64,10 @@ class WorkflowExecObjectController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\WorkflowExecObject  $workflowExecObject
+     * @param  \App\BordereauremiseFile  $bordereauremiseFile
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, WorkflowExecObject $workflowExecObject)
+    public function update(Request $request, BordereauremiseFile $bordereauremiseFile)
     {
         //
     }
@@ -75,10 +75,10 @@ class WorkflowExecObjectController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\WorkflowExecObject  $workflowExecObject
+     * @param  \App\BordereauremiseFile  $bordereauremiseFile
      * @return \Illuminate\Http\Response
      */
-    public function destroy(WorkflowExecObject $workflowExecObject)
+    public function destroy(BordereauremiseFile $bordereauremiseFile)
     {
         //
     }

@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class Bordereauremise
@@ -35,4 +36,34 @@ use Illuminate\Support\Carbon;
 class Bordereauremise extends BaseModel
 {
     protected $guarded = [];
+
+    public function workflow() {
+        $workflow_id = DB::table('model_has_workflow')
+            ->where('model_type', 'App\Bordereauremise')
+            ->value('workflow_id');
+
+        if ($workflow_id) {
+            return Workflow::where('id', $workflow_id)->first();
+        } else {
+            return null;
+        }
+    }
+
+    public function execaction() {
+        return $this->hasMany('App\WorkflowExecAction', 'model_id')
+            ->where('model_type', 'App\Bordereauremise')
+            ->where('current', 1);
+    }
+
+    public static function boot(){
+        parent::boot();
+
+        // Après création
+        self::created(function($model){
+            $workflow = $model->workflow();
+            if ($workflow) {
+                $workflow->exec();
+            }
+        });
+    }
 }

@@ -42,6 +42,8 @@ return [
     'debug' => (bool) env('APP_DEBUG', false),
 
     'bordereauremises_scans' => env('BORDEREAUREMISES_SCANS', 'uploads/bordereauremises/scans'),
+    'bordereauremises_files' => env('BORDEREAUREMISES_FILES', 'uploads/bordereauremises/files'),
+    'bordereauremises_filesscanned' => env('BORDEREAUREMISES_FILESSCANNED', 'uploads/bordereauremises/filesscanned'),
     'RAW_FOLDER' => env('RAW_FOLDER', '/var/www/gesbordremise/public'),
 
     /*

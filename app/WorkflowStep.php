@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Support\Carbon;
+use Spatie\Permission\Models\Role;
 
 /**
  * Class WorkflowStep
@@ -35,8 +36,31 @@ class WorkflowStep extends BaseModel
         return $this->belongsTo('App\Workflow');
     }
 
-    public function actorprofile() {
-        return $this->belongsTo(Spatie\Permission\Models\Role::class, 'role_id');
+    public function profile() {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    public function actions() {
+        return $this->hasMany('App\WorkflowAction', 'workflow_step_id');
+    }
+
+    #region Validation Rules
+
+    public static function defaultRules() {
+        return [
+            'titre' => 'required',
+            'profile' => 'required',
+        ];
+    }
+    public static function createRules() {
+        return array_merge(self::defaultRules(), [
+
+        ]);
+    }
+    public static function updateRules($model) {
+        return array_merge(self::defaultRules(), [
+            'actions' => 'required',
+        ]);
     }
 
     #endregion

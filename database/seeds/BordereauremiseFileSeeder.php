@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class WorkflowExecObjectSeeder extends Seeder
+class BordereauremiseFileSeeder extends Seeder
 {
     /**
      * Run the database seeds.
