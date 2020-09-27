@@ -71,7 +71,7 @@ class WorkflowExecAction extends BaseModel
             foreach ($actors as $actor) {
                 if ($actor->email) {
                     Mail::to($actor->email)
-                        ->send(new WorkflowActionNext($this->with['action']));
+                        ->send(new WorkflowActionNext($this));
                 }
             }
         }
