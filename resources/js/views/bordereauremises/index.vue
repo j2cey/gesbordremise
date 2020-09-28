@@ -72,7 +72,11 @@
                                             <tr v-for="(bordereauremise, index) in bordereauremises" v-if="bordereauremises">
                                                 <td>{{bordereauremise.id}}</td>
                                                 <td>{{bordereauremise.date_remise}}</td>
-                                                <td>{{bordereauremise.numero_transaction}}</td>
+                                                <td>
+                                                    <a :href="'/bordereauremises/' + bordereauremise.uuid">
+                                                        {{bordereauremise.numero_transaction}}
+                                                    </a>
+                                                </td>
                                                 <td>{{bordereauremise.localisation}}</td>
                                                 <td>{{bordereauremise.changement_dernier_tarif}}</td>
                                                 <td>{{bordereauremise.classe_paiement}}</td>

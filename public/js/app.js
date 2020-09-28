@@ -2123,6 +2123,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "index",
   mounted: function mounted() {},
@@ -2141,6 +2145,251 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {}
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/bordereauremises/show.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/bordereauremises/show.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "show",
+  props: {
+    bordereauremise_prop: {},
+    actionvalues_prop: {}
+  },
+  data: function data() {
+    return {
+      bordereauremise: this.bordereauremise_prop,
+      actionvalues: this.actionvalues_prop,
+      workflowexecForm: new Form(this.actionvalues_prop),
+      filename: 'Télécharger un fichier',
+      selectedFile: null
+    };
+  },
+  methods: {
+    initActionvaluesArray: function initActionvaluesArray() {
+      var actionvalues = [];
+
+      for (var i = 0; i < this.exec_prop.currentstep.actions; i++) {}
+    },
+    handleFileUpload: function handleFileUpload(event) {
+      this.selectedFile = event.target.files[0];
+      this.filename = typeof this.selectedFile !== 'undefined' ? this.selectedFile.name : 'Télécharger un fichier';
+    },
+    validerEtape: function validerEtape() {
+      this.submitForm();
+    },
+    rejeterEtape: function rejeterEtape() {
+      this.$emit('validate_reject');
+    },
+    submitForm: function submitForm() {
+      var _this = this;
+
+      var fd = this.addFileToForm();
+      console.log(this.workflowexecForm); //.post(`/workflowexecs`, fd)
+
+      this.workflowexecForm.put("/workflowexecs/".concat(this.execId), fd).then(function (data) {
+        window.location = "/bordereauremises";
+      })["catch"](function (error) {
+        _this.loading = false;
+      });
+    },
+    addFileToForm: function addFileToForm() {
+      if (typeof this.selectedFile !== 'undefined') {
+        var fd = new FormData();
+        fd.append('step_files', this.selectedFile);
+        console.log("image added", fd);
+        return fd;
+      } else {
+        var _fd = undefined;
+        console.log("image not added", _fd);
+        return _fd;
+      }
+    }
+  }
 });
 
 /***/ }),
@@ -89135,8 +89384,24 @@ var render = function() {
                                 ]),
                                 _vm._v(" "),
                                 _c("td", [
-                                  _vm._v(
-                                    _vm._s(bordereauremise.numero_transaction)
+                                  _c(
+                                    "a",
+                                    {
+                                      attrs: {
+                                        href:
+                                          "/bordereauremises/" +
+                                          bordereauremise.uuid
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                                    " +
+                                          _vm._s(
+                                            bordereauremise.numero_transaction
+                                          ) +
+                                          "\n                                                "
+                                      )
+                                    ]
                                   )
                                 ]),
                                 _vm._v(" "),
@@ -89381,6 +89646,620 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Statut")])
       ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/bordereauremises/show.vue?vue&type=template&id=8d603d90&scoped=true&":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/bordereauremises/show.vue?vue&type=template&id=8d603d90&scoped=true& ***!
+  \*******************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "content-wrapper" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("section", { staticClass: "content" }, [
+      _c("div", { staticClass: "card" }, [
+        _vm._m(1),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-body" }, [
+          _c("div", { staticClass: "row" }, [
+            _c(
+              "div",
+              { staticClass: "col-12 col-md-12 col-lg-8 order-2 order-md-1" },
+              [
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-12 col-sm-12" }, [
+                    _c("div", { staticClass: "card" }, [
+                      _vm._m(2),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "card-body" }, [
+                        _c("dl", { staticClass: "row" }, [
+                          _c("dt", { staticClass: "col-sm-4" }, [
+                            _vm._v("Date Remise")
+                          ]),
+                          _vm._v(" "),
+                          _c("dd", { staticClass: "col-sm-8" }, [
+                            _vm._v(_vm._s(_vm.bordereauremise.date_remise))
+                          ]),
+                          _vm._v(" "),
+                          _c("dt", { staticClass: "col-sm-4" }, [
+                            _vm._v("Num. Transaction")
+                          ]),
+                          _vm._v(" "),
+                          _c("dd", { staticClass: "col-sm-8" }, [
+                            _vm._v(
+                              _vm._s(_vm.bordereauremise.numero_transaction)
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("dt", { staticClass: "col-sm-4" }, [
+                            _vm._v("Localisation")
+                          ]),
+                          _vm._v(" "),
+                          _c("dd", { staticClass: "col-sm-8" }, [
+                            _vm._v(_vm._s(_vm.bordereauremise.localisation))
+                          ]),
+                          _vm._v(" "),
+                          _c("dt", { staticClass: "col-sm-4" }, [
+                            _vm._v("Classe Paiement")
+                          ]),
+                          _vm._v(" "),
+                          _c("dd", { staticClass: "col-sm-8" }, [
+                            _vm._v(_vm._s(_vm.bordereauremise.classe_paiement))
+                          ])
+                        ])
+                      ])
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-12 col-sm-12" }, [
+                    _c("div", { staticClass: "card" }, [
+                      _vm._m(3),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "card-body" }, [
+                        _c("dl", { staticClass: "row" }, [
+                          _c("dt", { staticClass: "col-sm-4" }, [
+                            _vm._v("Date Dépôt")
+                          ]),
+                          _vm._v(" "),
+                          _c("dd", { staticClass: "col-sm-8" }, [
+                            _vm._v(
+                              _vm._s(_vm.bordereauremise.date_depot_agence)
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("dt", { staticClass: "col-sm-4" }, [
+                            _vm._v("Montant Déposé")
+                          ]),
+                          _vm._v(" "),
+                          _c("dd", { staticClass: "col-sm-8" }, [
+                            _vm._v(
+                              _vm._s(_vm.bordereauremise.montant_depose_agence)
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("dt", { staticClass: "col-sm-4" }, [
+                            _vm._v("Scan")
+                          ]),
+                          _vm._v(" "),
+                          _c("dd", { staticClass: "col-sm-8" }),
+                          _vm._v(" "),
+                          _c("dt", { staticClass: "col-sm-4" }, [
+                            _vm._v("Commentaire")
+                          ]),
+                          _vm._v(" "),
+                          _c("dd", { staticClass: "col-sm-8" }, [
+                            _vm._v(
+                              _vm._s(_vm.bordereauremise.commentaire_agence)
+                            )
+                          ])
+                        ])
+                      ])
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-12 col-sm-12" }, [
+                    _c("div", { staticClass: "card" }, [
+                      _vm._m(4),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "card-body" }, [
+                        _c("dl", { staticClass: "row" }, [
+                          _c("dt", { staticClass: "col-sm-4" }, [
+                            _vm._v("Date Valeur")
+                          ]),
+                          _vm._v(" "),
+                          _c("dd", { staticClass: "col-sm-8" }, [
+                            _vm._v(_vm._s(_vm.bordereauremise.date_valeur))
+                          ]),
+                          _vm._v(" "),
+                          _c("dt", { staticClass: "col-sm-4" }, [
+                            _vm._v("Montant Déposé")
+                          ]),
+                          _vm._v(" "),
+                          _c("dd", { staticClass: "col-sm-8" }, [
+                            _vm._v(
+                              _vm._s(_vm.bordereauremise.montant_depose_finance)
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("dt", { staticClass: "col-sm-4" }, [
+                            _vm._v("Commentaire")
+                          ]),
+                          _vm._v(" "),
+                          _c("dd", { staticClass: "col-sm-8" }, [
+                            _vm._v(
+                              _vm._s(_vm.bordereauremise.commentaire_finance)
+                            )
+                          ])
+                        ])
+                      ])
+                    ])
+                  ])
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "col-12 col-md-12 col-lg-4 order-1 order-md-2" },
+              [
+                _c("div", { staticClass: "row" }, [
+                  _vm._m(5),
+                  _vm._v(" "),
+                  _c(
+                    "form",
+                    {
+                      staticClass: "form-horizontal",
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                        },
+                        keydown: function($event) {
+                          return _vm.workflowexecForm.errors.clear()
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "card-body" },
+                        _vm._l(
+                          _vm.bordereauremise.workflowexec.currentstep.actions,
+                          function(action, index) {
+                            return _vm.bordereauremise.workflowexec.currentstep
+                              ? _c("div", { staticClass: "form-group row" }, [
+                                  action.type.code == 1
+                                    ? _c("div", { staticClass: "col-sm-10" }, [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.workflowexecForm.setvalue,
+                                              expression:
+                                                "workflowexecForm.setvalue"
+                                            }
+                                          ],
+                                          staticClass: "form-control",
+                                          attrs: {
+                                            type: "text",
+                                            id: "setvalue",
+                                            name: "setvalue",
+                                            autocomplete: "setvalue",
+                                            placeholder: "Titre"
+                                          },
+                                          domProps: {
+                                            value: _vm.workflowexecForm.setvalue
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.workflowexecForm,
+                                                "setvalue",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _vm.workflowexecForm.errors.has(
+                                          "setvalue"
+                                        )
+                                          ? _c("span", {
+                                              staticClass:
+                                                "invalid-feedback d-block",
+                                              attrs: { role: "alert" },
+                                              domProps: {
+                                                textContent: _vm._s(
+                                                  _vm.workflowexecForm.errors.get(
+                                                    "setvalue"
+                                                  )
+                                                )
+                                              }
+                                            })
+                                          : _vm._e()
+                                      ])
+                                    : action.objectfield.valuetype_string ||
+                                      action.objectfield.valuetype_integer
+                                    ? _c("div", { staticClass: "col-sm-10" }, [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.workflowexecForm[
+                                                  action.objectfield
+                                                    .db_field_name
+                                                ],
+                                              expression:
+                                                "workflowexecForm[action.objectfield.db_field_name]"
+                                            }
+                                          ],
+                                          staticClass: "form-control",
+                                          attrs: {
+                                            type: "text",
+                                            id:
+                                              action.objectfield.db_field_name,
+                                            name:
+                                              action.objectfield.db_field_name,
+                                            placeholder: action.titre
+                                          },
+                                          domProps: {
+                                            value:
+                                              _vm.workflowexecForm[
+                                                action.objectfield.db_field_name
+                                              ]
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.workflowexecForm,
+                                                action.objectfield
+                                                  .db_field_name,
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _vm.workflowexecForm.errors.has(
+                                          "" + action.objectfield.db_field_name
+                                        )
+                                          ? _c("span", {
+                                              staticClass:
+                                                "invalid-feedback d-block",
+                                              attrs: { role: "alert" },
+                                              domProps: {
+                                                textContent: _vm._s(
+                                                  _vm.workflowexecForm.errors.get(
+                                                    "" +
+                                                      action.objectfield
+                                                        .db_field_name
+                                                  )
+                                                )
+                                              }
+                                            })
+                                          : _vm._e()
+                                      ])
+                                    : action.objectfield.valuetype_boolean
+                                    ? _c("div", { staticClass: "col-sm-10" }, [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.workflowexecForm[
+                                                  action.objectfield
+                                                    .db_field_name
+                                                ],
+                                              expression:
+                                                "workflowexecForm[action.objectfield.db_field_name]"
+                                            }
+                                          ],
+                                          staticClass: "form-control",
+                                          attrs: {
+                                            type: "text",
+                                            id:
+                                              action.objectfield.db_field_name,
+                                            name:
+                                              action.objectfield.db_field_name,
+                                            placeholder: action.titre
+                                          },
+                                          domProps: {
+                                            value:
+                                              _vm.workflowexecForm[
+                                                action.objectfield.db_field_name
+                                              ]
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.workflowexecForm,
+                                                action.objectfield
+                                                  .db_field_name,
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _vm.workflowexecForm.errors.has(
+                                          "" + action.objectfield.db_field_name
+                                        )
+                                          ? _c("span", {
+                                              staticClass:
+                                                "invalid-feedback d-block",
+                                              attrs: { role: "alert" },
+                                              domProps: {
+                                                textContent: _vm._s(
+                                                  _vm.workflowexecForm.errors.get(
+                                                    "" +
+                                                      action.objectfield
+                                                        .db_field_name
+                                                  )
+                                                )
+                                              }
+                                            })
+                                          : _vm._e()
+                                      ])
+                                    : action.objectfield.valuetype_datetime
+                                    ? _c(
+                                        "div",
+                                        { staticClass: "col-sm-10" },
+                                        [
+                                          _c("VueCtkDateTimePicker", {
+                                            attrs: {
+                                              label: action.titre,
+                                              format: "YYYY-MM-DD hh:mm:ss"
+                                            },
+                                            model: {
+                                              value:
+                                                _vm.workflowexecForm[
+                                                  action.objectfield
+                                                    .db_field_name
+                                                ],
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.workflowexecForm,
+                                                  action.objectfield
+                                                    .db_field_name,
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "workflowexecForm[action.objectfield.db_field_name]"
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _vm.workflowexecForm.errors.has(
+                                            "" +
+                                              action.objectfield.db_field_name
+                                          )
+                                            ? _c("span", {
+                                                staticClass:
+                                                  "invalid-feedback d-block",
+                                                attrs: { role: "alert" },
+                                                domProps: {
+                                                  textContent: _vm._s(
+                                                    _vm.workflowexecForm.errors.get(
+                                                      "" +
+                                                        action.objectfield
+                                                          .db_field_name
+                                                    )
+                                                  )
+                                                }
+                                              })
+                                            : _vm._e()
+                                        ],
+                                        1
+                                      )
+                                    : action.objectfield.valuetype_image
+                                    ? _c("div", { staticClass: "col-sm-10" }, [
+                                        _c("input", {
+                                          ref: action.objectfield.db_field_name,
+                                          refInFor: true,
+                                          staticClass: "custom-file-input",
+                                          attrs: {
+                                            type: "file",
+                                            id:
+                                              action.objectfield.db_field_name,
+                                            name:
+                                              action.objectfield.db_field_name
+                                          },
+                                          on: { change: _vm.handleFileUpload }
+                                        }),
+                                        _vm._v(" "),
+                                        _c(
+                                          "label",
+                                          {
+                                            staticClass: "custom-file-label",
+                                            attrs: {
+                                              for:
+                                                action.objectfield.db_field_name
+                                            }
+                                          },
+                                          [_vm._v(_vm._s(_vm.filename))]
+                                        ),
+                                        _vm._v(" "),
+                                        _vm.workflowexecForm.errors.has(
+                                          "" + action.objectfield.db_field_name
+                                        )
+                                          ? _c("span", {
+                                              staticClass:
+                                                "invalid-feedback d-block",
+                                              attrs: { role: "alert" },
+                                              domProps: {
+                                                textContent: _vm._s(
+                                                  _vm.workflowexecForm.errors.get(
+                                                    "" +
+                                                      action.objectfield
+                                                        .db_field_name
+                                                  )
+                                                )
+                                              }
+                                            })
+                                          : _vm._e()
+                                      ])
+                                    : _c("div", { staticClass: "col-sm-10" })
+                                ])
+                              : _vm._e()
+                          }
+                        ),
+                        0
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "text-center mt-5 mb-3" }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "btn btn-sm btn-primary",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            return _vm.validerEtape()
+                          }
+                        }
+                      },
+                      [_vm._v("Valider")]
+                    )
+                  ])
+                ])
+              ]
+            )
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("section", { staticClass: "content-header" }, [
+      _c("div", { staticClass: "container-fluid" }, [
+        _c("div", { staticClass: "row mb-2" }, [
+          _c("div", { staticClass: "col-sm-6" }, [
+            _c("h1", [_vm._v("Project Detail")])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-sm-6" }, [
+            _c("ol", { staticClass: "breadcrumb float-sm-right" }, [
+              _c("li", { staticClass: "breadcrumb-item" }, [
+                _c("a", { attrs: { href: "#" } }, [_vm._v("Home")])
+              ]),
+              _vm._v(" "),
+              _c("li", { staticClass: "breadcrumb-item active" }, [
+                _vm._v("Détails Bordereau")
+              ])
+            ])
+          ])
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _c("h3", { staticClass: "card-title" }, [_vm._v("Détails Bordereau")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-tools" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-tool",
+            attrs: {
+              type: "button",
+              "data-card-widget": "collapse",
+              "data-toggle": "tooltip",
+              title: "Collapse"
+            }
+          },
+          [_c("i", { staticClass: "fas fa-minus" })]
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _c("h3", { staticClass: "card-title" }, [
+        _vm._v(
+          "\n                                            Aris\n                                        "
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _c("h3", { staticClass: "card-title" }, [
+        _vm._v(
+          "\n                                            Agence\n                                        "
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _c("h3", { staticClass: "card-title" }, [
+        _vm._v(
+          "\n                                            Finances\n                                        "
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h3", { staticClass: "text-primary" }, [
+      _c("i", { staticClass: "fas fa-paint-brush" }),
+      _vm._v(" Traitement")
     ])
   }
 ]
@@ -111657,6 +112536,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('workflow-execaction', __we
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('workflow-execstep', __webpack_require__(/*! ./views/workflowexecsteps/show */ "./resources/js/views/workflowexecsteps/show.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('workflow-exec', __webpack_require__(/*! ./views/workflowexecs/exec */ "./resources/js/views/workflowexecs/exec.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('bordereauremise-index', __webpack_require__(/*! ./views/bordereauremises/index */ "./resources/js/views/bordereauremises/index.vue")["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('bordereauremise-show', __webpack_require__(/*! ./views/bordereauremises/show */ "./resources/js/views/bordereauremises/show.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component("rawDisplayer", _utilities_infra_raw_displayer_vue__WEBPACK_IMPORTED_MODULE_2__["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -112302,6 +113182,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_index_vue_vue_type_template_id_96c566b2_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_index_vue_vue_type_template_id_96c566b2_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/views/bordereauremises/show.vue":
+/*!******************************************************!*\
+  !*** ./resources/js/views/bordereauremises/show.vue ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _show_vue_vue_type_template_id_8d603d90_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./show.vue?vue&type=template&id=8d603d90&scoped=true& */ "./resources/js/views/bordereauremises/show.vue?vue&type=template&id=8d603d90&scoped=true&");
+/* harmony import */ var _show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./show.vue?vue&type=script&lang=js& */ "./resources/js/views/bordereauremises/show.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _show_vue_vue_type_template_id_8d603d90_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _show_vue_vue_type_template_id_8d603d90_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "8d603d90",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/bordereauremises/show.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/bordereauremises/show.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/views/bordereauremises/show.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./show.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/bordereauremises/show.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/bordereauremises/show.vue?vue&type=template&id=8d603d90&scoped=true&":
+/*!*************************************************************************************************!*\
+  !*** ./resources/js/views/bordereauremises/show.vue?vue&type=template&id=8d603d90&scoped=true& ***!
+  \*************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_show_vue_vue_type_template_id_8d603d90_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./show.vue?vue&type=template&id=8d603d90&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/bordereauremises/show.vue?vue&type=template&id=8d603d90&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_show_vue_vue_type_template_id_8d603d90_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_show_vue_vue_type_template_id_8d603d90_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

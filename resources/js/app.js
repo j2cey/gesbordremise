@@ -71,6 +71,7 @@ Vue.component('workflow-execaction', require('./views/workflowexecactions/show')
 Vue.component('workflow-execstep', require('./views/workflowexecsteps/show').default);
 Vue.component('workflow-exec', require('./views/workflowexecs/exec').default);
 Vue.component('bordereauremise-index', require('./views/bordereauremises/index').default);
+Vue.component('bordereauremise-show', require('./views/bordereauremises/show').default);
 Vue.component("rawDisplayer", rawDisplayer);
 
 /**

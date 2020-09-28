@@ -84,7 +84,21 @@ class BordereauremiseController extends Controller
      */
     public function show(Bordereauremise $bordereauremise)
     {
-        //
+        $bordereauremise = Bordereauremise::where('id',$bordereauremise->id)
+            ->first()
+            ->load(['workflowexec','workflowexec.currentstep','workflowexec.currentstep.actions','workflowexec.currentstep.actions.type','workflowexec.currentstep.actions.objectfield','workflowexec.currentstep.profile','workflowexec.workflowstatus']);
+
+        $actionvalues = [];
+        if ($bordereauremise->workflowexec && $bordereauremise->workflowexec->currentstep) {
+
+            foreach ($bordereauremise->workflowexec->currentstep->actions as $action) {
+                $actionvalues[$action->objectfield->db_field_name] = null;
+            }
+            $actionvalues['setvalue'] = null;
+            $actionvalues['motif_rejet'] = null;
+        }
+
+        return view('bordereauremises.show', ['bordereauremise' => $bordereauremise, 'actionvalues' => json_encode($actionvalues)]);
     }
 
     /**
