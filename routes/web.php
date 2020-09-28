@@ -29,6 +29,11 @@ Route::get('/home', function () {
 
 Auth::routes();
 
+Route::get('/product', 'ProductController@index')->name('product');
+Route::get('/product/fetch', 'ProductController@fetch')->name('product.fetch');
+Route::get('/product/{product_id}/edit', 'ProductController@edit')->name('product.edit');
+Route::get('/product/{product_id}/destroy', 'ProductController@destroy')->name('product.destroy');
+
 Route::get('permissions','RoleController@permissions')->middleware('auth');
 Route::resource('roles','RoleController')->middleware('auth');
 Route::resource('users','UserController')->middleware('auth');

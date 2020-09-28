@@ -12,6 +12,10 @@ import Vue from 'vue';
 import VueRouter from "vue-router";
 
 window.Vue = Vue;
+
+import axios from 'axios';
+import store from './store/index';
+
 Vue.use(VueRouter);
 
 // draggable
@@ -65,7 +69,7 @@ import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('vue-noty', require('./components/Noty').default);
 Vue.component('VueCtkDateTimePicker', VueCtkDateTimePicker);
 Vue.component('workflow-execaction', require('./views/workflowexecactions/show').default);
 Vue.component('workflow-execstep', require('./views/workflowexecsteps/show').default);
@@ -74,6 +78,13 @@ Vue.component('bordereauremise-index', require('./views/bordereauremises/index')
 Vue.component('bordereauremise-show', require('./views/bordereauremises/show').default);
 Vue.component("rawDisplayer", rawDisplayer);
 
+Vue.component('times-circle', require('./components/Icons/TimesCircle').default);
+Vue.component('select-angle', require('./components/Form/SelectAngle').default);
+
+Vue.component('search-pagination', require('./components/Search/SearchPagination').default);
+Vue.component('search-form', require('./components/Search/SearchForm').default);
+Vue.component('search-results', require('./components/Search/SearchResults').default);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -81,6 +92,7 @@ Vue.component("rawDisplayer", rawDisplayer);
  */
 
 const app = new Vue({
+    store,
     el: '#app',
     router
 });

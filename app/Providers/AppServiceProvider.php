@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -44,5 +45,7 @@ class AppServiceProvider extends ServiceProvider
         Blueprint::macro('dropBaseForeigns', function () {
             $this->dropForeign(['status_id']);
         });
+
+        JsonResource::withoutWrapping();
     }
 }
