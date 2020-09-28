@@ -39,8 +39,10 @@ class BordereauremiseController extends Controller
 
             if ($bord->workflowexec) {
                 //$validation[] = [ "hasRole" . $bord->workflowexec->currentstep->profile->name => $user->hasRole([$bord->workflowexec->currentstep->profile->name, 'Admin']) ];
-                if ($user->hasRole([$bord->workflowexec->currentstep->profile->name, 'Admin'])) {
-                    $bordereauremises_arr[] = $bord;
+                if ($bord->workflowexec->currentstep) {
+                    if ($user->hasRole([$bord->workflowexec->currentstep->profile->name, 'Admin'])) {
+                        $bordereauremises_arr[] = $bord;
+                    }
                 }
             } else {
                 $bordereauremises_arr[] = $bord;
