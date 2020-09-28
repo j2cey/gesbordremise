@@ -10,7 +10,7 @@ class CreateWorkflowExecsTable extends Migration
     use BaseMigrationTrait;
 
     public $table_name = 'workflow_execs';
-    public $table_comment = 'Instance d exeution d un workflow';
+    public $table_comment = 'Instance d exécution d un workflow';
 
     /**
      * Run the migrations.
@@ -27,10 +27,17 @@ class CreateWorkflowExecsTable extends Migration
                 ->comment('référence du workflow')
                 ->constrained()->onDelete('set null');
 
-            $table->integer('prev_step')->nullable()->comment('étape précédant l étape courrante');
-            $table->integer('curr_step')->nullable()->comment('étape courrante');
-            $table->integer('next_step')->nullable()->comment('étape suivant l étape courrante');
+            $table->foreignId('current_step_id')->nullable()
+                ->comment('référence de l etape courrante')
+                ->constrained('workflow_steps')->onDelete('set null');
 
+            $table->foreignId('workflow_status_id')->nullable()
+                ->comment('référence du statut de workflow')
+                ->constrained()->onDelete('set null');
+
+            $table->string('model_type')->comment('type du modèle référencé');
+            $table->bigInteger('model_id')->comment('référence de l instance du modèle');
+            $table->string('motif_rejet')->nullable()->comment('motif rejet le cas échéant');
             $table->json('report')->comment('rapport d exécution');
         });
         $this->setTableComment($this->table_name,$this->table_comment);
@@ -46,6 +53,8 @@ class CreateWorkflowExecsTable extends Migration
         Schema::table($this->table_name, function (Blueprint $table) {
             $table->dropBaseForeigns();
             $table->dropForeign(['workflow_id']);
+            $table->dropForeign(['current_step_id']);
+            $table->dropForeign(['workflow_status_id']);
         });
         Schema::dropIfExists($this->table_name);
     }

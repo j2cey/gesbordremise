@@ -65,7 +65,7 @@
                                                 <th>Depot Agence</th>
                                                 <th>Date Effectif</th>
                                                 <th>Date Valeur</th>-->
-                                                <th>Action</th>
+                                                <th>Statut</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -83,7 +83,21 @@
                                                 <td>{{bordereauremise.date_effectif}}</td>
                                                 <td>{{bordereauremise.date_valeur}}</td>-->
                                                 <td>
-                                                    <span v-if="bordereauremise.execaction[0]" class="badge badge-default"><a :href="'/workflowexecactions/' + bordereauremise.execaction[0].uuid">{{bordereauremise.execaction[0].action.titre}}</a></span>
+                                                    <span v-if="bordereauremise.workflowexec && bordereauremise.workflowexec.currentstep" class="badge badge-default"><a :href="'/workflowexecs/' + bordereauremise.workflowexec.uuid">{{bordereauremise.workflowexec.currentstep.titre}}</a></span>
+                                                    <span v-else-if="bordereauremise.workflowexec">
+                                                        <span v-if="bordereauremise.workflowexec.workflowstatus.code == 5" class="badge badge-danger">
+                                                            {{bordereauremise.workflowexec.workflowstatus.name}}
+                                                        </span>
+                                                        <span v-else-if="bordereauremise.workflowexec.workflowstatus.code == 4" class="badge badge-success">
+                                                            {{bordereauremise.workflowexec.workflowstatus.name}}
+                                                        </span>
+                                                        <span v-else-if="bordereauremise.workflowexec.workflowstatus.code == 3" class="badge badge-warning">
+                                                            {{bordereauremise.workflowexec.workflowstatus.name}}
+                                                        </span>
+                                                        <span v-else class="badge badge-dark">
+                                                            {{bordereauremise.workflowexec.workflowstatus.name}}
+                                                        </span>
+                                                    </span>
                                                     <span v-else class="badge badge-default">Aucune Action</span>
                                                 </td>
                                             </tr>
@@ -126,7 +140,7 @@
             }
         },
         created() {
-            axios.get('/bordereauremises')
+            axios.get('/bordereauremises.fetch')
                 .then(({data}) => this.bordereauremises = data);
         },
         methods: {

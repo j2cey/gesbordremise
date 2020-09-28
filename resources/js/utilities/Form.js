@@ -100,28 +100,73 @@ class Form {
         //axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 
         if (typeof fd !== 'undefined') {
+            console.log('fd is not undefined', fd);
             for (let property in this.originalData) {
                 fd.append(property, this[property]);
+                console.log(property, this[property]);
             }
-            console.log('fd is not undefined', fd)
+            if (requestType === 'put') {
+                fd.append("_method", "PATCH");
+                console.log('fd method PATCH added', fd);
+            }
         } else {
             console.log('fd is undefined', fd)
             fd = this.data();
         }
 
-        return new Promise((resolve, reject) => {
-            axios[requestType](url, fd)
-                .then(response => {
-                    this.onSuccess(response.data);
+        if (requestType === 'put') {
 
-                    resolve(response.data);
+            return new Promise((resolve, reject) => {
+                axios.post(url, fd)
+                    .then(response => {
+                        this.onSuccess(response.data);
+
+                        resolve(response.data);
+                    })
+                    .catch(error => {
+                        this.onFail(error.response.data.errors);
+
+                        reject(error.response.data.errors);
+                    });
+            });
+
+
+            /*return new Promise((resolve, reject) => {
+                axios.fetch(url, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-type': 'application/x-www-form-urlencoded'
+                    },
+                    body: fd
                 })
-                .catch(error => {
-                    this.onFail(error.response.data.errors);
+                    .then(response => {
+                        this.onSuccess(response.data);
 
-                    reject(error.response.data.errors);
-                });
-        });
+                        resolve(response.data);
+                    })
+                    .catch(error => {
+                        this.onFail(error.response.data.errors);
+
+                        reject(error.response.data.errors);
+                    });
+            });*/
+
+
+        } else {
+            return new Promise((resolve, reject) => {
+                axios[requestType](url, fd)
+                    .then(response => {
+                        this.onSuccess(response.data);
+
+                        resolve(response.data);
+                    })
+                    .catch(error => {
+                        this.onFail(error.response.data.errors);
+
+                        reject(error.response.data.errors);
+                    });
+            });
+        }
     }
 
 

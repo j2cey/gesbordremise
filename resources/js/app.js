@@ -68,6 +68,9 @@ import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('VueCtkDateTimePicker', VueCtkDateTimePicker);
 Vue.component('workflow-execaction', require('./views/workflowexecactions/show').default);
+Vue.component('workflow-execstep', require('./views/workflowexecsteps/show').default);
+Vue.component('workflow-exec', require('./views/workflowexecs/exec').default);
+Vue.component('bordereauremise-index', require('./views/bordereauremises/index').default);
 Vue.component("rawDisplayer", rawDisplayer);
 
 /**

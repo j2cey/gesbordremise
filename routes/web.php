@@ -41,7 +41,9 @@ Route::resource('workflowobjects','WorkflowObjectController')->middleware('auth'
 Route::resource('workflowobjectfields','WorkflowObjectFieldController')->middleware('auth');
 
 Route::resource('bordereauremises','BordereauremiseController')->middleware('auth');
+Route::get('bordereauremises.fetch','BordereauremiseController@fetch')->middleware('auth');
 
+Route::resource('workflowexecs','WorkflowExecController')->middleware('auth');
 Route::resource('workflowexecactions','WorkflowExecActionController')->middleware('auth');
 
 //Route::get('/home', 'HomeController@index')->name('home');

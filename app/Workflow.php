@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
  * @property integer|null $status_id
  *
  * @property string $titre
+ * @property string|null $model_type
  *
  * @property integer|null $user_id
  *

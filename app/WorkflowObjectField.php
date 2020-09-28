@@ -18,11 +18,11 @@ use Illuminate\Support\Carbon;
  * @property string $db_field_name
  * @property string $field_label
  *
- * @property boolean $valuetype_string
- * @property boolean $valuetype_integer
- * @property boolean $valuetype_boolean
- * @property boolean $valuetype_datetime
- * @property boolean $valuetype_image
+ * @property boolean|null $valuetype_string
+ * @property boolean|null $valuetype_integer
+ * @property boolean|null $valuetype_boolean
+ * @property boolean|null $valuetype_datetime
+ * @property boolean|null $valuetype_image
  *
  * @property integer|null $workflow_object_id
  *

@@ -3,7 +3,10 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -25,10 +28,15 @@ use Illuminate\Support\Facades\DB;
  * @property string $classe_paiement
  * @property string $mode_paiement
  * @property string $montant_total
+ *
+ * @property Carbon $date_depot
+ * @property integer $montant_depose_agence
  * @property string $scan_bordereau
- * @property Carbon $date_depot_agence
- * @property Carbon $date_effectif
+ * @property string $commentaire_agence
+ *
  * @property Carbon $date_valeur
+ * @property integer $montant_depose_finance
+ * @property string $commentaire_finance
  *
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -37,32 +45,69 @@ class Bordereauremise extends BaseModel
 {
     protected $guarded = [];
 
-    public function workflow() {
-        $workflow_id = DB::table('model_has_workflow')
-            ->where('model_type', 'App\Bordereauremise')
-            ->value('workflow_id');
+    #region Eloquent Relationships
 
-        if ($workflow_id) {
-            return Workflow::where('id', $workflow_id)->first();
+    /**
+     * Le(s) Workflow(s) rattaché(s) a ce type de modèle le cas échéant
+     * @return Collection|null
+     */
+    public function workflows() {
+        /*return $this->hasMany('App\Workflow', 'model_id')
+            ->where('model_type', 'App\Bordereauremise');*/
+        $workflows = Workflow::where('model_type', 'App\Bordereauremise')
+            ->get();
+
+        if ($workflows) {
+            return $workflows;
         } else {
             return null;
         }
     }
 
-    public function execaction() {
-        return $this->hasMany('App\WorkflowExecAction', 'model_id')
-            ->where('model_type', 'App\Bordereauremise')
-            ->where('current', 1);
+    public function workflowexecs() {
+        return $this->hasMany('App\WorkflowExec', 'model_id')
+            ->where('model_type', 'App\Bordereauremise');
+        //->whereNotNull('current_step_id');
     }
+
+    public function workflowexec() {
+        return $this->hasOne('App\WorkflowExec', 'model_id')
+            ->where('model_type', 'App\Bordereauremise')
+            ->latest();
+        //->whereNotNull('current_step_id');
+    }
+
+    /**
+     * L'instance d'exécution du workflow rattaché, le cas échéant.
+     * @return WorkflowExec|\Illuminate\Database\Eloquent\Collection|HasMany
+     */
+    public function workflowexecs_old() {
+
+        $user = User::where('id', Auth::user()->id())->first();
+
+        //return $this->workflowexecs_all;
+
+        $workflowexecs = array();
+        foreach ($this->workflowexecs_all as $exec) {
+            if ($user->hasAnyRole([$exec->currentstep->profile->name, 'Admin'])) {
+                $workflowexecs[] = $exec;
+            }
+        }
+        return \Illuminate\Database\Eloquent\Collection::make($workflowexecs);
+    }
+
+    #endregion
 
     public static function boot(){
         parent::boot();
 
         // Après création
         self::created(function($model){
-            $workflow = $model->workflow();
-            if ($workflow) {
-                $workflow->exec();
+            $workflows = $model->workflows();
+            if ($workflows) {
+                foreach ($workflows as $workflow) {
+                    $workflow->exec();
+                }
             }
         });
     }

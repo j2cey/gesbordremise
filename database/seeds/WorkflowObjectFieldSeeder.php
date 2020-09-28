@@ -14,7 +14,11 @@ class WorkflowObjectFieldSeeder extends Seeder
     {
         $objectfields = [
             [
-                'db_field_name' => "montant_total", 'field_label' => "Montant Total", 'valuetype_integer' => true,
+                'db_field_name' => "date_depot", 'field_label' => "Date Depot Agence", 'valuetype_datetime' => true,
+                'workflow_object_id' => 1
+            ],
+            [
+                'db_field_name' => "montant_depose_agence", 'field_label' => "Montant Déposé (Agence)", 'valuetype_integer' => true,
                 'workflow_object_id' => 1
             ],
             [
@@ -22,15 +26,19 @@ class WorkflowObjectFieldSeeder extends Seeder
                 'workflow_object_id' => 1
             ],
             [
-                'db_field_name' => "date_depot_agence", 'field_label' => "Date Depot Agence", 'valuetype_datetime' => true,
-                'workflow_object_id' => 1
-            ],
-            [
-                'db_field_name' => "date_effectif", 'field_label' => "Date Effective", 'valuetype_datetime' => true,
+                'db_field_name' => "commentaire_agence", 'field_label' => "Commentaire Agence", 'valuetype_string' => true,
                 'workflow_object_id' => 1
             ],
             [
                 'db_field_name' => "date_valeur", 'field_label' => "Date Valeur", 'valuetype_datetime' => true,
+                'workflow_object_id' => 1
+            ],
+            [
+                'db_field_name' => "montant_depose_finance", 'field_label' => "Montant Déposé (Finance)", 'valuetype_integer' => true,
+                'workflow_object_id' => 1
+            ],
+            [
+                'db_field_name' => "commentaire_finance", 'field_label' => "Commentaire Finance", 'valuetype_string' => true,
                 'workflow_object_id' => 1
             ],
         ];

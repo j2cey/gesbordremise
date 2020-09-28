@@ -3,30 +3,60 @@
 namespace App\Http\Controllers;
 
 use App\Bordereauremise;
-use App\WorkflowExecAction;
+use App\User;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class BordereauremiseController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|Response|View
      */
     public function index()
     {
-        $bordereauremises = Bordereauremise::all();
-        $bordereauremises->load(['execaction','execaction.action','execaction.prevexec','execaction.nextexec']);
+        return view('bordereauremises.index');
+    }
 
-        //$bordereauremises->load(['steps','steps.profile','steps.actions','steps.actions.type','steps.actions.objectfield']);
-        return $bordereauremises;
+    public function fetch() {
+        $bordereauremises_all = Bordereauremise::all();
+        $bordereauremises_all->load(['workflowexec','workflowexec.currentstep','workflowexec.currentstep.profile','workflowexec.workflowstatus']);
+
+        $user = auth()->user();//User::where('id', Auth::user()->id())->first();
+
+        //dd($user->hasRole(['Chef Agence','Admin']));
+
+        $validation = [];
+
+        $bordereauremises_arr = array();
+        foreach ($bordereauremises_all as $bord) {
+
+            if ($bord->workflowexec) {
+                //$validation[] = [ "hasRole" . $bord->workflowexec->currentstep->profile->name => $user->hasRole([$bord->workflowexec->currentstep->profile->name, 'Admin']) ];
+                if ($user->hasRole([$bord->workflowexec->currentstep->profile->name, 'Admin'])) {
+                    $bordereauremises_arr[] = $bord;
+                }
+            } else {
+                $bordereauremises_arr[] = $bord;
+            }
+        }
+
+        $bordereauremises = Collection::make($bordereauremises_arr);
+
+        //dd("Validation: ", $validation, "Coll: ", $bordereauremises);
+        return $bordereauremises_arr;
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -37,7 +67,7 @@ class BordereauremiseController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -48,7 +78,7 @@ class BordereauremiseController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Bordereauremise  $bordereauremise
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(Bordereauremise $bordereauremise)
     {
@@ -59,7 +89,7 @@ class BordereauremiseController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Bordereauremise  $bordereauremise
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit(Bordereauremise $bordereauremise)
     {
@@ -71,7 +101,7 @@ class BordereauremiseController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Bordereauremise  $bordereauremise
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, Bordereauremise $bordereauremise)
     {
@@ -82,7 +112,7 @@ class BordereauremiseController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Bordereauremise  $bordereauremise
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(Bordereauremise $bordereauremise)
     {

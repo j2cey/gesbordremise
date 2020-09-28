@@ -131,7 +131,7 @@
                 this.loading = true
 
                 this.workflowForm
-                    .put(`/workflows/${this.workflowId}`,"")
+                    .put(`/workflows/${this.workflowId}`,undefined)
                     .then(updworkflow => {
                         this.loading = false
                         this.$parent.$emit('workflow_updated', updworkflow)

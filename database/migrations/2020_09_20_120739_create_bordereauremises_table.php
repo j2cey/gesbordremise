@@ -29,12 +29,16 @@ class CreateBordereauremisesTable extends Migration
             $table->string('changement_dernier_tarif')->nullable()->comment('changement dernier tarif');
             $table->string('classe_paiement')->nullable()->comment('classe de paiement');
             $table->string('mode_paiement')->nullable()->comment('mode de paiement');
-            //TODO changer type montant_total en integer
             $table->string('montant_total')->nullable()->comment('montant total');
+            // Champs à modifier par le workflow (Agence)
+            $table->timestamp('date_depot')->nullable()->comment('date de depot agence');
+            $table->integer('montant_depose_agence')->nullable()->comment('montant déposé (agence)');
             $table->string('scan_bordereau')->nullable()->comment('fichier scan du bordereau');
-            $table->timestamp('date_depot_agence')->nullable()->comment('date de depot agence');
-            $table->timestamp('date_effectif')->nullable()->comment('date effective');
+            $table->string('commentaire_agence')->nullable()->comment('commentaire agence');
+            // Champs à modifier par le workflow (Finance)
             $table->timestamp('date_valeur')->nullable()->comment('date valeur');
+            $table->integer('montant_depose_finance')->nullable()->comment('montant déposé (finance)');
+            $table->string('commentaire_finance')->nullable()->comment('commentaire finance');
         });
         $this->setTableComment($this->table_name,$this->table_comment);
     }

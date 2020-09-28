@@ -5,12 +5,12 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWorkflowExecActionsTable extends Migration
+class CreateWorkflowExecStepsTable extends Migration
 {
     use BaseMigrationTrait;
 
-    public $table_name = 'workflow_exec_actions';
-    public $table_comment = 'Instance des actions effectuées/a effectuer par le workflow';
+    public $table_name = 'workflow_exec_steps';
+    public $table_comment = 'Instance d exécution d une étape de workflow';
 
     /**
      * Run the migrations.
@@ -23,19 +23,18 @@ class CreateWorkflowExecActionsTable extends Migration
             $table->id();
             $table->baseFields();
 
-            $table->foreignId('workflow_exec_step_id')->nullable()
-                ->comment('référence de l instance d execution d étape')
+            $table->foreignId('workflow_exec_id')->nullable()
+                ->comment('référence de l instance d exécution de workflow')
                 ->constrained()->onDelete('set null');
 
-            $table->foreignId('workflow_action_id')->nullable()
-                ->comment('référence de l action')
+            $table->foreignId('workflow_step_id')->nullable()
+                ->comment('référence de l etape de workflow')
                 ->constrained()->onDelete('set null');
 
             $table->foreignId('workflow_status_id')->nullable()
-                ->comment('référence du statut')
+                ->comment('référence du statut de workflow')
                 ->constrained()->onDelete('set null');
 
-            $table->string('motif_rejet')->nullable()->comment('motif rejet le cas échéant');
             $table->json('report')->comment('rapport d exécution');
         });
         $this->setTableComment($this->table_name,$this->table_comment);
@@ -50,8 +49,8 @@ class CreateWorkflowExecActionsTable extends Migration
     {
         Schema::table($this->table_name, function (Blueprint $table) {
             $table->dropBaseForeigns();
-            $table->dropForeign(['workflow_exec_step_id']);
-            $table->dropForeign(['workflow_action_id']);
+            $table->dropForeign(['workflow_exec_id']);
+            $table->dropForeign(['workflow_step_id']);
             $table->dropForeign(['workflow_status_id']);
         });
         Schema::dropIfExists($this->table_name);

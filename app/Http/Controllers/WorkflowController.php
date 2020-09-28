@@ -49,13 +49,14 @@ class WorkflowController extends Controller
             'titre' => $formInput['titre'],
             'description' => $formInput['description'],
             'user_id' => $user->id,
+            'model_type' => $formInput['object']['model_type'],
         ]);
 
         // Insert model_workflow
-        DB::table('model_has_workflow')->insert([
+        /*DB::table('model_has_workflow')->insert([
             'workflow_id' => $new_workflow->id,
             'model_type' => $formInput['object']['model_type'],
-        ]);
+        ]);*/
 
         return $new_workflow->load(['steps','steps.profile','steps.actions']);
     }
@@ -91,7 +92,8 @@ class WorkflowController extends Controller
      */
     public function update(Request $request, Workflow $workflow)
     {
-
+        $formInput = $request->all();
+        dd($formInput, $workflow, $request);
     }
 
     /**

@@ -22,9 +22,7 @@
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Bordereaux Remise</a>
                     <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
                         <li class="nav-item">
-                            <router-link tag="a" to="/bordereauremises" class="nav-link">
-                                <i class="fas fa-send"></i> Liste
-                            </router-link>
+                            <a href="/bordereauremises" class="nav-link">Liste</a>
                         </li>
                         <!-- End Level two -->
                     </ul>

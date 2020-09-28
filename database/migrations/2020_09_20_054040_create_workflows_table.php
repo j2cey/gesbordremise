@@ -29,6 +29,8 @@ class CreateWorkflowsTable extends Migration
             $table->foreignId('user_id')->nullable()
                 ->comment('référence de l utilisateur')
                 ->constrained()->onDelete('set null');
+
+            $table->string('model_type')->nullable()->comment('type du modèle référencé');
         });
         $this->setTableComment($this->table_name,$this->table_comment);
     }

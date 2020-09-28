@@ -2109,6 +2109,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "index",
   mounted: function mounted() {},
@@ -2121,7 +2135,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
-    axios.get('/bordereauremises').then(function (_ref) {
+    axios.get('/bordereauremises.fetch').then(function (_ref) {
       var data = _ref.data;
       return _this.bordereauremises = data;
     });
@@ -3101,6 +3115,428 @@ var Workflowexecaction = function Workflowexecaction(workflowexecaction) {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/workflowexecs/exec.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/workflowexecs/exec.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _reject__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./reject */ "./resources/js/views/workflowexecs/reject.vue");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+var Workflowexec = function Workflowexec(workflowexec, actionvalues) {
+  _classCallCheck(this, Workflowexec);
+
+  this.setvalue = workflowexec.setvalue || '';
+  this.actionvalues = actionvalues;
+  this.motif_rejet = workflowexec.motif_rejet || '';
+};
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "exec",
+  props: {
+    exec_prop: {},
+    actionvalues_prop: {}
+  },
+  components: {
+    ValidateReject: _reject__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    this.$on('reject_validated', function (motif) {
+      _this.workflowexecForm.motif_rejet = motif;
+      console.log('reject_validated', _this.workflowexecForm);
+
+      _this.submitForm();
+    });
+  },
+  data: function data() {
+    return {
+      exec: this.exec_prop,
+      execId: this.exec_prop.uuid,
+      workflowexecForm: new Form(this.actionvalues_prop),
+      filename: 'Télécharger un fichier',
+      selectedFile: null
+    };
+  },
+  methods: {
+    initActionvaluesArray: function initActionvaluesArray() {
+      var actionvalues = [];
+
+      for (var i = 0; i < this.exec_prop.currentstep.actions; i++) {}
+    },
+    handleFileUpload: function handleFileUpload(event) {
+      this.selectedFile = event.target.files[0];
+      this.filename = typeof this.selectedFile !== 'undefined' ? this.selectedFile.name : 'Télécharger un fichier';
+    },
+    validerEtape: function validerEtape() {
+      this.submitForm();
+    },
+    rejeterEtape: function rejeterEtape() {
+      this.$emit('validate_reject');
+    },
+    submitForm: function submitForm() {
+      var _this2 = this;
+
+      var fd = this.addFileToForm();
+      console.log(this.workflowexecForm); //.post(`/workflowexecs`, fd)
+
+      this.workflowexecForm.put("/workflowexecs/".concat(this.execId), fd).then(function (data) {
+        window.location = "/bordereauremises";
+      })["catch"](function (error) {
+        _this2.loading = false;
+      });
+    },
+    addFileToForm: function addFileToForm() {
+      if (typeof this.selectedFile !== 'undefined') {
+        var fd = new FormData();
+        fd.append('step_files', this.selectedFile);
+        console.log("image added", fd);
+        return fd;
+      } else {
+        var _fd = undefined;
+        console.log("image not added", _fd);
+        return _fd;
+      }
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/workflowexecs/reject.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/workflowexecs/reject.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "reject",
+  props: {},
+  components: {},
+  mounted: function mounted() {
+    var _this = this;
+
+    this.$parent.$on('validate_reject', function () {
+      _this.motif = null;
+      $('#rejectStep').modal();
+    });
+  },
+  created: function created() {},
+  data: function data() {
+    return {
+      motif: null
+    };
+  },
+  methods: {
+    validateForm: function validateForm() {
+      this.$parent.$emit('reject_validated', this.motif);
+      $('#rejectStep').modal('hide');
+    }
+  },
+  computed: {
+    isValidForm: function isValidForm() {
+      return this.motif && this.motif !== "null";
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/workflowexecsteps/show.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/workflowexecsteps/show.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var Workflowexecstep = function Workflowexecstep(workflowexecstep) {
+  _classCallCheck(this, Workflowexecstep);
+
+  this.setvalue = workflowexecstep.setvalue || '';
+  this.actionvalues = workflowexecstep.actionvalues || '';
+  this.motif_rejet = workflowexecstep.motif_rejet || '';
+};
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "show",
+  props: {
+    execstep_prop: {}
+  },
+  data: function data() {
+    return {
+      execstep: this.execstep_prop,
+      execstepId: this.execstep_prop.uuid,
+      workflowexecstepForm: new Form(new Workflowexecstep({})),
+      filename: 'Télécharger un fichier',
+      selectedFile: null
+    };
+  },
+  methods: {
+    handleFileUpload: function handleFileUpload(event) {
+      this.selectedFile = event.target.files[0];
+      this.filename = typeof this.selectedFile !== 'undefined' ? this.selectedFile.name : 'Télécharger un fichier';
+    },
+    validerAction: function validerAction() {
+      var _this = this;
+
+      var fd = this.addFileToForm();
+      this.workflowexecstepForm.put("/workflowexecsteps/".concat(this.execstepId), fd).then(function (data) {//this.$router.go('/bordereauremises')
+      })["catch"](function (error) {
+        _this.loading = false;
+      });
+    },
+    rejeterAction: function rejeterAction() {},
+    addFileToForm: function addFileToForm() {
+      if (this.execstep.action.objectfield.valuetype_image === 1) {
+        console.log("we have to load image", this.selectedFile);
+
+        if (typeof this.selectedFile !== 'undefined') {
+          var fd = new FormData();
+          fd.append('valueimage', this.selectedFile);
+          console.log("image added", fd);
+          return fd;
+        } else {
+          var _fd = undefined;
+          console.log("image not added", _fd);
+          return _fd;
+        }
+      } else {
+        console.log("no image to load", this.selectedFile);
+        var _fd2 = undefined;
+        return _fd2;
+      }
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/workflows/addupdate.vue?vue&type=script&lang=js&":
 /*!*************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/workflows/addupdate.vue?vue&type=script&lang=js& ***!
@@ -3252,7 +3688,7 @@ var Workflow = function Workflow(workflow) {
       var _this4 = this;
 
       this.loading = true;
-      this.workflowForm.put("/workflows/".concat(this.workflowId), "").then(function (updworkflow) {
+      this.workflowForm.put("/workflows/".concat(this.workflowId), undefined).then(function (updworkflow) {
         _this4.loading = false;
 
         _this4.$parent.$emit('workflow_updated', updworkflow);
@@ -88731,7 +89167,8 @@ var render = function() {
                                 ]),
                                 _vm._v(" "),
                                 _c("td", [
-                                  bordereauremise.execaction[0]
+                                  bordereauremise.workflowexec &&
+                                  bordereauremise.workflowexec.currentstep
                                     ? _c(
                                         "span",
                                         { staticClass: "badge badge-default" },
@@ -88741,22 +89178,102 @@ var render = function() {
                                             {
                                               attrs: {
                                                 href:
-                                                  "/workflowexecactions/" +
-                                                  bordereauremise.execaction[0]
+                                                  "/workflowexecs/" +
+                                                  bordereauremise.workflowexec
                                                     .uuid
                                               }
                                             },
                                             [
                                               _vm._v(
                                                 _vm._s(
-                                                  bordereauremise.execaction[0]
-                                                    .action.titre
+                                                  bordereauremise.workflowexec
+                                                    .currentstep.titre
                                                 )
                                               )
                                             ]
                                           )
                                         ]
                                       )
+                                    : bordereauremise.workflowexec
+                                    ? _c("span", [
+                                        bordereauremise.workflowexec
+                                          .workflowstatus.code == 5
+                                          ? _c(
+                                              "span",
+                                              {
+                                                staticClass:
+                                                  "badge badge-danger"
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                                        " +
+                                                    _vm._s(
+                                                      bordereauremise
+                                                        .workflowexec
+                                                        .workflowstatus.name
+                                                    ) +
+                                                    "\n                                                    "
+                                                )
+                                              ]
+                                            )
+                                          : bordereauremise.workflowexec
+                                              .workflowstatus.code == 4
+                                          ? _c(
+                                              "span",
+                                              {
+                                                staticClass:
+                                                  "badge badge-success"
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                                        " +
+                                                    _vm._s(
+                                                      bordereauremise
+                                                        .workflowexec
+                                                        .workflowstatus.name
+                                                    ) +
+                                                    "\n                                                    "
+                                                )
+                                              ]
+                                            )
+                                          : bordereauremise.workflowexec
+                                              .workflowstatus.code == 3
+                                          ? _c(
+                                              "span",
+                                              {
+                                                staticClass:
+                                                  "badge badge-warning"
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                                        " +
+                                                    _vm._s(
+                                                      bordereauremise
+                                                        .workflowexec
+                                                        .workflowstatus.name
+                                                    ) +
+                                                    "\n                                                    "
+                                                )
+                                              ]
+                                            )
+                                          : _c(
+                                              "span",
+                                              {
+                                                staticClass: "badge badge-dark"
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                                        " +
+                                                    _vm._s(
+                                                      bordereauremise
+                                                        .workflowexec
+                                                        .workflowstatus.name
+                                                    ) +
+                                                    "\n                                                    "
+                                                )
+                                              ]
+                                            )
+                                      ])
                                     : _c(
                                         "span",
                                         { staticClass: "badge badge-default" },
@@ -88862,7 +89379,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Montant Total")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Action")])
+        _c("th", [_vm._v("Statut")])
       ])
     ])
   }
@@ -90518,6 +91035,1108 @@ var render = function() {
                                 ])
                               : _vm._e()
                           ])
+                    ]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row no-print" }, [
+                _c("div", { staticClass: "col-12" }, [
+                  _vm._m(1),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger float-right",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.rejeterAction()
+                        }
+                      }
+                    },
+                    [
+                      _c("i", { staticClass: "far fa-credit-card" }),
+                      _vm._v(" Rejéter\n                                ")
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary float-right",
+                      staticStyle: { "margin-right": "5px" },
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.validerAction()
+                        }
+                      }
+                    },
+                    [
+                      _c("i", { staticClass: "fas fa-download" }),
+                      _vm._v(" Valider\n                                ")
+                    ]
+                  )
+                ])
+              ])
+            ])
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("ol", { staticClass: "breadcrumb float-sm-right" }, [
+        _c("li", { staticClass: "breadcrumb-item" }, [
+          _c("a", { attrs: { href: "#" } }, [_vm._v("Home")])
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "breadcrumb-item active" }, [
+          _vm._v("Action Workflow")
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass: "btn btn-default",
+        attrs: { href: "invoice-print.html", target: "_blank" }
+      },
+      [_c("i", { staticClass: "fa fa-undo" }), _vm._v(" Annuler")]
+    )
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/workflowexecs/exec.vue?vue&type=template&id=47872b88&scoped=true&":
+/*!****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/workflowexecs/exec.vue?vue&type=template&id=47872b88&scoped=true& ***!
+  \****************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("section", { staticClass: "content-header" }, [
+        _c("div", { staticClass: "container-fluid" }, [
+          _c("div", { staticClass: "row mb-2" }, [
+            _c("div", { staticClass: "col-sm-6" }, [
+              _c("h1", [_vm._v(_vm._s(_vm.exec.workflow.titre))])
+            ]),
+            _vm._v(" "),
+            _vm._m(0)
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("section", { staticClass: "content" }, [
+        _c("div", { staticClass: "container-fluid" }, [
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-12" }, [
+              _c("div", { staticClass: "callout callout-info" }, [
+                _c("h5", [
+                  _c("u", [_vm._v("Etape ")]),
+                  _vm._v(": "),
+                  _c("strong", [_vm._v(_vm._s(_vm.exec.currentstep.titre))])
+                ]),
+                _vm._v(
+                  "\n                        " +
+                    _vm._s(_vm.exec.currentstep.description) +
+                    "\n                        "
+                ),
+                _vm.exec.motif_rejet
+                  ? _c("p", [
+                      _c("i", { staticClass: "fas fa-info text-red" }),
+                      _vm._v(" Bordereau retourné avec le "),
+                      _c("u", [_vm._v("Motif")]),
+                      _vm._v(":\n                            "),
+                      _c("span", { staticClass: "text-red" }, [
+                        _vm._v(_vm._s(_vm.exec.motif_rejet))
+                      ])
+                    ])
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "invoice p-3 mb-3" }, [
+                _c("div", { staticClass: "row invoice-info" }, [
+                  _c("div", { staticClass: "col-sm-12 invoice-col" }, [
+                    _c(
+                      "form",
+                      {
+                        staticClass: "form-horizontal",
+                        on: {
+                          submit: function($event) {
+                            $event.preventDefault()
+                          },
+                          keydown: function($event) {
+                            return _vm.workflowexecForm.errors.clear()
+                          }
+                        }
+                      },
+                      [
+                        _c(
+                          "div",
+                          { staticClass: "card-body" },
+                          _vm._l(_vm.exec.currentstep.actions, function(
+                            action,
+                            index
+                          ) {
+                            return _vm.exec.currentstep.actions
+                              ? _c("div", { staticClass: "form-group row" }, [
+                                  action.type.code == 1
+                                    ? _c("div", { staticClass: "col-sm-10" }, [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.workflowexecForm.setvalue,
+                                              expression:
+                                                "workflowexecForm.setvalue"
+                                            }
+                                          ],
+                                          staticClass: "form-control",
+                                          attrs: {
+                                            type: "text",
+                                            id: "setvalue",
+                                            name: "setvalue",
+                                            autocomplete: "setvalue",
+                                            placeholder: "Titre"
+                                          },
+                                          domProps: {
+                                            value: _vm.workflowexecForm.setvalue
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.workflowexecForm,
+                                                "setvalue",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _vm.workflowexecForm.errors.has(
+                                          "setvalue"
+                                        )
+                                          ? _c("span", {
+                                              staticClass:
+                                                "invalid-feedback d-block",
+                                              attrs: { role: "alert" },
+                                              domProps: {
+                                                textContent: _vm._s(
+                                                  _vm.workflowexecForm.errors.get(
+                                                    "setvalue"
+                                                  )
+                                                )
+                                              }
+                                            })
+                                          : _vm._e()
+                                      ])
+                                    : action.objectfield.valuetype_string ||
+                                      action.objectfield.valuetype_integer
+                                    ? _c("div", { staticClass: "col-sm-10" }, [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.workflowexecForm[
+                                                  action.objectfield
+                                                    .db_field_name
+                                                ],
+                                              expression:
+                                                "workflowexecForm[action.objectfield.db_field_name]"
+                                            }
+                                          ],
+                                          staticClass: "form-control",
+                                          attrs: {
+                                            type: "text",
+                                            id:
+                                              action.objectfield.db_field_name,
+                                            name:
+                                              action.objectfield.db_field_name,
+                                            placeholder: action.titre
+                                          },
+                                          domProps: {
+                                            value:
+                                              _vm.workflowexecForm[
+                                                action.objectfield.db_field_name
+                                              ]
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.workflowexecForm,
+                                                action.objectfield
+                                                  .db_field_name,
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _vm.workflowexecForm.errors.has(
+                                          "" + action.objectfield.db_field_name
+                                        )
+                                          ? _c("span", {
+                                              staticClass:
+                                                "invalid-feedback d-block",
+                                              attrs: { role: "alert" },
+                                              domProps: {
+                                                textContent: _vm._s(
+                                                  _vm.workflowexecForm.errors.get(
+                                                    "" +
+                                                      action.objectfield
+                                                        .db_field_name
+                                                  )
+                                                )
+                                              }
+                                            })
+                                          : _vm._e()
+                                      ])
+                                    : action.objectfield.valuetype_boolean
+                                    ? _c("div", { staticClass: "col-sm-10" }, [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.workflowexecForm[
+                                                  action.objectfield
+                                                    .db_field_name
+                                                ],
+                                              expression:
+                                                "workflowexecForm[action.objectfield.db_field_name]"
+                                            }
+                                          ],
+                                          staticClass: "form-control",
+                                          attrs: {
+                                            type: "text",
+                                            id:
+                                              action.objectfield.db_field_name,
+                                            name:
+                                              action.objectfield.db_field_name,
+                                            placeholder: action.titre
+                                          },
+                                          domProps: {
+                                            value:
+                                              _vm.workflowexecForm[
+                                                action.objectfield.db_field_name
+                                              ]
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.workflowexecForm,
+                                                action.objectfield
+                                                  .db_field_name,
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _vm.workflowexecForm.errors.has(
+                                          "" + action.objectfield.db_field_name
+                                        )
+                                          ? _c("span", {
+                                              staticClass:
+                                                "invalid-feedback d-block",
+                                              attrs: { role: "alert" },
+                                              domProps: {
+                                                textContent: _vm._s(
+                                                  _vm.workflowexecForm.errors.get(
+                                                    "" +
+                                                      action.objectfield
+                                                        .db_field_name
+                                                  )
+                                                )
+                                              }
+                                            })
+                                          : _vm._e()
+                                      ])
+                                    : action.objectfield.valuetype_datetime
+                                    ? _c(
+                                        "div",
+                                        { staticClass: "col-sm-10" },
+                                        [
+                                          _c("VueCtkDateTimePicker", {
+                                            attrs: {
+                                              label: action.titre,
+                                              format: "YYYY-MM-DD hh:mm:ss"
+                                            },
+                                            model: {
+                                              value:
+                                                _vm.workflowexecForm[
+                                                  action.objectfield
+                                                    .db_field_name
+                                                ],
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.workflowexecForm,
+                                                  action.objectfield
+                                                    .db_field_name,
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "workflowexecForm[action.objectfield.db_field_name]"
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _vm.workflowexecForm.errors.has(
+                                            "" +
+                                              action.objectfield.db_field_name
+                                          )
+                                            ? _c("span", {
+                                                staticClass:
+                                                  "invalid-feedback d-block",
+                                                attrs: { role: "alert" },
+                                                domProps: {
+                                                  textContent: _vm._s(
+                                                    _vm.workflowexecForm.errors.get(
+                                                      "" +
+                                                        action.objectfield
+                                                          .db_field_name
+                                                    )
+                                                  )
+                                                }
+                                              })
+                                            : _vm._e()
+                                        ],
+                                        1
+                                      )
+                                    : action.objectfield.valuetype_image
+                                    ? _c("div", { staticClass: "col-sm-10" }, [
+                                        _c("input", {
+                                          ref: action.objectfield.db_field_name,
+                                          refInFor: true,
+                                          staticClass: "custom-file-input",
+                                          attrs: {
+                                            type: "file",
+                                            id:
+                                              action.objectfield.db_field_name,
+                                            name:
+                                              action.objectfield.db_field_name
+                                          },
+                                          on: { change: _vm.handleFileUpload }
+                                        }),
+                                        _vm._v(" "),
+                                        _c(
+                                          "label",
+                                          {
+                                            staticClass: "custom-file-label",
+                                            attrs: {
+                                              for:
+                                                action.objectfield.db_field_name
+                                            }
+                                          },
+                                          [_vm._v(_vm._s(_vm.filename))]
+                                        ),
+                                        _vm._v(" "),
+                                        _vm.workflowexecForm.errors.has(
+                                          "" + action.objectfield.db_field_name
+                                        )
+                                          ? _c("span", {
+                                              staticClass:
+                                                "invalid-feedback d-block",
+                                              attrs: { role: "alert" },
+                                              domProps: {
+                                                textContent: _vm._s(
+                                                  _vm.workflowexecForm.errors.get(
+                                                    "" +
+                                                      action.objectfield
+                                                        .db_field_name
+                                                  )
+                                                )
+                                              }
+                                            })
+                                          : _vm._e()
+                                      ])
+                                    : _c("div", { staticClass: "col-sm-10" })
+                                ])
+                              : _vm._e()
+                          }),
+                          0
+                        )
+                      ]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row no-print" }, [
+                  _c("div", { staticClass: "col-12" }, [
+                    _vm._m(1),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger float-right",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.rejeterEtape()
+                          }
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "far fa-credit-card" }),
+                        _vm._v(" Rejéter\n                                ")
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary float-right",
+                        staticStyle: { "margin-right": "5px" },
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.validerEtape()
+                          }
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "fas fa-download" }),
+                        _vm._v(" Valider\n                                ")
+                      ]
+                    )
+                  ])
+                ])
+              ])
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("ValidateReject")
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("ol", { staticClass: "breadcrumb float-sm-right" }, [
+        _c("li", { staticClass: "breadcrumb-item" }, [
+          _c("a", { attrs: { href: "#" } }, [_vm._v("Home")])
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "breadcrumb-item active" }, [
+          _vm._v("Action Workflow")
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      { staticClass: "btn btn-default", attrs: { href: "/bordereauremises" } },
+      [_c("i", { staticClass: "fa fa-undo" }), _vm._v(" Annuler")]
+    )
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/workflowexecs/reject.vue?vue&type=template&id=1e4f54ec&":
+/*!******************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/workflowexecs/reject.vue?vue&type=template&id=1e4f54ec& ***!
+  \******************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      staticClass: "modal fade",
+      attrs: {
+        id: "rejectStep",
+        tabindex: "-1",
+        role: "dialog",
+        "aria-labelledby": "exampleModalLabel",
+        "aria-hidden": "true"
+      }
+    },
+    [
+      _c("div", { staticClass: "modal-dialog modal-lg" }, [
+        _c("div", { staticClass: "modal-content" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "modal-body" }, [
+            _c(
+              "form",
+              {
+                staticClass: "form-horizontal",
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "card-body" }, [
+                  _c("div", { staticClass: "form-group row" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "col-sm-2 col-form-label",
+                        attrs: { for: "motif" }
+                      },
+                      [_vm._v("Motif Réjet")]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-sm-10" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.motif,
+                            expression: "motif"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          id: "motif",
+                          name: "motif",
+                          required: "",
+                          autocomplete: "titre",
+                          autofocus: "",
+                          placeholder: "Motif"
+                        },
+                        domProps: { value: _vm.motif },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.motif = $event.target.value
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      !_vm.isValidForm
+                        ? _c("span", {
+                            staticClass: "invalid-feedback d-block",
+                            attrs: {
+                              role: "alert",
+                              text: "Veuillez Renseigner le Motif"
+                            }
+                          })
+                        : _vm._e()
+                    ])
+                  ])
+                ])
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "modal-footer justify-content-between" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-secondary",
+                attrs: { type: "button", "data-dismiss": "modal" }
+              },
+              [_vm._v("Fermer")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-danger",
+                attrs: { type: "button", disabled: !_vm.isValidForm },
+                on: {
+                  click: function($event) {
+                    return _vm.validateForm()
+                  }
+                }
+              },
+              [_vm._v("Valider")]
+            )
+          ])
+        ])
+      ])
+    ]
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
+        [_vm._v("Rejéter cette étape")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/workflowexecsteps/show.vue?vue&type=template&id=297edaf4&scoped=true&":
+/*!********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/workflowexecsteps/show.vue?vue&type=template&id=297edaf4&scoped=true& ***!
+  \********************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("section", { staticClass: "content-header" }, [
+      _c("div", { staticClass: "container-fluid" }, [
+        _c("div", { staticClass: "row mb-2" }, [
+          _c("div", { staticClass: "col-sm-6" }, [
+            _c("h1", [_vm._v(_vm._s(_vm.execstep.exec.workflow.titre))])
+          ]),
+          _vm._v(" "),
+          _vm._m(0)
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("section", { staticClass: "content" }, [
+      _c("div", { staticClass: "container-fluid" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-12" }, [
+            _c("div", { staticClass: "callout callout-info" }, [
+              _c("h5", [
+                _c("i", { staticClass: "fas fa-info" }),
+                _vm._v(" "),
+                _c("u", [_vm._v("Etape ")]),
+                _vm._v(": "),
+                _c("strong", [_vm._v(_vm._s(_vm.execstep.step.titre))])
+              ]),
+              _vm._v(
+                "\n                        " +
+                  _vm._s(_vm.execstep.step.description) +
+                  "\n                    "
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "invoice p-3 mb-3" }, [
+              _c("div", { staticClass: "row invoice-info" }, [
+                _c("div", { staticClass: "col-sm-12 invoice-col" }, [
+                  _c(
+                    "form",
+                    {
+                      staticClass: "form-horizontal",
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                        },
+                        keydown: function($event) {
+                          return _vm.workflowexecstepForm.errors.clear()
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "card-body" },
+                        _vm._l(_vm.execstep.step.actions, function(
+                          action,
+                          index
+                        ) {
+                          return _vm.execstep.step.actions
+                            ? _c("div", { staticClass: "form-group row" }, [
+                                action.type.code == 1
+                                  ? _c("div", { staticClass: "col-sm-10" }, [
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value:
+                                              _vm.workflowexecstepForm.setvalue,
+                                            expression:
+                                              "workflowexecstepForm.setvalue"
+                                          }
+                                        ],
+                                        staticClass: "form-control",
+                                        attrs: {
+                                          type: "text",
+                                          id: "setvalue",
+                                          name: "setvalue",
+                                          autocomplete: "setvalue",
+                                          placeholder: "Titre"
+                                        },
+                                        domProps: {
+                                          value:
+                                            _vm.workflowexecstepForm.setvalue
+                                        },
+                                        on: {
+                                          input: function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              _vm.workflowexecstepForm,
+                                              "setvalue",
+                                              $event.target.value
+                                            )
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _vm.workflowexecstepForm.errors.has(
+                                        "setvalue"
+                                      )
+                                        ? _c("span", {
+                                            staticClass:
+                                              "invalid-feedback d-block",
+                                            attrs: { role: "alert" },
+                                            domProps: {
+                                              textContent: _vm._s(
+                                                _vm.workflowexecstepForm.errors.get(
+                                                  "setvalue"
+                                                )
+                                              )
+                                            }
+                                          })
+                                        : _vm._e()
+                                    ])
+                                  : _c(
+                                      "div",
+                                      { staticClass: "col-sm-10" },
+                                      [
+                                        action.objectfield.valuetype_string
+                                          ? _c("input", {
+                                              directives: [
+                                                {
+                                                  name: "model",
+                                                  rawName: "v-model",
+                                                  value:
+                                                    _vm.workflowexecstepForm
+                                                      .actionvalues[
+                                                      action.objectfield
+                                                        .db_field_name
+                                                    ],
+                                                  expression:
+                                                    "workflowexecstepForm.actionvalues[action.objectfield.db_field_name]"
+                                                }
+                                              ],
+                                              staticClass: "form-control",
+                                              attrs: {
+                                                type: "text",
+                                                id:
+                                                  action.objectfield
+                                                    .db_field_name,
+                                                name:
+                                                  action.objectfield
+                                                    .db_field_name,
+                                                placeholder:
+                                                  action.objectfield.field_label
+                                              },
+                                              domProps: {
+                                                value:
+                                                  _vm.workflowexecstepForm
+                                                    .actionvalues[
+                                                    action.objectfield
+                                                      .db_field_name
+                                                  ]
+                                              },
+                                              on: {
+                                                input: function($event) {
+                                                  if ($event.target.composing) {
+                                                    return
+                                                  }
+                                                  _vm.$set(
+                                                    _vm.workflowexecstepForm
+                                                      .actionvalues,
+                                                    action.objectfield
+                                                      .db_field_name,
+                                                    $event.target.value
+                                                  )
+                                                }
+                                              }
+                                            })
+                                          : action.objectfield.valuetype_integer
+                                          ? _c("input", {
+                                              directives: [
+                                                {
+                                                  name: "model",
+                                                  rawName: "v-model",
+                                                  value:
+                                                    _vm.workflowexecstepForm
+                                                      .valuestring,
+                                                  expression:
+                                                    "workflowexecstepForm.valuestring"
+                                                }
+                                              ],
+                                              staticClass: "form-control",
+                                              attrs: {
+                                                type: "text",
+                                                id:
+                                                  action.objectfield
+                                                    .db_field_name,
+                                                name:
+                                                  action.objectfield
+                                                    .db_field_name,
+                                                placeholder:
+                                                  action.objectfield
+                                                    .db_field_name
+                                              },
+                                              domProps: {
+                                                value:
+                                                  _vm.workflowexecstepForm
+                                                    .valuestring
+                                              },
+                                              on: {
+                                                input: function($event) {
+                                                  if ($event.target.composing) {
+                                                    return
+                                                  }
+                                                  _vm.$set(
+                                                    _vm.workflowexecstepForm,
+                                                    "valuestring",
+                                                    $event.target.value
+                                                  )
+                                                }
+                                              }
+                                            })
+                                          : action.objectfield.valuetype_boolean
+                                          ? _c("input", {
+                                              directives: [
+                                                {
+                                                  name: "model",
+                                                  rawName: "v-model",
+                                                  value:
+                                                    _vm.workflowexecstepForm
+                                                      .valuestring,
+                                                  expression:
+                                                    "workflowexecstepForm.valuestring"
+                                                }
+                                              ],
+                                              staticClass: "form-control",
+                                              attrs: {
+                                                type: "text",
+                                                id:
+                                                  action.objectfield
+                                                    .db_field_name,
+                                                name:
+                                                  action.objectfield
+                                                    .field_label,
+                                                placeholder:
+                                                  action.objectfield
+                                                    .db_field_name
+                                              },
+                                              domProps: {
+                                                value:
+                                                  _vm.workflowexecstepForm
+                                                    .valuestring
+                                              },
+                                              on: {
+                                                input: function($event) {
+                                                  if ($event.target.composing) {
+                                                    return
+                                                  }
+                                                  _vm.$set(
+                                                    _vm.workflowexecstepForm,
+                                                    "valuestring",
+                                                    $event.target.value
+                                                  )
+                                                }
+                                              }
+                                            })
+                                          : action.objectfield
+                                              .valuetype_datetime
+                                          ? _c("VueCtkDateTimePicker", {
+                                              attrs: {
+                                                label:
+                                                  action.objectfield
+                                                    .db_field_name
+                                              },
+                                              model: {
+                                                value:
+                                                  _vm.workflowexecactionForm
+                                                    .valuedatetime,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.workflowexecactionForm,
+                                                    "valuedatetime",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "workflowexecactionForm.valuedatetime"
+                                              }
+                                            })
+                                          : action.objectfield.valuetype_image
+                                          ? _c("span", [
+                                              _c("input", {
+                                                directives: [
+                                                  {
+                                                    name: "model",
+                                                    rawName: "v-model",
+                                                    value:
+                                                      _vm.workflowexecstepForm
+                                                        .valuestring,
+                                                    expression:
+                                                      "workflowexecstepForm.valuestring"
+                                                  }
+                                                ],
+                                                staticClass: "form-control",
+                                                attrs: {
+                                                  type: "text",
+                                                  id:
+                                                    action.objectfield
+                                                      .db_field_name,
+                                                  name:
+                                                    action.objectfield
+                                                      .db_field_name,
+                                                  placeholder:
+                                                    action.objectfield
+                                                      .field_label
+                                                },
+                                                domProps: {
+                                                  value:
+                                                    _vm.workflowexecstepForm
+                                                      .valuestring
+                                                },
+                                                on: {
+                                                  input: function($event) {
+                                                    if (
+                                                      $event.target.composing
+                                                    ) {
+                                                      return
+                                                    }
+                                                    _vm.$set(
+                                                      _vm.workflowexecstepForm,
+                                                      "valuestring",
+                                                      $event.target.value
+                                                    )
+                                                  }
+                                                }
+                                              }),
+                                              _vm._v(" "),
+                                              _c(
+                                                "label",
+                                                {
+                                                  staticClass:
+                                                    "custom-file-label",
+                                                  attrs: {
+                                                    for:
+                                                      action.objectfield
+                                                        .db_field_name
+                                                  }
+                                                },
+                                                [_vm._v(_vm._s(_vm.filename))]
+                                              )
+                                            ])
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        _vm.workflowexecstepForm.errors.has(
+                                          "" + action.objectfield.db_field_name
+                                        )
+                                          ? _c("span", {
+                                              staticClass:
+                                                "invalid-feedback d-block",
+                                              attrs: { role: "alert" },
+                                              domProps: {
+                                                textContent: _vm._s(
+                                                  _vm.workflowexecstepForm.errors.get(
+                                                    "" +
+                                                      action.objectfield
+                                                        .db_field_name
+                                                  )
+                                                )
+                                              }
+                                            })
+                                          : _vm._e()
+                                      ],
+                                      1
+                                    )
+                              ])
+                            : _vm._e()
+                        }),
+                        0
+                      )
                     ]
                   )
                 ])
@@ -110035,6 +111654,9 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.filter('formatDate', function (value)
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('VueCtkDateTimePicker', vue_ctk_date_time_picker__WEBPACK_IMPORTED_MODULE_6___default.a);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('workflow-execaction', __webpack_require__(/*! ./views/workflowexecactions/show */ "./resources/js/views/workflowexecactions/show.vue")["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('workflow-execstep', __webpack_require__(/*! ./views/workflowexecsteps/show */ "./resources/js/views/workflowexecsteps/show.vue")["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('workflow-exec', __webpack_require__(/*! ./views/workflowexecs/exec */ "./resources/js/views/workflowexecs/exec.vue")["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('bordereauremise-index', __webpack_require__(/*! ./views/bordereauremises/index */ "./resources/js/views/bordereauremises/index.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component("rawDisplayer", _utilities_infra_raw_displayer_vue__WEBPACK_IMPORTED_MODULE_2__["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -110439,27 +112061,64 @@ var Form = /*#__PURE__*/function () {
       //axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
       //axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
       if (typeof fd !== 'undefined') {
+        console.log('fd is not undefined', fd);
+
         for (var property in this.originalData) {
           fd.append(property, this[property]);
+          console.log(property, this[property]);
         }
 
-        console.log('fd is not undefined', fd);
+        if (requestType === 'put') {
+          fd.append("_method", "PATCH");
+          console.log('fd method PATCH added', fd);
+        }
       } else {
         console.log('fd is undefined', fd);
         fd = this.data();
       }
 
-      return new Promise(function (resolve, reject) {
-        axios[requestType](url, fd).then(function (response) {
-          _this.onSuccess(response.data);
+      if (requestType === 'put') {
+        return new Promise(function (resolve, reject) {
+          axios.post(url, fd).then(function (response) {
+            _this.onSuccess(response.data);
 
-          resolve(response.data);
-        })["catch"](function (error) {
-          _this.onFail(error.response.data.errors);
+            resolve(response.data);
+          })["catch"](function (error) {
+            _this.onFail(error.response.data.errors);
 
-          reject(error.response.data.errors);
+            reject(error.response.data.errors);
+          });
         });
-      });
+        /*return new Promise((resolve, reject) => {
+            axios.fetch(url, {
+                method: 'PATCH',
+                headers: {
+                    'Content-type': 'application/x-www-form-urlencoded'
+                },
+                body: fd
+            })
+                .then(response => {
+                    this.onSuccess(response.data);
+                     resolve(response.data);
+                })
+                .catch(error => {
+                    this.onFail(error.response.data.errors);
+                     reject(error.response.data.errors);
+                });
+        });*/
+      } else {
+        return new Promise(function (resolve, reject) {
+          axios[requestType](url, fd).then(function (response) {
+            _this.onSuccess(response.data);
+
+            resolve(response.data);
+          })["catch"](function (error) {
+            _this.onFail(error.response.data.errors);
+
+            reject(error.response.data.errors);
+          });
+        });
+      }
     }
     /**
      * Handle a successful form submission.
@@ -111062,6 +112721,213 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_show_vue_vue_type_template_id_1eeef41e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_show_vue_vue_type_template_id_1eeef41e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/views/workflowexecs/exec.vue":
+/*!***************************************************!*\
+  !*** ./resources/js/views/workflowexecs/exec.vue ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _exec_vue_vue_type_template_id_47872b88_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./exec.vue?vue&type=template&id=47872b88&scoped=true& */ "./resources/js/views/workflowexecs/exec.vue?vue&type=template&id=47872b88&scoped=true&");
+/* harmony import */ var _exec_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./exec.vue?vue&type=script&lang=js& */ "./resources/js/views/workflowexecs/exec.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _exec_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _exec_vue_vue_type_template_id_47872b88_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _exec_vue_vue_type_template_id_47872b88_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "47872b88",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/workflowexecs/exec.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/workflowexecs/exec.vue?vue&type=script&lang=js&":
+/*!****************************************************************************!*\
+  !*** ./resources/js/views/workflowexecs/exec.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_exec_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./exec.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/workflowexecs/exec.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_exec_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/workflowexecs/exec.vue?vue&type=template&id=47872b88&scoped=true&":
+/*!**********************************************************************************************!*\
+  !*** ./resources/js/views/workflowexecs/exec.vue?vue&type=template&id=47872b88&scoped=true& ***!
+  \**********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_exec_vue_vue_type_template_id_47872b88_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./exec.vue?vue&type=template&id=47872b88&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/workflowexecs/exec.vue?vue&type=template&id=47872b88&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_exec_vue_vue_type_template_id_47872b88_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_exec_vue_vue_type_template_id_47872b88_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/views/workflowexecs/reject.vue":
+/*!*****************************************************!*\
+  !*** ./resources/js/views/workflowexecs/reject.vue ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _reject_vue_vue_type_template_id_1e4f54ec___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./reject.vue?vue&type=template&id=1e4f54ec& */ "./resources/js/views/workflowexecs/reject.vue?vue&type=template&id=1e4f54ec&");
+/* harmony import */ var _reject_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./reject.vue?vue&type=script&lang=js& */ "./resources/js/views/workflowexecs/reject.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _reject_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _reject_vue_vue_type_template_id_1e4f54ec___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _reject_vue_vue_type_template_id_1e4f54ec___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/workflowexecs/reject.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/workflowexecs/reject.vue?vue&type=script&lang=js&":
+/*!******************************************************************************!*\
+  !*** ./resources/js/views/workflowexecs/reject.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_reject_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./reject.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/workflowexecs/reject.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_reject_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/workflowexecs/reject.vue?vue&type=template&id=1e4f54ec&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/views/workflowexecs/reject.vue?vue&type=template&id=1e4f54ec& ***!
+  \************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_reject_vue_vue_type_template_id_1e4f54ec___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./reject.vue?vue&type=template&id=1e4f54ec& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/workflowexecs/reject.vue?vue&type=template&id=1e4f54ec&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_reject_vue_vue_type_template_id_1e4f54ec___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_reject_vue_vue_type_template_id_1e4f54ec___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/views/workflowexecsteps/show.vue":
+/*!*******************************************************!*\
+  !*** ./resources/js/views/workflowexecsteps/show.vue ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _show_vue_vue_type_template_id_297edaf4_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./show.vue?vue&type=template&id=297edaf4&scoped=true& */ "./resources/js/views/workflowexecsteps/show.vue?vue&type=template&id=297edaf4&scoped=true&");
+/* harmony import */ var _show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./show.vue?vue&type=script&lang=js& */ "./resources/js/views/workflowexecsteps/show.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _show_vue_vue_type_template_id_297edaf4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _show_vue_vue_type_template_id_297edaf4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "297edaf4",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/workflowexecsteps/show.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/workflowexecsteps/show.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/views/workflowexecsteps/show.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./show.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/workflowexecsteps/show.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/workflowexecsteps/show.vue?vue&type=template&id=297edaf4&scoped=true&":
+/*!**************************************************************************************************!*\
+  !*** ./resources/js/views/workflowexecsteps/show.vue?vue&type=template&id=297edaf4&scoped=true& ***!
+  \**************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_show_vue_vue_type_template_id_297edaf4_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./show.vue?vue&type=template&id=297edaf4&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/workflowexecsteps/show.vue?vue&type=template&id=297edaf4&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_show_vue_vue_type_template_id_297edaf4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_show_vue_vue_type_template_id_297edaf4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
