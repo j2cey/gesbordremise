@@ -134,7 +134,7 @@
                                         <a
                                             :href="record.destroy_url"
                                             class="tw-inline-block tw-text-red-500">
-                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
                                         </a>
                                     </div>
                                 </div>
