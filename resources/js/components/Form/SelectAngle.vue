@@ -1,9 +1,9 @@
 <template>
     <div
-        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+        class="tw-pointer-events-none tw-absolute tw-inset-y-0 tw-right-0 tw-flex tw-items-center tw-px-2 tw-text-gray-700"
     >
         <svg
-            class="fill-current h-4 w-4"
+            class="tw-fill-current tw-h-4 tw-w-4"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
         >

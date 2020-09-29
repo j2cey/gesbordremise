@@ -10,11 +10,7 @@
     <div class="content-wrapper">
 
         <!-- Main content -->
-        <div class="content">
-            <div class="container">
-                @yield('app_content')
-            </div><!-- /.container-fluid -->
-        </div>
+        @yield('app_content')
         <!-- /.content -->
 
     </div>

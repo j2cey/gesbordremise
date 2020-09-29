@@ -1,27 +1,27 @@
 <template>
     <form
         v-if="show"
-        class="w-full md:w-1/3 mx-auto mt-3 grid grid-cols-5 gap-0 text-gray-700"
+        class="tw-w-full md:tw-w-1/3 tw-mx-auto tw-mt-3 tw-grid tw-grid-cols-5 tw-gap-0 tw-text-gray-700"
     >
         <span
             :class="buttonClass('first')"
-            class="row-span-1 flex items-center justify-center border rounded-l-sm"
+            class="tw-row-span-1 tw-flex items-center tw-justify-center tw-border tw-rounded-l-sm"
             @click="goToFirst"
         >
-            <double-angle-left class="fill-current h-4 pointer-events-none" />
+            <double-angle-left class="tw-fill-current tw-h-4 tw-pointer-events-none" />
         </span>
         <span
             :class="buttonClass('prev')"
-            class="row-span-1 flex items-center justify-center border-t border-b"
+            class="tw-row-span-1 tw-flex tw-items-center tw-justify-center tw-border-t tw-border-b"
             @click="goToPrev"
         >
-            <angle-left class="fill-current h-4 pointer-events-none" />
+            <angle-left class="tw-fill-current tw-h-4 tw-pointer-events-none" />
         </span>
-        <span class="row-span-1 relative">
+        <span class="tw-row-span-1 tw-relative">
             <select
                 id="per_page"
-                class="appearance-none rounded-none block w-full bg-gray-200 focus:bg-white text-gray-700 border border-gray-400 focus:border-gray-500 py-3 pl-4 pr-8 leading-tight focus:outline-none"
-                :class="{ 'opacity-50': !hasPages }"
+                class="tw-appearance-none tw-rounded-none tw-block tw-w-full tw-bg-gray-200 focus:tw-bg-white tw-text-gray-700 tw-border tw-border-gray-400 focus:tw-border-gray-500 tw-py-3 tw-pl-4 tw-pr-8 tw-leading-tight focus:tw-outline-none"
+                :class="{ 'tw-opacity-50': !hasPages }"
                 :disabled="!hasPages"
                 @change="change"
             >
@@ -34,21 +34,21 @@
                     {{ page }}
                 </option>
             </select>
-            <select-angle :class="{ 'opacity-50': !hasPages }"></select-angle>
+            <select-angle :class="{ 'tw-opacity-50': !hasPages }"></select-angle>
         </span>
         <span
             :class="buttonClass('next')"
-            class="row-span-1 flex items-center justify-center border-t border-b"
+            class="tw-row-span-1 tw-flex tw-items-center tw-justify-center tw-border-t tw-border-b"
             @click="goToNext"
         >
-            <angle-right class="fill-current h-4 pointer-events-none" />
+            <angle-right class="tw-fill-current tw-h-4 tw-pointer-events-none" />
         </span>
         <span
             :class="buttonClass('last')"
-            class="row-span-1 flex items-center justify-center border rounded-r-sm"
+            class="tw-row-span-1 tw-flex tw-items-center tw-justify-center tw-border tw-rounded-r-sm"
             @click="goToLast"
         >
-            <double-angle-right class="fill-current h-4 pointer-events-none" />
+            <double-angle-right class="tw-fill-current tw-h-4 tw-pointer-events-none" />
         </span>
     </form>
 </template>
@@ -80,10 +80,10 @@
         },
         data() {
             return {
-                defaultClass: 'px-4 py-2 inline-flex border-solid',
+                defaultClass: 'tw-px-4 tw-py-2 tw-inline-flex tw-border-solid',
                 activeClass:
-                    'cursor-pointer border-gray-400 hover:bg-gray-300 text-gray-700',
-                inactiveClass: 'cursor-not-allowed border-gray-300 text-gray-300'
+                    'tw-cursor-pointer tw-border-gray-400 hover:tw-bg-gray-300 tw-text-gray-700',
+                inactiveClass: 'tw-cursor-not-allowed tw-border-gray-300 tw-text-gray-300'
             };
         },
         computed: {
