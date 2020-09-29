@@ -2,18 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use App\Bordereauremise;
 use App\User;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\Eloquent\Collection;
+use App\Bordereauremise;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Foundation\Application;
+
+use Exception;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Resources\SearchCollection;
+use App\Http\Requests\Bordereauremise\FetchRequest;
+use App\Http\Resources\Bordereauremise as BordereauremiseResource;
+use App\Repositories\Contracts\IBordereauremiseRepositoryContract;
 
 class BordereauremiseController extends Controller
 {
+    /**
+     * @var IBordereauremiseRepositoryContract
+     */
+    private $repository;
+
+    /**
+     * BordereauremiseController constructor.
+     *
+     * @param IBordereauremiseRepositoryContract $repository [description]
+     */
+    public function __construct(IBordereauremiseRepositoryContract $repository) {
+        $this->repository = $repository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -21,10 +42,25 @@ class BordereauremiseController extends Controller
      */
     public function index()
     {
-        return view('bordereauremises.index');
+        return view('bordereauremises.index')
+            ->with('perPage', new \Illuminate\Support\Collection(config('system.per_page')))
+            ->with('defaultPerPage', config('system.default_per_page'));
     }
 
-    public function fetch() {
+    /**
+     * Fetch records.
+     *
+     * @param  FetchRequest     $request [description]
+     * @return SearchCollection          [description]
+     */
+    public function fetch(FetchRequest $request): SearchCollection
+    {
+        return new SearchCollection(
+            $this->repository->search($request), BordereauremiseResource::class
+        );
+    }
+
+    public function fetch_old() {
         $bordereauremises_all = Bordereauremise::all();
         $bordereauremises_all->load(['workflowexec','workflowexec.currentstep','workflowexec.currentstep.profile','workflowexec.workflowstatus']);
 

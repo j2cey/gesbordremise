@@ -4,18 +4,19 @@
 namespace App\Repositories\Eloquent;
 
 use App\Search\Queries\Search;
-use App\Search\Queries\ProductSearch;
+use App\Search\Queries\BordereauremiseSearch;
 use App\Http\Requests\ISearchFormRequest;
-use App\Repositories\Contracts\IProductRepositoryContract;
+use App\Repositories\Contracts\IBordereauremiseRepositoryContract;
 
-class ProductRepository implements IProductRepositoryContract
+
+class BordereauremiseRepository implements IBordereauremiseRepositoryContract
 {
     /**
      * @inheritDoc
      */
     public function search(ISearchFormRequest $request): Search
     {
-        return new ProductSearch(
+        return new BordereauremiseSearch(
             $request->requestParams(), $request->requestOrder()
         );
     }

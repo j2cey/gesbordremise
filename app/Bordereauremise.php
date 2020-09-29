@@ -44,6 +44,7 @@ use Illuminate\Support\Facades\DB;
 class Bordereauremise extends BaseModel
 {
     protected $guarded = [];
+    protected $table = 'bordereauremises';
 
     #region Eloquent Relationships
 
@@ -64,24 +65,24 @@ class Bordereauremise extends BaseModel
         }
     }
 
-    public function workflowexecs() {
+    /*public function workflowexecs() {
         return $this->hasMany('App\WorkflowExec', 'model_id')
             ->where('model_type', 'App\Bordereauremise');
         //->whereNotNull('current_step_id');
-    }
+    }*/
 
-    public function workflowexec() {
+    /*public function workflowexec() {
         return $this->hasOne('App\WorkflowExec', 'model_id')
             ->where('model_type', 'App\Bordereauremise')
             ->latest();
         //->whereNotNull('current_step_id');
-    }
+    }*/
 
     /**
      * L'instance d'exécution du workflow rattaché, le cas échéant.
      * @return WorkflowExec|\Illuminate\Database\Eloquent\Collection|HasMany
      */
-    public function workflowexecs_old() {
+    /*public function workflowexecs_old() {
 
         $user = User::where('id', Auth::user()->id())->first();
 
@@ -94,7 +95,7 @@ class Bordereauremise extends BaseModel
             }
         }
         return \Illuminate\Database\Eloquent\Collection::make($workflowexecs);
-    }
+    }*/
 
     #endregion
 
