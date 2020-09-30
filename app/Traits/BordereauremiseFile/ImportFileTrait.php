@@ -90,6 +90,7 @@ trait ImportFileTrait
     }
 
     private function getParameters($row) {
+        // TODO: (1) Tester $row[0]; (2) Faire l'explode si la ligne est un string
         //$row_tab = $row; //explode(',', $row);
         $row_tab = explode(';', $row[0]);
         // DatePaid;TrackingNumber;Location;LocationName;OSS360_PaymentType;BankName;Montant Total

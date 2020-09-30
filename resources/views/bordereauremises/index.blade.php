@@ -105,7 +105,7 @@
                                         <select-angle></select-angle>
                                     </div>
                                     <div class="input-group-append">
-                                        <button type="button" class="btn btn-default" @click="clear({ $statuts: '' })"><i class="fa fa-times"></i></button>
+                                        <button type="button" class="btn btn-default" @click="clear({ statut: '' })"><i class="fa fa-times"></i></button>
                                     </div>
                                 </div>
                             </div>
