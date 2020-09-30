@@ -160,7 +160,7 @@
                                 v-else
                                 class="tw-flex tw-flex-wrap tw-p-4 border-b tw-border-dashed tw-border-gray-400 tw-text-gray-700"
                             >
-                                There are no records available
+                                Aucune donnée disponible
                             </div>
 
                         </div>
