@@ -51,6 +51,8 @@ class WorkflowActionController extends Controller
             'workflow_step_id' => $formInput['workflow_step_id'],
             'workflow_action_type_id' => $formInput['type']['id'],
             'workflow_object_field_id' => $formInput['objectfield']['id'],
+            'field_required' => isset($formInput['field_required']) ? 1 : 0,
+            'field_required_msg' => $formInput['field_required_msg'],
         ]);
 
         return $new_workflowaction->load(['type','objectfield']);

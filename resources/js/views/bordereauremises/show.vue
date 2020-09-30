@@ -6,7 +6,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Project Detail</h1>
+                        <h1>Détails Bordereau</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -45,17 +45,29 @@
                                         </div>
                                         <!-- /.card-header -->
                                         <div class="card-body">
-                                            <dl class="row">
-                                                <dt class="col-sm-4">Date Remise</dt>
-                                                <dd class="col-sm-8">{{ bordereauremise.date_remise }}</dd>
-                                                <dt class="col-sm-4">Num. Transaction</dt>
-                                                <dd class="col-sm-8">{{ bordereauremise.numero_transaction }}</dd>
+                                            <div class="row">
+                                                <div class="col-12 col-sm-6">
+                                                    <dl class="row">
+                                                        <dt class="col-sm-4">Date Remise</dt>
+                                                        <dd class="col-sm-8">{{ bordereauremise.date_remise | formatDate }}</dd>
+                                                        <dt class="col-sm-4">Num. Transaction</dt>
+                                                        <dd class="col-sm-8">{{ bordereauremise.numero_transaction }}</dd>
 
-                                                <dt class="col-sm-4">Localisation</dt>
-                                                <dd class="col-sm-8">{{ bordereauremise.localisation.titre }}</dd>
-                                                <dt class="col-sm-4">Classe Paiement</dt>
-                                                <dd class="col-sm-8">{{ bordereauremise.classe_paiement }}</dd>
-                                            </dl>
+                                                        <dt class="col-sm-4">Localisation</dt>
+                                                        <dd class="col-sm-8">{{ bordereauremise.localisation.titre }}</dd>
+                                                    </dl>
+                                                </div>
+                                                <div class="col-12 col-sm-6">
+                                                    <dl class="row">
+                                                        <dt class="col-sm-4">Classe Paiement</dt>
+                                                        <dd class="col-sm-8">{{ bordereauremise.classe_paiement }}</dd>
+                                                        <dt class="col-sm-4">Mode Paiement</dt>
+                                                        <dd class="col-sm-8">{{ bordereauremise.mode_paiement }}</dd>
+                                                        <dt class="col-sm-4">Montant Total</dt>
+                                                        <dd class="col-sm-8">{{ bordereauremise.montant_total }}</dd>
+                                                    </dl>
+                                                </div>
+                                            </div>
                                         </div>
                                         <!-- /.card-body -->
                                     </div>
@@ -81,11 +93,11 @@
                                     <div class="card-body">
                                         <dl class="row">
                                             <dt class="col-sm-4">Date Dépôt</dt>
-                                            <dd class="col-sm-8">{{ bordereauremise.date_depot_agence }}</dd>
+                                            <dd class="col-sm-8">{{ bordereauremise.date_depot_agence | formatDate }}</dd>
                                             <dt class="col-sm-4">Montant Déposé</dt>
                                             <dd class="col-sm-8">{{ bordereauremise.montant_depose_agence }}</dd>
                                             <dt class="col-sm-4">Scan</dt>
-                                            <dd class="col-sm-8"></dd>
+                                            <dd class="col-sm-8"><a v-if="bordereauremise.scan_bordereau" href="#" @click.prevent="showImage" class="link-black text-sm"><i class="fas fa-link mr-1"></i> {{ bordereauremise.scan_bordereau }}</a></dd>
                                             <dt class="col-sm-4">Commentaire</dt>
                                             <dd class="col-sm-8">{{ bordereauremise.commentaire_agence }}</dd>
                                         </dl>
@@ -107,7 +119,7 @@
                                     <div class="card-body">
                                         <dl class="row">
                                             <dt class="col-sm-4">Date Valeur</dt>
-                                            <dd class="col-sm-8">{{ bordereauremise.date_valeur }}</dd>
+                                            <dd class="col-sm-8">{{ bordereauremise.date_valeur | formatDate }}</dd>
                                             <dt class="col-sm-4">Montant Déposé</dt>
                                             <dd class="col-sm-8">{{ bordereauremise.montant_depose_finance }}</dd>
                                             <dt class="col-sm-4">Commentaire</dt>
@@ -125,9 +137,9 @@
             </div>
             <!-- /.card -->
 
-            <div class="card" v-if="hasexecrole">
+            <div class="card" v-if="canExec">
                 <div class="card-header">
-                    <h3 class="card-title">Traitement</h3>
+                    <h3 class="card-title">Traitement du Bordereau</h3>
 
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
@@ -139,7 +151,7 @@
                     <div class="row">
                         <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
 
-                            <h3 class="text-primary"><i class="fas fa-paint-brush"></i> Traitement</h3>
+                            <h3 class="text-primary"><i class="fas fa-paint-brush"></i> {{ bordereauremise.workflowexec.currentstep.titre }}</h3>
                             <form class="form-horizontal" @submit.prevent @keydown="workflowexecForm.errors.clear()">
 
                                 <div class="card-body">
@@ -189,17 +201,22 @@
 
         </section>
         <!-- /.content -->
+        <ImgShow></ImgShow>
     </div>
 
 </template>
 
 <script>
+    import ImgShow from './img'
     export default {
         name: "show",
         props: {
             bordereauremise_prop: {},
             actionvalues_prop: {},
             hasexecrole_prop: 0
+        },
+        components: {
+            ImgShow
         },
         data() {
             return {
@@ -257,6 +274,21 @@
             },
             updateData(data) {
                 console.log(data);
+                // MAJ du model
+                this.bordereauremise = data;
+                // MAJ de l'exec
+                //this.bordereauremise = data.exec;
+                // TODO: réévaluer le droit d'exécution du nouveau traitement
+                this.hasexecrole = false;
+                console.log(this.bordereauremise, this.hasexecrole);
+            },
+            showImage() {
+                this.$emit('show_image', this.bordereauremise.scan_bordereau)
+            },
+        },
+        computed: {
+            canExec() {
+                return this.hasexecrole;
             }
         }
     }

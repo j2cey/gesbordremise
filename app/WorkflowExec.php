@@ -79,6 +79,20 @@ class WorkflowExec extends BaseModel
                 }
             }
         });
+
+        self::saved(function($model){
+            if ($model->current_step_id) {
+                $currentstep = WorkflowStep::where('id', $model->current_step_id)->first();
+                if ($currentstep) {
+                    if ($model->model_type === 'App\Bordereauremise') {
+                        $bordereauremise = Bordereauremise::where('id', $model->model_id)->first();
+                        if ($bordereauremise) {
+                            $currentstep->updateBordereauremise($bordereauremise);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     #endregion

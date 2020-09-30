@@ -52,7 +52,7 @@ class WorkflowExecController extends Controller
     {
         $workflowexec = WorkflowExec::where('id',$workflowexec->id)
             ->first()
-            ->load(['workflow','currentstep','currentstep.actions','currentstep.actions.type','currentstep.actions.objectfield','workflowstatus']);
+            ->load(['workflow','currentstep','currentstep.actions','currentstep.actions.type','currentstep.actions.objectfield','workflowstatus','workflow']);
         $actionvalues = [];
         foreach ($workflowexec->currentstep->actions as $action) {
             $actionvalues[$action->objectfield->db_field_name] = null;
@@ -82,13 +82,46 @@ class WorkflowExecController extends Controller
      */
     public function update(Request $request, WorkflowExec $workflowexec)
     {
+        /*request()->validate([
+            'file' => 'required',
+            'type' => 'required'
+        ],
+        [
+            'file.required' => 'You have to choose the file!',
+            'type.required' => 'You have to choose type of the file!'
+        ]
+        );*/
+
         $request->replace($request->all());
+        $formInput = $request->all();
+        foreach ($formInput as $key => $value) {
+            if ($value === "null") {
+                $request->replace([$key => null]);
+            }
+        }
+
+        // Validation
+        $currstep = WorkflowStep::with(['actions','actions.objectfield'])->where('id', $workflowexec->current_step_id)->first();
+        $validation_rules = [];
+        $validation_messages = [];
+
+        foreach ($currstep->actions as $action) {
+            if ($action->field_required) {
+                $validation_rules[$action->objectfield->db_field_name] = 'required';
+                if ($action->field_required_msg && ($action->field_required_msg !== "")) {
+                    $validation_messages[$action->objectfield->db_field_name . '.required'] = $action->field_required_msg;
+                }
+            }
+        }
+
+        //request()->validate($validation_rules, $validation_messages);
+        $request->validate($validation_rules, $validation_messages);
+        dd($request, $validation_rules,$validation_messages);
+
         $step_file = $request->file('step_files');
 
-        $formInput = $request->all();
         $formInput['motif_rejet'] = ($formInput['motif_rejet'] === "null" ? null : $formInput['motif_rejet']);
 
-        $currstep = WorkflowStep::with(['actions','actions.objectfield'])->where('id', $workflowexec->current_step_id)->first();
         $prevstep = WorkflowStep::where('workflow_id', $workflowexec->workflow_id)
             ->where('posi', $currstep->posi - 1)->first();
         $nextstep = WorkflowStep::where('workflow_id', $workflowexec->workflow_id)
@@ -96,6 +129,8 @@ class WorkflowExecController extends Controller
 
         $nextstep_id = WorkflowStep::coded("0")->first()->id;;
         $workflow_status_id = $workflowexec->workflow_status_id;
+
+        $model = null;
 
         if ( is_null($formInput['motif_rejet']) || $formInput['motif_rejet'] === "null" ) {
             //dd('motif_rejet null, Validation de l étape ',$formInput,is_null($formInput['motif_rejet']));
@@ -140,7 +175,12 @@ class WorkflowExecController extends Controller
             'motif_rejet' => $formInput['motif_rejet'],
         ]);
 
-        return json_encode($formInput);
+        if (! is_null($model)) {
+            $model->load(['workflowexec','workflowexec.currentstep','workflowexec.currentstep.actions','workflowexec.currentstep.actions.type','workflowexec.currentstep.actions.objectfield','workflowexec.currentstep.profile','workflowexec.workflowstatus']);
+        }
+        //$workflowexec->load(['currentstep','currentstep.actions','currentstep.actions.type','currentstep.actions.objectfield','currentstep.profile','workflowstatus']);
+
+        return $model;
     }
 
     /**

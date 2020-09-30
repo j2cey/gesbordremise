@@ -20,6 +20,8 @@ use Illuminate\Support\Carbon;
  * @property integer|null $workflow_action_type_id
  * @property integer|null $workflow_step_id
  * @property integer|null $workflow_object_field_id
+ * @property boolean $field_required
+ * @property string|null $field_required_msg
  *
  * @property Carbon $created_at
  * @property Carbon $updated_at

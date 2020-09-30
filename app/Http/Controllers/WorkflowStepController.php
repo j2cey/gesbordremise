@@ -50,7 +50,7 @@ class WorkflowStepController extends Controller
 
         $new_workflowstep = WorkflowStep::create([
             'titre' => $formInput['titre'],
-            'code' => (string) Str::orderedUuid(),
+            'code' => "step_" . $posi,//(string) Str::orderedUuid(),
             'description' => $formInput['description'],
             'workflow_id' => $formInput['workflow_id'],
             'role_id' => $formInput['profile']['id'],

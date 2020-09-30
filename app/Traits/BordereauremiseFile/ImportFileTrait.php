@@ -6,6 +6,7 @@ namespace App\Traits\BordereauremiseFile;
 
 use App\Bordereauremise;
 use App\BordereauremiseLoc;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 
 trait ImportFileTrait
@@ -34,16 +35,19 @@ trait ImportFileTrait
                 $row_parsed = $this->getParameters($row);
 
                 if ($row_parsed[0]) {
-                    $localisation = $this->getLocalisation($row_parsed[1]['localisation']);
+                    //['date_remise','numero_transaction','localisation_code','localisation_titre','classe_paiement','mode_paiement','montant_total']
+                    $localisation = $this->getLocalisation($row_parsed[1]['localisation_code'],$row_parsed[1]['localisation_titre']);
                     // New Bordereauremise
                     Bordereauremise::create([
-                        'date_remise' => date('Y-m-d',strtotime($row_parsed[1]['date_remise'])),
+                        'date_remise' => Carbon::createFromFormat('d/m/Y', $row_parsed[1]['date_remise'])->format('Y-m-d'),//date('Y-m-d',strtotime($row_parsed[1]['date_remise'])),
                         'numero_transaction' => $row_parsed[1]['numero_transaction'],
                         'bordereauremise_loc_id' => $localisation->id,
-                        'changement_dernier_tarif' => $row_parsed[1]['changement_dernier_tarif'],
-                        'classe_paiement' => $row_parsed[1]['classe_paiement'],
-                        'mode_paiement' => $row_parsed[1]['mode_paiement'],
+                        'localisation_titre' => $localisation->titre,
+                        'classe_paiement' => utf8_encode($row_parsed[1]['classe_paiement']),
+                        'mode_paiement' => utf8_encode($row_parsed[1]['mode_paiement']),
                         'montant_total' => $row_parsed[1]['montant_total'],
+                        'workflow_currentstep_titre' => "aucun traitement", // On assigne une valeur pour pas faire échouer le check isset
+                        'workflow_currentstep_code' => "aucun traitement", // On assigne une valeur pour pas faire échouer le check isset
                     ]);
                     $this->nb_rows_success += 1;
                 } else {
@@ -74,20 +78,22 @@ trait ImportFileTrait
      * @param $titre
      * @return BordereauremiseLoc|null
      */
-    private function getLocalisation($titre) {
-        $localisation = BordereauremiseLoc::where('titre', $titre)->first();
+    private function getLocalisation($code, $titre) {
+        $localisation = BordereauremiseLoc::where('code', $code)->first();
         if (! $localisation) {
             $localisation = BordereauremiseLoc::create([
-                'code' => (string) Str::orderedUuid(),
-                'titre' => $titre
+                'code' => $code,
+                'titre' => utf8_encode($titre)
             ]);
         }
         return $localisation;
     }
 
     private function getParameters($row) {
-        $row_tab = $row; //explode(',', $row);
-        $row_tab_fields = ['date_remise','numero_transaction','localisation','changement_dernier_tarif','classe_paiement','mode_paiement','montant_total'];
+        //$row_tab = $row; //explode(',', $row);
+        $row_tab = explode(';', $row[0]);
+        // DatePaid;TrackingNumber;Location;LocationName;OSS360_PaymentType;BankName;Montant Total
+        $row_tab_fields = ['date_remise','numero_transaction','localisation_code','localisation_titre','classe_paiement','mode_paiement','montant_total'];
         $row_tab_values = [];
         $key = 0;
         foreach ($row_tab as $value) {

@@ -62,19 +62,24 @@
                                 >
                                     Localisation
                                 </label>
-                                <div class="tw-relative">
-                                    <select
-                                        v-model="params.localisation"
-                                        @change="change"
-                                        id="localisation"
-                                        class="tw-appearance-none tw-block tw-w-full tw-bg-gray-200 focus:tw-bg-white tw-text-gray-700 tw-border tw-border-gray-400 focus:tw-border-gray-500 tw-rounded-sm tw-py-3 tw-pl-4 tw-pr-8 tw-leading-tight focus:tw-outline-none"
-                                    >
-                                        <option
-                                            v-for="localisation in {{ $localisations }}"
-                                            :value="localisation.id"
-                                        >@{{ localisation.titre }}</option>
-                                    </select>
-                                    <select-angle></select-angle>
+                                <div class="tw-inline-flex">
+                                    <div class="tw-relative">
+                                        <select
+                                            v-model="params.localisation"
+                                            @change="change"
+                                            id="localisation"
+                                            class="tw-appearance-none tw-block tw-w-full tw-bg-gray-200 focus:tw-bg-white tw-text-gray-700 tw-border tw-border-gray-400 focus:tw-border-gray-500 tw-rounded-sm tw-py-3 tw-pl-4 tw-pr-8 tw-leading-tight focus:tw-outline-none"
+                                        >
+                                            <option
+                                                v-for="localisation in {{ $localisations }}"
+                                                :value="localisation.id"
+                                            >@{{ localisation.titre }}</option>
+                                        </select>
+                                        <select-angle></select-angle>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-default" @click="clear({ localisation: '' })"><i class="fa fa-times"></i></button>
+                                    </div>
                                 </div>
                             </div>
                             <div class="tw-col-span-4 md:tw-col-span-2">
@@ -84,19 +89,24 @@
                                 >
                                     Statut
                                 </label>
-                                <div class="tw-relative">
-                                    <select
-                                        v-model="params.statut"
-                                        @change="change"
-                                        id="statut"
-                                        class="tw-appearance-none tw-block tw-w-full tw-bg-gray-200 focus:tw-bg-white tw-text-gray-700 tw-border tw-border-gray-400 focus:tw-border-gray-500 tw-rounded-sm tw-py-3 tw-pl-4 tw-pr-8 tw-leading-tight focus:tw-outline-none"
-                                    >
-                                        <option
-                                            v-for="statut in {{ $statuts }}"
-                                            :value="statut.id"
-                                        >@{{ statut.titre }}</option>
-                                    </select>
-                                    <select-angle></select-angle>
+                                <div class="tw-inline-flex">
+                                    <div class="tw-relative">
+                                        <select
+                                            v-model="params.statut"
+                                            @change="change"
+                                            id="statut"
+                                            class="tw-appearance-none tw-block tw-w-full tw-bg-gray-200 focus:tw-bg-white tw-text-gray-700 tw-border tw-border-gray-400 focus:tw-border-gray-500 tw-rounded-sm tw-py-3 tw-pl-4 tw-pr-8 tw-leading-tight focus:tw-outline-none"
+                                        >
+                                            <option
+                                                v-for="statut in {{ $statuts }}"
+                                                :value="statut.id"
+                                            >@{{ statut.titre }}</option>
+                                        </select>
+                                        <select-angle></select-angle>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-default" @click="clear({ $statuts: '' })"><i class="fa fa-times"></i></button>
+                                    </div>
                                 </div>
                             </div>
                         </form>
@@ -118,17 +128,14 @@
 
                             <template v-if="records.length">
 
-
-
-
-
-
-
                                     <table class="table-auto">
                                         <thead>
                                         <tr>
                                             <th class="tw-px-4 tw-py-2">Numéro Transaction</th>
                                             <th class="tw-px-4 tw-py-2">Mode Paiement</th>
+                                            <th class="tw-px-4 tw-py-2">Agence</th>
+                                            <th class="tw-px-4 tw-py-2">Montant Total</th>
+                                            <th class="tw-px-4 tw-py-2">Statut</th>
                                             <th class="tw-px-4 tw-py-2">Détails</th>
                                         </tr>
                                         </thead>
@@ -139,6 +146,15 @@
                                         >
                                             <td class="tw-px-4 tw-py-2">@{{ record.numero_transaction }}</td>
                                             <td class="tw-px-4 tw-py-2">@{{ record.mode_paiement }}</td>
+                                            <td class="tw-px-4 tw-py-2">@{{ record.localisation_titre }}</td>
+                                            <td class="tw-px-4 tw-py-2">@{{ record.montant_total }}</td>
+                                            <td class="tw-px-4 tw-py-2">
+                                                <span v-if="record.workflow_currentstep_code == '0'" class="tw-text-xs tw-font-semibold tw-inline-block tw-py-1 tw-px-2 tw-rounded-full tw-text-green-600 tw-bg-green-200 last:tw-mr-0 tw-mr-1">@{{ record.workflow_currentstep_titre }}</span>
+                                                <span v-else-if="record.workflow_currentstep_code == 'step_0'" class="tw-text-xs tw-font-semibold tw-inline-block tw-py-1 tw-px-1 tw-rounded-full tw-text-purple-600 tw-bg-purple-200 last:tw-mr-0 tw-mr-1">@{{ record.workflow_currentstep_titre }}</span>
+                                                <span v-else-if="record.workflow_currentstep_code == 'step_1'" class="tw-text-xs tw-font-semibold tw-inline-block tw-py-1 tw-px-2 tw-rounded-full tw-text-indigo-600 tw-bg-indigo-200 last:tw-mr-0 tw-mr-1">@{{ record.workflow_currentstep_titre }}</span>
+                                                <span v-else-if="record.workflow_currentstep_code == 'step_2'" class="tw-text-xs tw-font-semibold tw-inline-block tw-py-1 tw-px-2 tw-rounded-full tw-text-blue-600 tw-bg-blue-200 last:tw-mr-0 tw-mr-1">@{{ record.workflow_currentstep_titre }}</span>
+                                                <span v-else class="tw-text-xs tw-font-semibold tw-inline-block tw-py-1 tw-px-2 tw-rounded-full tw-text-teal-600 tw-bg-teal-200 last:tw-mr-0 tw-mr-1">@{{ record.workflow_currentstep_titre }}</span>
+                                            </td>
                                             <td class="tw-px-4 tw-py-2"><a
                                                     :href="record.edit_url"
                                                     class="tw-inline-block tw-mr-3 tw-text-green-500"
@@ -149,10 +165,6 @@
 
                                         </tbody>
                                     </table>
-
-
-
-
 
                             </template>
 

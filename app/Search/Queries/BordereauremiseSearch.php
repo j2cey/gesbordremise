@@ -46,7 +46,9 @@ class BordereauremiseSearch extends Search
                     });*/
             }
             $query
-                ->has('localisation');
+                ->with(['localisation' => function($q) {
+                    $q->select('titre');
+                }]);
         }
 
         return $query;

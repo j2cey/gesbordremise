@@ -37,6 +37,9 @@ class CreateWorkflowActionsTable extends Migration
             $table->foreignId('workflow_object_field_id')->nullable()
                 ->comment('référence du champs d objet')
                 ->constrained()->onDelete('set null');
+
+            $table->boolean('field_required')->default(false)->comment('determine si le champs est requis');
+            $table->string('field_required_msg')->nullable()->comment('message d erreur si le champs est requis');
         });
         $this->setTableComment($this->table_name,$this->table_comment);
     }

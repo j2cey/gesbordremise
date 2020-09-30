@@ -31,7 +31,7 @@ class CreateBordereauremisesTable extends Migration
             $table->string('mode_paiement')->nullable()->comment('mode de paiement');
             $table->string('montant_total')->nullable()->comment('montant total');
             // Champs à modifier par le workflow (Agence)
-            $table->timestamp('date_depot')->nullable()->comment('date de depot agence');
+            $table->timestamp('date_depot_agence')->nullable()->comment('date de depot agence');
             $table->integer('montant_depose_agence')->nullable()->comment('montant déposé (agence)');
             $table->string('scan_bordereau')->nullable()->comment('fichier scan du bordereau');
             $table->string('commentaire_agence')->nullable()->comment('commentaire agence');
@@ -43,6 +43,11 @@ class CreateBordereauremisesTable extends Migration
             $table->foreignId('bordereauremise_loc_id')->nullable()
                 ->comment('référence de la localisation')
                 ->constrained()->onDelete('set null');
+
+            //TODO: Retirer ces champs après normalisation
+            $table->string('localisation_titre')->nullable()->comment('titre de la localisation');
+            $table->string('workflow_currentstep_titre')->nullable()->comment('titre de l étape de traitement actuelle, le cas échéant.');
+            $table->string('workflow_currentstep_code')->nullable()->comment('code de l étape de traitement actuelle, le cas échéant.');
         });
         $this->setTableComment($this->table_name,$this->table_comment);
     }

@@ -94,7 +94,7 @@ class BordereauremiseController extends Controller
 
     public function fetch_old() {
         $bordereauremises_all = Bordereauremise::all();
-        $bordereauremises_all->load(['workflowexec','workflowexec.currentstep','workflowexec.currentstep.profile','workflowexec.workflowstatus']);
+        $bordereauremises_all->load(['workflowexec','workflowexec.currentstep','workflowexec.currentstep.profile','workflowexec.workflowstatus','workflowexec.workflow']);
 
         $user = auth()->user();//User::where('id', Auth::user()->id())->first();
 
@@ -182,7 +182,7 @@ class BordereauremiseController extends Controller
         $bordereauremise = Bordereauremise::where('id',$bordereauremise->id)
             ->first()
             ->load(['localisation','workflowexec','workflowexec.currentstep','workflowexec.currentstep.actions','workflowexec.currentstep.actions.type','workflowexec.currentstep.actions.objectfield','workflowexec.currentstep.profile','workflowexec.workflowstatus']);
-        $hasexecrole = $user->hasRole([$exec_step_profile->name]) ? 1 : 0;
+        $hasexecrole = $exec_step_profile ? ( $user->hasRole([$exec_step_profile->name]) ? 1 : 0 ) : 0;
         //dd($hasexecrole);
         /*if ($user->hasRole([$exec_step_profile->name])) {
             $bordereauremise = Bordereauremise::where('id',$bordereauremise->id)

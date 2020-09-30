@@ -11,6 +11,8 @@ trait ScanFilesTrait
 {
     public function scanFiles() {
 
+        //TODO: PB de scan de plus d'1 fichier. Voir de plus près la suppression
+
         $files_dir = config('app.bordereauremises_files');
         $raw_dir = config('app.RAW_FOLDER');
         $path = $raw_dir.'/'.$files_dir;

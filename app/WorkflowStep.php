@@ -71,4 +71,44 @@ class WorkflowStep extends BaseModel
             ->where('code', $code)
             ;
     }
+
+    public function updateBordereauremises() {
+        $bordereauremises_ids = WorkflowExec::where('model_type', 'App\Bordereauremise')
+            ->where('current_step_id', $this->id)
+            ->get()->pluck('model_id')->toArray();
+        $bordereauremises = Bordereauremise::whereIn('id', $bordereauremises_ids)
+            ->get();
+
+        if ($bordereauremises) {
+            foreach ($bordereauremises as $bordereauremise) {
+                $this->updateBordereauremise($bordereauremise);
+            }
+        }
+    }
+
+    public function updateBordereauremise($bordereauremise) {
+        $values_to_update = [];
+        if (isset($bordereauremise->workflow_currentstep_titre)) {
+            $values_to_update['workflow_currentstep_titre'] = $this->titre;
+        }
+        if (isset($bordereauremise->workflow_currentstep_code)) {
+            $values_to_update['workflow_currentstep_code'] = $this->code;
+        }
+
+        if ( count($values_to_update) > 0 ) {
+            $bordereauremise->update($values_to_update);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function boot(){
+        parent::boot();
+
+        // Avant enregistrement
+        self::saved(function($model){
+            $model->updateBordereauremises();
+        });
+    }
 }

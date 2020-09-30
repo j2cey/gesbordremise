@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\DB;
  * @property string $mode_paiement
  * @property string $montant_total
  *
- * @property Carbon $date_depot
+ * @property Carbon $date_depot_agence
  * @property integer $montant_depose_agence
  * @property string $scan_bordereau
  * @property string $commentaire_agence
@@ -37,6 +37,10 @@ use Illuminate\Support\Facades\DB;
  * @property Carbon $date_valeur
  * @property integer $montant_depose_finance
  * @property string $commentaire_finance
+ *
+ * @property string $localisation_titre
+ * @property string $workflow_currentstep_code
+ * @property string $workflow_currentstep_titre
  *
  * @property integer|null $bordereauremise_loc_id
  *

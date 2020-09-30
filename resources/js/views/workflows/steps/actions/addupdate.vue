@@ -68,6 +68,18 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="field_required" name="field_required" autocomplete="field_required" autofocus placeholder="Champs Requis ?" v-model="workflowactionForm.field_required">
+                                    <label class="form-check-label" for="field_required">Champs Requis ?</label>
+                                    <span class="invalid-feedback d-block" role="alert" v-if="workflowactionForm.errors.has('field_required')" v-text="workflowactionForm.errors.get('field_required')"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row" v-if="workflowactionForm.field_required">
+                                <label for="field_required_msg" class="col-sm-2 col-form-label">Message Erreur</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="field_required_msg" name="field_required_msg" autocomplete="field_required_msg" placeholder="Message Erreur" v-model="workflowactionForm.field_required_msg">
+                                    <span class="invalid-feedback d-block" role="alert" v-if="workflowactionForm.errors.has('field_required_msg')" v-text="workflowactionForm.errors.get('field_required_msg')"></span>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -96,6 +108,8 @@
             this.workflow_step_id = workflowaction.workflow_step_id || ''
             this.type = workflowaction.type || ''
             this.objectfield = workflowaction.objectfield || ''
+            this.field_required = workflowaction.field_required || ''
+            this.field_required_msg = workflowaction.field_required_msg || ''
         }
     }
     export default {
