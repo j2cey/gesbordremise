@@ -22,6 +22,7 @@ use Spatie\Permission\Models\Role;
  *
  * @property integer|null $workflow_id
  * @property integer|null $role_id
+ * @property string $code
  *
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -64,4 +65,10 @@ class WorkflowStep extends BaseModel
     }
 
     #endregion
+
+    public function scopeCoded($query, $code) {
+        return $query
+            ->where('code', $code)
+            ;
+    }
 }

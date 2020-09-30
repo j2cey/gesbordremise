@@ -39,6 +39,10 @@ class CreateBordereauremisesTable extends Migration
             $table->timestamp('date_valeur')->nullable()->comment('date valeur');
             $table->integer('montant_depose_finance')->nullable()->comment('montant déposé (finance)');
             $table->string('commentaire_finance')->nullable()->comment('commentaire finance');
+
+            $table->foreignId('bordereauremise_loc_id')->nullable()
+                ->comment('référence de la localisation')
+                ->constrained()->onDelete('set null');
         });
         $this->setTableComment($this->table_name,$this->table_comment);
     }
@@ -52,6 +56,7 @@ class CreateBordereauremisesTable extends Migration
     {
         Schema::table($this->table_name, function (Blueprint $table) {
             $table->dropBaseForeigns();
+            $table->dropForeign(['bordereauremise_loc_id']);
         });
         Schema::dropIfExists($this->table_name);
     }

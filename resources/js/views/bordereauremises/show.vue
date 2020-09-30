@@ -33,7 +33,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
+                        <div class="col-12 col-md-12 col-lg-12 order-1 order-md-1">
                             <div class="row">
                                 <div class="col-12 col-sm-12">
 
@@ -52,7 +52,7 @@
                                                 <dd class="col-sm-8">{{ bordereauremise.numero_transaction }}</dd>
 
                                                 <dt class="col-sm-4">Localisation</dt>
-                                                <dd class="col-sm-8">{{ bordereauremise.localisation }}</dd>
+                                                <dd class="col-sm-8">{{ bordereauremise.localisation.titre }}</dd>
                                                 <dt class="col-sm-4">Classe Paiement</dt>
                                                 <dd class="col-sm-8">{{ bordereauremise.classe_paiement }}</dd>
                                             </dl>
@@ -63,106 +63,125 @@
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-12 col-sm-12">
-
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h3 class="card-title">
-                                                Agence
-                                            </h3>
-                                        </div>
-                                        <!-- /.card-header -->
-                                        <div class="card-body">
-                                            <dl class="row">
-                                                <dt class="col-sm-4">Date Dépôt</dt>
-                                                <dd class="col-sm-8">{{ bordereauremise.date_depot_agence }}</dd>
-                                                <dt class="col-sm-4">Montant Déposé</dt>
-                                                <dd class="col-sm-8">{{ bordereauremise.montant_depose_agence }}</dd>
-                                                <dt class="col-sm-4">Scan</dt>
-                                                <dd class="col-sm-8"></dd>
-                                                <dt class="col-sm-4">Commentaire</dt>
-                                                <dd class="col-sm-8">{{ bordereauremise.commentaire_agence }}</dd>
-                                            </dl>
-                                        </div>
-                                        <!-- /.card-body -->
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-12 col-sm-12">
-
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h3 class="card-title">
-                                                Finances
-                                            </h3>
-                                        </div>
-                                        <!-- /.card-header -->
-                                        <div class="card-body">
-                                            <dl class="row">
-                                                <dt class="col-sm-4">Date Valeur</dt>
-                                                <dd class="col-sm-8">{{ bordereauremise.date_valeur }}</dd>
-                                                <dt class="col-sm-4">Montant Déposé</dt>
-                                                <dd class="col-sm-8">{{ bordereauremise.montant_depose_finance }}</dd>
-                                                <dt class="col-sm-4">Commentaire</dt>
-                                                <dd class="col-sm-8">{{ bordereauremise.commentaire_finance }}</dd>
-                                            </dl>
-                                        </div>
-                                        <!-- /.card-body -->
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-
                         </div>
 
-                        <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
-                            <div class="row">
-                                <h3 class="text-primary"><i class="fas fa-paint-brush"></i> Traitement</h3>
-                                <form class="form-horizontal" @submit.prevent @keydown="workflowexecForm.errors.clear()">
+                    </div>
 
+                    <div>
+                        <div class="row">
+                            <div class="col-12 col-md-12 col-lg-6 order-1 order-md-1">
+
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">
+                                            Agence
+                                        </h3>
+                                    </div>
+                                    <!-- /.card-header -->
                                     <div class="card-body">
-                                        <div class="form-group row" v-for="(action, index) in bordereauremise.workflowexec.currentstep.actions" v-if="bordereauremise.workflowexec.currentstep">
-                                            <div class="col-sm-10" v-if="action.type.code == 1">
-                                                <input type="text" class="form-control" id="setvalue" name="setvalue" autocomplete="setvalue" placeholder="Titre" v-model="workflowexecForm.setvalue">
-                                                <span class="invalid-feedback d-block" role="alert" v-if="workflowexecForm.errors.has('setvalue')" v-text="workflowexecForm.errors.get('setvalue')"></span>
-                                            </div>
-                                            <div class="col-sm-10" v-else-if="action.objectfield.valuetype_string || action.objectfield.valuetype_integer">
-                                                <input type="text" class="form-control" :id="action.objectfield.db_field_name" :name="action.objectfield.db_field_name" :placeholder="action.titre" v-model="workflowexecForm[action.objectfield.db_field_name]">
-                                                <span class="invalid-feedback d-block" role="alert" v-if="workflowexecForm.errors.has(`${action.objectfield.db_field_name}`)" v-text="workflowexecForm.errors.get(`${action.objectfield.db_field_name}`)"></span>
-                                            </div>
-                                            <div class="col-sm-10" v-else-if="action.objectfield.valuetype_boolean">
-                                                <input type="text" class="form-control" :id="action.objectfield.db_field_name" :name="action.objectfield.db_field_name" :placeholder="action.titre" v-model="workflowexecForm[action.objectfield.db_field_name]">
-                                                <span class="invalid-feedback d-block" role="alert" v-if="workflowexecForm.errors.has(`${action.objectfield.db_field_name}`)" v-text="workflowexecForm.errors.get(`${action.objectfield.db_field_name}`)"></span>
-                                            </div>
-                                            <div class="col-sm-10" v-else-if="action.objectfield.valuetype_datetime">
-                                                <VueCtkDateTimePicker v-model="workflowexecForm[action.objectfield.db_field_name]" :label="action.titre" format="YYYY-MM-DD hh:mm:ss" />
-                                                <span class="invalid-feedback d-block" role="alert" v-if="workflowexecForm.errors.has(`${action.objectfield.db_field_name}`)" v-text="workflowexecForm.errors.get(`${action.objectfield.db_field_name}`)"></span>
-                                            </div>
-                                            <div class="col-sm-10" v-else-if="action.objectfield.valuetype_image">
-                                                <input type="file" class="custom-file-input" :id="action.objectfield.db_field_name" :name="action.objectfield.db_field_name"  :ref="action.objectfield.db_field_name" @change="handleFileUpload">
-                                                <label class="custom-file-label" :for="action.objectfield.db_field_name">{{ filename }}</label>
-                                                <span class="invalid-feedback d-block" role="alert" v-if="workflowexecForm.errors.has(`${action.objectfield.db_field_name}`)" v-text="workflowexecForm.errors.get(`${action.objectfield.db_field_name}`)"></span>
-                                            </div>
-                                            <div class="col-sm-10" v-else>
-
-                                            </div>
-                                        </div>
+                                        <dl class="row">
+                                            <dt class="col-sm-4">Date Dépôt</dt>
+                                            <dd class="col-sm-8">{{ bordereauremise.date_depot_agence }}</dd>
+                                            <dt class="col-sm-4">Montant Déposé</dt>
+                                            <dd class="col-sm-8">{{ bordereauremise.montant_depose_agence }}</dd>
+                                            <dt class="col-sm-4">Scan</dt>
+                                            <dd class="col-sm-8"></dd>
+                                            <dt class="col-sm-4">Commentaire</dt>
+                                            <dd class="col-sm-8">{{ bordereauremise.commentaire_agence }}</dd>
+                                        </dl>
                                     </div>
-
-                                </form>
-
-                                <div class="text-center mt-5 mb-3">
-                                    <a href="#" class="btn btn-sm btn-primary" @click="validerEtape()">Valider</a>
+                                    <!-- /.card-body -->
                                 </div>
-                        </div>
+
+                            </div>
+
+                            <div class="col-12 col-md-12 col-lg-6 order-2 order-md-1">
+
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">
+                                            Finances
+                                        </h3>
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <div class="card-body">
+                                        <dl class="row">
+                                            <dt class="col-sm-4">Date Valeur</dt>
+                                            <dd class="col-sm-8">{{ bordereauremise.date_valeur }}</dd>
+                                            <dt class="col-sm-4">Montant Déposé</dt>
+                                            <dd class="col-sm-8">{{ bordereauremise.montant_depose_finance }}</dd>
+                                            <dt class="col-sm-4">Commentaire</dt>
+                                            <dd class="col-sm-8">{{ bordereauremise.commentaire_finance }}</dd>
+                                        </dl>
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+
+                            </div>
                         </div>
                     </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+            <div class="card" v-if="hasexecrole">
+                <div class="card-header">
+                    <h3 class="card-title">Traitement</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                            <i class="fas fa-minus"></i></button>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
+
+                            <h3 class="text-primary"><i class="fas fa-paint-brush"></i> Traitement</h3>
+                            <form class="form-horizontal" @submit.prevent @keydown="workflowexecForm.errors.clear()">
+
+                                <div class="card-body">
+                                    <div class="form-group row" v-for="(action, index) in bordereauremise.workflowexec.currentstep.actions" v-if="bordereauremise.workflowexec.currentstep">
+                                        <div class="col-sm-10" v-if="action.type.code == 1">
+                                            <input type="text" class="form-control" id="setvalue" name="setvalue" autocomplete="setvalue" placeholder="Titre" v-model="workflowexecForm.setvalue">
+                                            <span class="invalid-feedback d-block" role="alert" v-if="workflowexecForm.errors.has('setvalue')" v-text="workflowexecForm.errors.get('setvalue')"></span>
+                                        </div>
+                                        <div class="col-sm-10" v-else-if="action.objectfield.valuetype_string || action.objectfield.valuetype_integer">
+                                            <input type="text" class="form-control" :id="action.objectfield.db_field_name" :name="action.objectfield.db_field_name" :placeholder="action.titre" v-model="workflowexecForm[action.objectfield.db_field_name]">
+                                            <span class="invalid-feedback d-block" role="alert" v-if="workflowexecForm.errors.has(`${action.objectfield.db_field_name}`)" v-text="workflowexecForm.errors.get(`${action.objectfield.db_field_name}`)"></span>
+                                        </div>
+                                        <div class="col-sm-10" v-else-if="action.objectfield.valuetype_boolean">
+                                            <input type="text" class="form-control" :id="action.objectfield.db_field_name" :name="action.objectfield.db_field_name" :placeholder="action.titre" v-model="workflowexecForm[action.objectfield.db_field_name]">
+                                            <span class="invalid-feedback d-block" role="alert" v-if="workflowexecForm.errors.has(`${action.objectfield.db_field_name}`)" v-text="workflowexecForm.errors.get(`${action.objectfield.db_field_name}`)"></span>
+                                        </div>
+                                        <div class="col-sm-10" v-else-if="action.objectfield.valuetype_datetime">
+                                            <VueCtkDateTimePicker v-model="workflowexecForm[action.objectfield.db_field_name]" :label="action.titre" format="YYYY-MM-DD hh:mm:ss" />
+                                            <span class="invalid-feedback d-block" role="alert" v-if="workflowexecForm.errors.has(`${action.objectfield.db_field_name}`)" v-text="workflowexecForm.errors.get(`${action.objectfield.db_field_name}`)"></span>
+                                        </div>
+                                        <div class="col-sm-10" v-else-if="action.objectfield.valuetype_image">
+                                            <input type="file" class="custom-file-input" :id="action.objectfield.db_field_name" :name="action.objectfield.db_field_name"  :ref="action.objectfield.db_field_name" @change="handleFileUpload">
+                                            <label class="custom-file-label" :for="action.objectfield.db_field_name">{{ filename }}</label>
+                                            <span class="invalid-feedback d-block" role="alert" v-if="workflowexecForm.errors.has(`${action.objectfield.db_field_name}`)" v-text="workflowexecForm.errors.get(`${action.objectfield.db_field_name}`)"></span>
+                                        </div>
+                                        <div class="col-sm-10" v-else>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="text-center mt-5 mb-3">
+                            <a href="#" class="btn btn-sm btn-primary" @click="validerEtape(bordereauremise.workflowexec.uuid)">Valider</a>
+                        </div>
+                    </div>
+
                 </div>
                 <!-- /.card-body -->
             </div>
@@ -179,12 +198,14 @@
         name: "show",
         props: {
             bordereauremise_prop: {},
-            actionvalues_prop: {}
+            actionvalues_prop: {},
+            hasexecrole_prop: 0
         },
         data() {
             return {
                 bordereauremise: this.bordereauremise_prop,
                 actionvalues: this.actionvalues_prop,
+                hasexecrole: this.hasexecrole_prop,
                 workflowexecForm: new Form(this.actionvalues_prop),
                 filename: 'Télécharger un fichier',
                 selectedFile : null,
@@ -201,22 +222,22 @@
                 this.selectedFile = event.target.files[0];
                 this.filename = (typeof this.selectedFile !== 'undefined') ? this.selectedFile.name : 'Télécharger un fichier';
             },
-            validerEtape() {
-                this.submitForm();
+            validerEtape(execId) {
+                this.submitForm(execId);
             },
             rejeterEtape() {
                 this.$emit('validate_reject')
             },
-            submitForm() {
+            submitForm(execId) {
                 const fd = this.addFileToForm()
 
                 console.log(this.workflowexecForm)
 
                 //.post(`/workflowexecs`, fd)
                 this.workflowexecForm
-                    .put(`/workflowexecs/${this.execId}`, fd)
+                    .put(`/workflowexecs/${execId}`, fd)
                     .then(data => {
-                        window.location = "/bordereauremises";
+                        this.updateData(data);
                     }).catch(error => {
                     this.loading = false
                 });
@@ -234,6 +255,9 @@
                     return fd;
                 }
             },
+            updateData(data) {
+                console.log(data);
+            }
         }
     }
 </script>

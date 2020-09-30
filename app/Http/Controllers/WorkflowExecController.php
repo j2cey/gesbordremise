@@ -94,7 +94,7 @@ class WorkflowExecController extends Controller
         $nextstep = WorkflowStep::where('workflow_id', $workflowexec->workflow_id)
             ->where('posi', $currstep->posi + 1)->first();
 
-        $nextstep_id = null;
+        $nextstep_id = WorkflowStep::coded("0")->first()->id;;
         $workflow_status_id = $workflowexec->workflow_status_id;
 
         if ( is_null($formInput['motif_rejet']) || $formInput['motif_rejet'] === "null" ) {
@@ -139,6 +139,8 @@ class WorkflowExecController extends Controller
             'workflow_status_id' => $workflow_status_id,
             'motif_rejet' => $formInput['motif_rejet'],
         ]);
+
+        return json_encode($formInput);
     }
 
     /**

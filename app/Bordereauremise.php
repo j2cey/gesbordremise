@@ -38,6 +38,8 @@ use Illuminate\Support\Facades\DB;
  * @property integer $montant_depose_finance
  * @property string $commentaire_finance
  *
+ * @property integer|null $bordereauremise_loc_id
+ *
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
@@ -45,8 +47,13 @@ class Bordereauremise extends BaseModel
 {
     protected $guarded = [];
     protected $table = 'bordereauremises';
+    protected $with = ['localisation'];
 
     #region Eloquent Relationships
+
+    public function localisation() {
+        return $this->belongsTo(BordereauremiseLoc::class, 'bordereauremise_loc_id');
+    }
 
     /**
      * Le(s) Workflow(s) rattaché(s) a ce type de modèle le cas échéant
@@ -65,18 +72,18 @@ class Bordereauremise extends BaseModel
         }
     }
 
-    /*public function workflowexecs() {
+    public function workflowexecs() {
         return $this->hasMany('App\WorkflowExec', 'model_id')
             ->where('model_type', 'App\Bordereauremise');
         //->whereNotNull('current_step_id');
-    }*/
+    }
 
-    /*public function workflowexec() {
+    public function workflowexec() {
         return $this->hasOne('App\WorkflowExec', 'model_id')
             ->where('model_type', 'App\Bordereauremise')
             ->latest();
         //->whereNotNull('current_step_id');
-    }*/
+    }
 
     /**
      * L'instance d'exécution du workflow rattaché, le cas échéant.

@@ -15,6 +15,10 @@ use Illuminate\Validation\Rule;
  * @package App\Http\Requests
  *
  * @property string|null $search
+ * @property string|null $dateremise_du
+ * @property string|null $dateremise_au
+ * @property string|null $localisation
+ * @property string|null $statut
  * @property int $per_page
  * @property int $page
  * @property string $order_by
@@ -128,7 +132,14 @@ trait SearchRequest
      */
     protected function payload(): Payload
     {
-        return new SearchOnlyPayload($this->search ?? null);
+        $payload = "";
+        //$payload = $this->addToPayload($payload, 'search', $this->search);
+        $payload = $this->addToPayload($payload, 'dateremise_du', substr($this->dateremise_du, 0, 10));
+        $payload = $this->addToPayload($payload, 'dateremise_au', substr($this->dateremise_au, 0, 10));
+        $payload = $this->addToPayload($payload, 'localisation', $this->localisation);
+        $payload = $this->addToPayload($payload, 'statut', $this->statut);
+
+        return new SearchOnlyPayload($payload);
     }
 
     /**
@@ -139,5 +150,16 @@ trait SearchRequest
     public function requestOrder(): OrderBy
     {
         return new OrderBy($this->order_field, $this->order_direction);
+    }
+
+    private function addToPayload($payload, $key, $val) {
+        if ($val) {
+            if ($payload !== "") {
+                $payload = $payload . '|' . $key . ':' . $val;
+            } else {
+                $payload = $key . ':' . $val;
+            }
+        }
+        return $payload;
     }
 }

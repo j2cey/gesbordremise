@@ -12,8 +12,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property integer $id
  * @property string $uuid
  * @property string $numero_transaction
- * @property string $localisation
+ * @property string $loc
  * @property string $mode_paiement
+ * @property integer $bordereauremise_loc_id
  */
 class Bordereauremise extends JsonResource
 {
@@ -29,7 +30,8 @@ class Bordereauremise extends JsonResource
             'id' => $this->id,
             'uuid' => $this->uuid,
             'numero_transaction' => $this->numero_transaction,
-            'localisation' => $this->localisation,
+            'loc' => (new BordereauremiseLoc($this->whenLoaded('localisation'))),
+            'statut' => $this->bordereauremise_loc_id,
             'mode_paiement' => $this->mode_paiement,
             'edit_url' => route('bordereauremises.edit', $this->uuid),
             'destroy_url' => route('bordereauremises.destroy', $this->uuid),

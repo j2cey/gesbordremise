@@ -1,5 +1,6 @@
 <?php
 
+use App\WorkflowStep;
 use Illuminate\Database\Seeder;
 
 class WorkflowStepSeeder extends Seeder
@@ -11,6 +12,11 @@ class WorkflowStepSeeder extends Seeder
      */
     public function run()
     {
-        //
+        WorkflowStep::create([
+            'titre' => "Traitement Terminé",
+            'code' => "0",
+            'description' => "Etape marquant la fin de tout Workflow",
+            'posi' => 0,
+        ]);
     }
 }

@@ -45,9 +45,11 @@ Route::resource('workflowactiontypes','WorkflowActionTypeController')->middlewar
 Route::resource('workflowobjects','WorkflowObjectController')->middleware('auth');
 Route::resource('workflowobjectfields','WorkflowObjectFieldController')->middleware('auth');
 
-Route::resource('bordereauremise','BordereauremiseController')->middleware('auth');
-Route::get('bordereauremise/fetch','BordereauremiseController@fetch')
-    ->name('bordereauremise.fetch')
+Route::resource('bordereauremises','BordereauremiseController')->middleware('auth');
+Route::get('bordereauremises.fetch','BordereauremiseController@fetch')
+    ->name('bordereauremises.fetch')
+    ->middleware('auth');
+Route::get('bordereauremisetest','BordereauremiseController@bordereauremisetest')
     ->middleware('auth');
 
 Route::resource('workflowexecs','WorkflowExecController')->middleware('auth');

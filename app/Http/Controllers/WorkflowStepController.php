@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class WorkflowStepController extends Controller
 {
@@ -45,10 +46,11 @@ class WorkflowStepController extends Controller
         $user = auth()->user();
 
         $formInput = $request->all();
-        $posi = WorkflowStep::count('id');
+        $posi = WorkflowStep::where('workflow_id', $formInput['workflow_id'])->count('id');
 
         $new_workflowstep = WorkflowStep::create([
             'titre' => $formInput['titre'],
+            'code' => (string) Str::orderedUuid(),
             'description' => $formInput['description'],
             'workflow_id' => $formInput['workflow_id'],
             'role_id' => $formInput['profile']['id'],

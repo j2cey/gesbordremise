@@ -39,6 +39,10 @@ class CreateWorkflowExecsTable extends Migration
             $table->bigInteger('model_id')->comment('référence de l instance du modèle');
             $table->string('motif_rejet')->nullable()->comment('motif rejet le cas échéant');
             $table->json('report')->comment('rapport d exécution');
+
+            $table->foreignId('current_step_role_id')->nullable()
+                ->comment('référence du role de l etape courrante')
+                ->constrained('roles')->onDelete('set null');
         });
         $this->setTableComment($this->table_name,$this->table_comment);
     }
@@ -55,6 +59,7 @@ class CreateWorkflowExecsTable extends Migration
             $table->dropForeign(['workflow_id']);
             $table->dropForeign(['current_step_id']);
             $table->dropForeign(['workflow_status_id']);
+            $table->dropForeign(['current_step_role_id']);
         });
         Schema::dropIfExists($this->table_name);
     }

@@ -34,6 +34,8 @@ class CreateWorkflowStepsTable extends Migration
             $table->foreignId('role_id')->nullable()
                 ->comment('référence du profile de l acteur potentiel')
                 ->constrained()->onDelete('set null');
+
+            $table->string('code')->unique()->comment('code de l étape');
         });
         $this->setTableComment($this->table_name,$this->table_comment);
     }

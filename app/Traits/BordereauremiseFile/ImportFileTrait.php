@@ -5,6 +5,8 @@ namespace App\Traits\BordereauremiseFile;
 
 
 use App\Bordereauremise;
+use App\BordereauremiseLoc;
+use Illuminate\Support\Str;
 
 trait ImportFileTrait
 {
@@ -32,11 +34,12 @@ trait ImportFileTrait
                 $row_parsed = $this->getParameters($row);
 
                 if ($row_parsed[0]) {
+                    $localisation = $this->getLocalisation($row_parsed[1]['localisation']);
                     // New Bordereauremise
                     Bordereauremise::create([
                         'date_remise' => date('Y-m-d',strtotime($row_parsed[1]['date_remise'])),
                         'numero_transaction' => $row_parsed[1]['numero_transaction'],
-                        'localisation' => $row_parsed[1]['localisation'],
+                        'bordereauremise_loc_id' => $localisation->id,
                         'changement_dernier_tarif' => $row_parsed[1]['changement_dernier_tarif'],
                         'classe_paiement' => $row_parsed[1]['classe_paiement'],
                         'mode_paiement' => $row_parsed[1]['mode_paiement'],
@@ -65,6 +68,21 @@ trait ImportFileTrait
         // unmark as processing
         $this->import_processing = 0;
         $this->save();
+    }
+
+    /**
+     * @param $titre
+     * @return BordereauremiseLoc|null
+     */
+    private function getLocalisation($titre) {
+        $localisation = BordereauremiseLoc::where('titre', $titre)->first();
+        if (! $localisation) {
+            $localisation = BordereauremiseLoc::create([
+                'code' => (string) Str::orderedUuid(),
+                'titre' => $titre
+            ]);
+        }
+        return $localisation;
     }
 
     private function getParameters($row) {

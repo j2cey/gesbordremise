@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\BordereauremiseLoc;
 use App\User;
 use App\Bordereauremise;
+use App\Workflow;
+use App\WorkflowStep;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -18,6 +22,7 @@ use App\Http\Resources\SearchCollection;
 use App\Http\Requests\Bordereauremise\FetchRequest;
 use App\Http\Resources\Bordereauremise as BordereauremiseResource;
 use App\Repositories\Contracts\IBordereauremiseRepositoryContract;
+use Spatie\Permission\Models\Role;
 
 class BordereauremiseController extends Controller
 {
@@ -35,6 +40,22 @@ class BordereauremiseController extends Controller
         $this->repository = $repository;
     }
 
+    public function bordereauremisetest() {
+        $user = auth()->user(); //$user = User::where(......, ........)->first(); // Without first() it's a query builder
+        //$user = User::where('id', $user->id)->first();
+        $userroles = Role::whereIn('id', DB::table('model_has_roles')->where('model_type','App\User')->where('model_id', $user->id)->select(['role_id'])
+        )->get()->pluck('id')->toArray();
+        $superroleIds = [1];
+        //dd($userroles);
+        $ids = [1,2,3];
+        $cb = function ($query, $userroles)
+        {
+            $query->whereIn('role_id', $userroles);
+        };
+        $results = Bordereauremise::whereIn('id', $ids)->with(['workflowexec.currentstep' => $cb])->get();
+        dd($results);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -42,9 +63,15 @@ class BordereauremiseController extends Controller
      */
     public function index()
     {
+        $localisations = BordereauremiseLoc::all();
+        $bordereaux_wf = Workflow::where('model_type', 'App\Bordereauremise')->first();
+        $statuts = $bordereaux_wf ? WorkflowStep::where('workflow_id', $bordereaux_wf->id)->orWhereNull('workflow_id')->get() : null;
         return view('bordereauremises.index')
             ->with('perPage', new \Illuminate\Support\Collection(config('system.per_page')))
-            ->with('defaultPerPage', config('system.default_per_page'));
+            ->with('defaultPerPage', config('system.default_per_page'))
+            ->with('localisations', $localisations)
+            ->with('statuts', $statuts)
+            ;
     }
 
     /**
@@ -55,6 +82,11 @@ class BordereauremiseController extends Controller
      */
     public function fetch(FetchRequest $request): SearchCollection
     {
+        /*$request->replace([
+            'search' => "32",
+            'order_by' => "numero_transaction:asc"
+        ]);*/
+        //dd($request->all());
         return new SearchCollection(
             $this->repository->search($request), BordereauremiseResource::class
         );
@@ -145,7 +177,34 @@ class BordereauremiseController extends Controller
      */
     public function edit(Bordereauremise $bordereauremise)
     {
-        //
+        $user = auth()->user();
+        $exec_step_profile = $bordereauremise->workflowexec->currentstep->profile;
+        $bordereauremise = Bordereauremise::where('id',$bordereauremise->id)
+            ->first()
+            ->load(['localisation','workflowexec','workflowexec.currentstep','workflowexec.currentstep.actions','workflowexec.currentstep.actions.type','workflowexec.currentstep.actions.objectfield','workflowexec.currentstep.profile','workflowexec.workflowstatus']);
+        $hasexecrole = $user->hasRole([$exec_step_profile->name]) ? 1 : 0;
+        //dd($hasexecrole);
+        /*if ($user->hasRole([$exec_step_profile->name])) {
+            $bordereauremise = Bordereauremise::where('id',$bordereauremise->id)
+                ->first()
+                ->load(['localisation','workflowexec','workflowexec.currentstep','workflowexec.currentstep.actions','workflowexec.currentstep.actions.type','workflowexec.currentstep.actions.objectfield','workflowexec.currentstep.profile','workflowexec.workflowstatus']);
+        } else {
+            $bordereauremise = Bordereauremise::where('id',$bordereauremise->id)
+                ->without('workflowexec')->first();
+
+            $bordereauremise->load(['localisation']);
+        }*/
+        $actionvalues = [];
+        if ($bordereauremise->workflowexec && $bordereauremise->workflowexec->currentstep) {
+
+            foreach ($bordereauremise->workflowexec->currentstep->actions as $action) {
+                $actionvalues[$action->objectfield->db_field_name] = null;
+            }
+            $actionvalues['setvalue'] = null;
+            $actionvalues['motif_rejet'] = null;
+        }
+
+        return view('bordereauremises.edit', ['bordereauremise' => $bordereauremise, 'actionvalues' => json_encode($actionvalues), 'hasexecrole' => $hasexecrole]);
     }
 
     /**

@@ -20,6 +20,7 @@ use Spatie\Permission\Models\Role;
  * @property integer|null $status_id
  *
  * @property integer|null $current_step_id
+ * @property integer|null $current_step_role_id
  * @property integer|null $workflow_id
  * @property string $model_type
  * @property integer $model_id
@@ -60,6 +61,24 @@ class WorkflowExec extends BaseModel
 
     public function workflowstatus() {
         return $this->belongsTo('App\WorkflowStatus','workflow_status_id');
+    }
+
+    public function currentsteprole() {
+        return $this->belongsTo(Role::class, 'current_step_role_id');
+    }
+
+    public static function boot(){
+        parent::boot();
+
+        // Après enregistrement, on met à jour l'id du role de l'actuel étape
+        self::saving(function($model){
+            if ($model->current_step_id) {
+                $currentstep = WorkflowStep::where('id', $model->current_step_id)->first();
+                if ($currentstep) {
+                    $model->current_step_role_id = $currentstep->role_id;
+                }
+            }
+        });
     }
 
     #endregion

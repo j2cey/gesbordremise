@@ -1,9 +1,13 @@
 <script>
     import { debounce } from 'lodash';
     import { mapActions } from 'vuex';
+    import vdtpicker from 'vue-ctk-date-time-picker';
     export default {
         name: 'SearchForm',
         props: {
+            components: {
+                vdtpicker
+            },
             group: {
                 type: String,
                 required: true

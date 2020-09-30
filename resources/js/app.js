@@ -66,11 +66,19 @@ import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
+//import 'vue2-datepicker/locale/fr-fr';
+
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('vue-noty', require('./components/Noty').default);
 Vue.component('VueCtkDateTimePicker', VueCtkDateTimePicker);
+Vue.component('vue-dtpicker', require('./components/vueDTpicker').default);
+Vue.component('vue2-datepicker', require('vue2-datepicker').default);
+Vue.component('vue-datepicker', require('vuejs-datepicker').default);
+
 Vue.component('workflow-execaction', require('./views/workflowexecactions/show').default);
 Vue.component('workflow-execstep', require('./views/workflowexecsteps/show').default);
 Vue.component('workflow-exec', require('./views/workflowexecs/exec').default);
@@ -94,5 +102,5 @@ Vue.component('search-results', require('./components/Search/SearchResults').def
 const app = new Vue({
     store,
     el: '#app',
-    router
+    router,
 });

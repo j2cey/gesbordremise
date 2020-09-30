@@ -6,13 +6,10 @@
     @include('layouts.admin02.nav.nav')
     <!-- /.navbar -->
 
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-
-        <!-- Main content -->
-        @yield('app_content')
-        <!-- /.content -->
-
+    <div class="content">
+        <div class="container">
+            @yield('app_content')
+        </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-wrapper -->
 
