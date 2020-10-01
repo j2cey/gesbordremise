@@ -32283,15 +32283,13 @@ a.text-muted:hover {
 
 [class*="accent-"] a.btn-dark {
   color: #ffffff;
-}@charset "UTF-8";
-
-/*!
+}/*!
  * Font Awesome Free 5.14.0 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
  */
 
 @font-face {
-  font-family: "Font Awesome 5 Brands";
+  font-family: 'Font Awesome 5 Brands';
 
   font-style: normal;
 
@@ -32305,7 +32303,7 @@ a.text-muted:hover {
 }
 
 .fab {
-  font-family: "Font Awesome 5 Brands";
+  font-family: 'Font Awesome 5 Brands';
   font-weight: 400;
 }
 
@@ -32315,7 +32313,7 @@ a.text-muted:hover {
  */
 
 @font-face {
-  font-family: "Font Awesome 5 Free";
+  font-family: 'Font Awesome 5 Free';
 
   font-style: normal;
 
@@ -32329,7 +32327,7 @@ a.text-muted:hover {
 }
 
 .far {
-  font-family: "Font Awesome 5 Free";
+  font-family: 'Font Awesome 5 Free';
   font-weight: 400;
 }
 
@@ -32339,7 +32337,7 @@ a.text-muted:hover {
  */
 
 @font-face {
-  font-family: "Font Awesome 5 Free";
+  font-family: 'Font Awesome 5 Free';
 
   font-style: normal;
 
@@ -32354,7 +32352,7 @@ a.text-muted:hover {
 
 .fa,
 .fas {
-  font-family: "Font Awesome 5 Free";
+  font-family: 'Font Awesome 5 Free';
   font-weight: 900;
 }
 
@@ -32379,17 +32377,17 @@ a.text-muted:hover {
 }
 
 .fa-lg {
-  font-size: 1.3333333333em;
+  font-size: 1.33333333em;
   line-height: 0.75em;
-  vertical-align: -0.0667em;
+  vertical-align: -.0667em;
 }
 
 .fa-xs {
-  font-size: 0.75em;
+  font-size: .75em;
 }
 
 .fa-sm {
-  font-size: 0.875em;
+  font-size: .875em;
 }
 
 .fa-1x {
@@ -32457,8 +32455,8 @@ a.text-muted:hover {
 
 .fa-border {
   border: solid 0.08em #eee;
-  border-radius: 0.1em;
-  padding: 0.2em 0.25em 0.15em;
+  border-radius: .1em;
+  padding: .2em .25em .15em;
 }
 
 .fa-pull-left {
@@ -32474,7 +32472,7 @@ a.text-muted:hover {
 .far.fa-pull-left,
 .fal.fa-pull-left,
 .fab.fa-pull-left {
-  margin-right: 0.3em;
+  margin-right: .3em;
 }
 
 .fa.fa-pull-right,
@@ -32482,7 +32480,7 @@ a.text-muted:hover {
 .far.fa-pull-right,
 .fal.fa-pull-right,
 .fab.fa-pull-right {
-  margin-left: 0.3em;
+  margin-left: .3em;
 }
 
 .fa-spin {

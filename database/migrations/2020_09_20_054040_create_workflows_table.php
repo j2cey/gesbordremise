@@ -30,6 +30,10 @@ class CreateWorkflowsTable extends Migration
                 ->comment('référence de l utilisateur')
                 ->constrained()->onDelete('set null');
 
+            $table->foreignId('workflow_object_id')->nullable()
+                ->comment('référence de l objet')
+                ->constrained()->onDelete('set null');
+
             $table->string('model_type')->nullable()->comment('type du modèle référencé');
         });
         $this->setTableComment($this->table_name,$this->table_comment);
@@ -45,6 +49,7 @@ class CreateWorkflowsTable extends Migration
         Schema::table($this->table_name, function (Blueprint $table) {
             $table->dropBaseForeigns();
             $table->dropForeign(['user_id']);
+            $table->dropForeign(['workflow_object_id']);
         });
         Schema::dropIfExists($this->table_name);
     }

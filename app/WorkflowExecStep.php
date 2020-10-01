@@ -22,6 +22,7 @@ use PHPUnit\Util\Json;
  *
  * @property Json $report
  * @property integer|null $workflow_status_id
+ * @property integer|null $user_id
  *
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -42,6 +43,10 @@ class WorkflowExecStep extends BaseModel
 
     public function execstatus() {
         return $this->belongsTo('App\WorkflowStatus', 'workflow_status_id');
+    }
+
+    public function user() {
+        return $this->belongsTo('App\User');
     }
 
     #endregion

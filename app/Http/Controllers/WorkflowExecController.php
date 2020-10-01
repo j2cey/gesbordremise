@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CleanRequestTrait;
 use App\Workflow;
 use App\WorkflowExec;
 use App\WorkflowStatus;
@@ -11,6 +12,7 @@ use Illuminate\Support\Carbon;
 
 class WorkflowExecController extends Controller
 {
+    use CleanRequestTrait;
     /**
      * Display a listing of the resource.
      *
@@ -92,13 +94,13 @@ class WorkflowExecController extends Controller
         ]
         );*/
 
-        $request->replace($request->all());
+        //$request->replace($request->all());
         $formInput = $request->all();
-        foreach ($formInput as $key => $value) {
+        /*foreach ($formInput as $key => $value) {
             if ($value === "null") {
                 $request->replace([$key => null]);
             }
-        }
+        }*/
 
         // Validation
         $currstep = WorkflowStep::with(['actions','actions.objectfield'])->where('id', $workflowexec->current_step_id)->first();
@@ -107,7 +109,32 @@ class WorkflowExecController extends Controller
 
         foreach ($currstep->actions as $action) {
             if ($action->field_required) {
-                $validation_rules[$action->objectfield->db_field_name] = 'required';
+                $field_label = explode('|',$action->objectfield->field_label)[1];
+                if ($action->objectfield->valuetype_string) {
+                    // string required
+                    $validation_rules[$action->objectfield->db_field_name] = 'required|string';
+                    $validation_messages[$action->objectfield->db_field_name . '.string'] = $field_label . " doit être une chaine de caractères";
+                } elseif ($action->objectfield->valuetype_integer) {
+                    // integer required
+                    $validation_rules[$action->objectfield->db_field_name] = 'required|integer';
+                    $validation_messages[$action->objectfield->db_field_name . '.integer'] = $field_label . " doit être un nombre";
+                } elseif ($action->objectfield->valuetype_boolean) {
+                    // bool required
+                    $validation_rules[$action->objectfield->db_field_name] = 'required|bool';
+                    $validation_messages[$action->objectfield->db_field_name . '.bool'] = $field_label . " doit être un booléen";
+                } elseif ($action->objectfield->valuetype_datetime) {
+                    // datetime required
+                    $validation_rules[$action->objectfield->db_field_name] = 'required|date';
+                    $validation_messages[$action->objectfield->db_field_name . '.date'] = $field_label . " doit être une date valide";
+                } elseif ($action->objectfield->valuetype_image) {
+                    // image required
+                    $validation_rules[$action->objectfield->db_field_name] = 'required|image';
+                    $validation_messages[$action->objectfield->db_field_name . '.image'] = $field_label . " doit être une image valide";
+                } else {
+                    // default required
+                    $validation_rules[$action->objectfield->db_field_name] = 'required';
+                }
+
                 if ($action->field_required_msg && ($action->field_required_msg !== "")) {
                     $validation_messages[$action->objectfield->db_field_name . '.required'] = $action->field_required_msg;
                 }
@@ -116,9 +143,9 @@ class WorkflowExecController extends Controller
 
         //request()->validate($validation_rules, $validation_messages);
         $request->validate($validation_rules, $validation_messages);
-        dd($request, $validation_rules,$validation_messages);
+        //dd($request, $validation_rules,$validation_messages);
 
-        $step_file = $request->file('step_files');
+        //$step_file = $request->file('step_files');
 
         $formInput['motif_rejet'] = ($formInput['motif_rejet'] === "null" ? null : $formInput['motif_rejet']);
 
@@ -133,7 +160,6 @@ class WorkflowExecController extends Controller
         $model = null;
 
         if ( is_null($formInput['motif_rejet']) || $formInput['motif_rejet'] === "null" ) {
-            //dd('motif_rejet null, Validation de l étape ',$formInput,is_null($formInput['motif_rejet']));
             // Validation de l'étape
             $model = $workflowexec->model_type::where('id', $workflowexec->model_id)->first();
             // On parcoure les actions pour assigner les valeurs
@@ -144,7 +170,10 @@ class WorkflowExecController extends Controller
                         // Type DateTime
                         $model->{$action->objectfield->db_field_name} = $formInput[$action->objectfield->db_field_name]; // Carbon::parse($formInput[$action->objectfield->db_field_name]);
                     } elseif ($action->objectfield->valuetype_image) {
-                        $model->{$action->objectfield->db_field_name} = $this->verifyAndStoreImage($request, 'step_files', 'bordereauremises_scans');
+                        $model->{$action->objectfield->db_field_name} = $this->verifyAndStoreImage($request, $action->objectfield->db_field_name, 'bordereauremises_scans');
+                    } elseif ($action->objectfield->valuetype_string) {
+                        $str_val = ($formInput[$action->objectfield->db_field_name] === "null" || $formInput[$action->objectfield->db_field_name] === null) ? "" : $formInput[$action->objectfield->db_field_name];
+                        $model->{$action->objectfield->db_field_name} = $str_val;
                     } else {
                         $model->{$action->objectfield->db_field_name} = $formInput[$action->objectfield->db_field_name];
                     }

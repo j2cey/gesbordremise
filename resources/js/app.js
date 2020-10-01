@@ -29,7 +29,7 @@ window.noty = function(notification) {
 }
 
 window.handleErrors = function(error) {
-    if(error.response.status == 422) {
+    if(error.response.status === 422) {
         window.noty({
             message: 'Vous avez des erreurs de validation. Veuillez réessayer.',
             type: 'danger'
@@ -79,6 +79,7 @@ Vue.component('vue-dtpicker', require('./components/vueDTpicker').default);
 Vue.component('vue2-datepicker', require('vue2-datepicker').default);
 Vue.component('vue-datepicker', require('vuejs-datepicker').default);
 
+Vue.component('workflows-index', require('./views/workflows/workflows').default);
 Vue.component('workflow-execaction', require('./views/workflowexecactions/show').default);
 Vue.component('workflow-execstep', require('./views/workflowexecsteps/show').default);
 Vue.component('workflow-exec', require('./views/workflowexecs/exec').default);

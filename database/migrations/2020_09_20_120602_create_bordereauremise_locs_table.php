@@ -24,9 +24,10 @@ class CreateBordereauremiseLocsTable extends Migration
             $table->baseFields();
 
             $table->string('titre')->comment('titre de la localisation');
-            $table->string('code')->unique()->comment('status code');
+            $table->string('code')->unique()->comment('code de la localisation');
             $table->string('description')->nullable()->comment('description de la localisation');
         });
+        $this->setTableComment($this->table_name,$this->table_comment);
     }
 
     /**

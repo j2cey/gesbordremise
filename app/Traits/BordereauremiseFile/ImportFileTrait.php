@@ -6,6 +6,7 @@ namespace App\Traits\BordereauremiseFile;
 
 use App\Bordereauremise;
 use App\BordereauremiseLoc;
+use App\BordereauremiseModepaie;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 
@@ -37,6 +38,7 @@ trait ImportFileTrait
                 if ($row_parsed[0]) {
                     //['date_remise','numero_transaction','localisation_code','localisation_titre','classe_paiement','mode_paiement','montant_total']
                     $localisation = $this->getLocalisation($row_parsed[1]['localisation_code'],$row_parsed[1]['localisation_titre']);
+                    $modepaie = $this->getModepaiement($row_parsed[1]['mode_paiement']);
                     // New Bordereauremise
                     Bordereauremise::create([
                         'date_remise' => Carbon::createFromFormat('d/m/Y', $row_parsed[1]['date_remise'])->format('Y-m-d'),//date('Y-m-d',strtotime($row_parsed[1]['date_remise'])),
@@ -44,7 +46,8 @@ trait ImportFileTrait
                         'bordereauremise_loc_id' => $localisation->id,
                         'localisation_titre' => $localisation->titre,
                         'classe_paiement' => utf8_encode($row_parsed[1]['classe_paiement']),
-                        'mode_paiement' => utf8_encode($row_parsed[1]['mode_paiement']),
+                        'bordereauremise_modepaie_id' => $modepaie->id,
+                        'modepaiement_titre' => $modepaie->titre,
                         'montant_total' => $row_parsed[1]['montant_total'],
                         'workflow_currentstep_titre' => "aucun traitement", // On assigne une valeur pour pas faire échouer le check isset
                         'workflow_currentstep_code' => "aucun traitement", // On assigne une valeur pour pas faire échouer le check isset
@@ -87,6 +90,17 @@ trait ImportFileTrait
             ]);
         }
         return $localisation;
+    }
+
+    private function getModepaiement($titre) {
+        $modepaie = BordereauremiseModepaie::where('titre', $titre)->first();
+        if (! $modepaie) {
+            $modepaie = BordereauremiseModepaie::create([
+                'code' => Str::slug( (string) Str::orderedUuid() ),
+                'titre' => utf8_encode($titre)
+            ]);
+        }
+        return $modepaie;
     }
 
     private function getParameters($row) {

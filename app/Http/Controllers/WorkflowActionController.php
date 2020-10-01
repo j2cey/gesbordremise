@@ -45,13 +45,18 @@ class WorkflowActionController extends Controller
         $user = auth()->user();
         $formInput = $request->all();
 
+        //$val_bfor = $formInput['field_required'];
+        $formInput['field_required'] = $this->getCheckValue($formInput, 'field_required');
+
+        //dd($val_bfor,$formInput);
+
         $new_workflowaction = WorkflowAction::create([
             'titre' => $formInput['titre'],
             'description' => $formInput['description'],
             'workflow_step_id' => $formInput['workflow_step_id'],
             'workflow_action_type_id' => $formInput['type']['id'],
             'workflow_object_field_id' => $formInput['objectfield']['id'],
-            'field_required' => isset($formInput['field_required']) ? 1 : 0, // TODO: required false ne passe pas
+            'field_required' => $formInput['field_required'],
             'field_required_msg' => $formInput['field_required_msg'],
         ]);
 
@@ -92,12 +97,30 @@ class WorkflowActionController extends Controller
         $user = auth()->user();
         $formInput = $request->all();
 
+        /*foreach ($formInput as $key => $value) {
+            if ($value === "null") {
+                $request->replace([$key => null]);
+            }
+        }*/
+
+        // TODO: Valider l'Action à Modifier
+
+        $formInput['type'] = json_decode($formInput['type'], true);
+        $formInput['objectfield'] = json_decode($formInput['objectfield'], true);
+
+        //$val_bfor = $formInput['field_required'];
+        $formInput['field_required'] = $this->getCheckValue($formInput, 'field_required');
+
+        //dd($val_bfor,$formInput);
+
         $workflowaction->update([
             'titre' => $formInput['titre'],
             'description' => $formInput['description'],
             'workflow_step_id' => $formInput['workflow_step_id'],
             'workflow_action_type_id' => $formInput['type']['id'],
             'workflow_object_field_id' => $formInput['objectfield']['id'],
+            'field_required' => $formInput['field_required'],
+            'field_required_msg' => $formInput['field_required_msg'],
         ]);
 
         return $workflowaction->load(['type','objectfield']);
@@ -111,6 +134,18 @@ class WorkflowActionController extends Controller
      */
     public function destroy(WorkflowAction $workflowaction)
     {
-        //
+        // TODO: Supprimer Action
+    }
+
+    public function getCheckValue($formInput, $field) {
+        if (array_key_exists($field, $formInput)) {
+            if (is_null($formInput[$field])) {
+                return 0;
+            } else {
+                return ($formInput[$field] === "true" || $formInput[$field] === "1" || $formInput[$field] === true) ? 1 : 0;
+            }
+        } else {
+            return 0;
+        }
     }
 }

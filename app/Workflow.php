@@ -20,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $model_type
  *
  * @property integer|null $user_id
+ * @property integer|null $workflow_object_id
  *
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -34,6 +35,10 @@ class Workflow extends BaseModel
 
     public function steps() {
         return $this->hasMany('App\WorkflowStep')->orderBy('posi');
+    }
+
+    public function object() {
+        return $this->belongsTo('App\WorkflowObject','workflow_object_id');
     }
 
     public function user() {

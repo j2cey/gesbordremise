@@ -18,8 +18,12 @@ class WorkflowController extends Controller
      */
     public function index()
     {
+        return view('workflows.index');
+    }
+
+    public function fetch() {
         $workflows = Workflow::all();
-        $workflows->load(['steps','steps.profile','steps.actions','steps.actions.type','steps.actions.objectfield']);
+        $workflows->load(['object','steps','steps.profile','steps.actions','steps.actions.type','steps.actions.objectfield']);
         return $workflows;
     }
 
@@ -49,6 +53,7 @@ class WorkflowController extends Controller
             'titre' => $formInput['titre'],
             'description' => $formInput['description'],
             'user_id' => $user->id,
+            'workflow_object_id' => $formInput['object']['id'],
             'model_type' => $formInput['object']['model_type'],
         ]);
 
@@ -58,7 +63,7 @@ class WorkflowController extends Controller
             'model_type' => $formInput['object']['model_type'],
         ]);*/
 
-        return $new_workflow->load(['steps','steps.profile','steps.actions']);
+        return $new_workflow->load(['object','steps','steps.profile','steps.actions','steps.actions.type','steps.actions.objectfield']);
     }
 
     /**
@@ -93,7 +98,24 @@ class WorkflowController extends Controller
     public function update(Request $request, Workflow $workflow)
     {
         $formInput = $request->all();
-        dd($formInput, $workflow, $request);
+        foreach ($formInput as $key => $value) {
+            if ($value === "null") {
+                $request->replace([$key => null]);
+            }
+        }
+
+        // TODO: Validadtion
+
+        $formInput['object'] = json_decode($formInput['object'], true);
+
+        $workflow->update([
+            'titre' => $formInput['titre'],
+            'description' => $formInput['description'],
+            'workflow_object_id' => $formInput['object']['id'],
+            'model_type' => $formInput['object']['model_type'],
+        ]);
+
+        return $workflow->load(['object','steps','steps.profile','steps.actions','steps.actions.type','steps.actions.objectfield']);
     }
 
     /**
@@ -104,6 +126,6 @@ class WorkflowController extends Controller
      */
     public function destroy(Workflow $workflow)
     {
-        //
+        //TODO: Supprimer le Workflow
     }
 }

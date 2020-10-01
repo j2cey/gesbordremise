@@ -14,10 +14,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property string $numero_transaction
  * @property string $montant_total
  * @property string $loc
- * @property string $mode_paiement
  * @property integer $bordereauremise_loc_id
  * @property string $titre
  * @property string $localisation_titre
+ * @property string $modepaiement_titre
+ * @property string $classe_paiement
  * @property string $workflow_currentstep_code
  * @property string $workflow_currentstep_titre
  */
@@ -38,7 +39,8 @@ class Bordereauremise extends JsonResource
             'montant_total' => $this->montant_total,
             //'loc' => (new BordereauremiseLoc($this->whenLoaded('localisation'))),
             //'statut' => $this->bordereauremise_loc_id,
-            'mode_paiement' => $this->mode_paiement,
+            'modepaiement_titre' => $this->modepaiement_titre,
+            'classe_paiement' => $this->classe_paiement,
             'titre' => $this->titre,
             'localisation_titre' => $this->localisation_titre,
             'workflow_currentstep_titre' => $this->workflow_currentstep_titre,

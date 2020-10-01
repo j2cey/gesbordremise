@@ -37,7 +37,12 @@ Route::get('/product/{product_id}/destroy', 'ProductController@destroy')->name('
 Route::get('permissions','RoleController@permissions')->middleware('auth');
 Route::resource('roles','RoleController')->middleware('auth');
 Route::resource('users','UserController')->middleware('auth');
+
 Route::resource('workflows','WorkflowController')->middleware('auth');
+Route::get('workflows.fetch','WorkflowController@fetch')
+    ->name('workflows.fetch')
+    ->middleware('auth');
+
 Route::resource('workflowsteps','WorkflowStepController')->middleware('auth');
 Route::resource('workflowactions','WorkflowActionController')->middleware('auth');
 

@@ -78,7 +78,7 @@
                                         <select-angle></select-angle>
                                     </div>
                                     <div class="input-group-append">
-                                        <button type="button" class="btn btn-default" @click="clear({ localisation: '' })"><i class="fa fa-times"></i></button>
+                                        <button type="button" id="localisation_clear" name="localisation_clear" class="btn btn-default" @click="clear({ localisation: '' })"><i class="fa fa-times"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -105,7 +105,7 @@
                                         <select-angle></select-angle>
                                     </div>
                                     <div class="input-group-append">
-                                        <button type="button" class="btn btn-default" @click="clear({ statut: '' })"><i class="fa fa-times"></i></button>
+                                        <button type="button" id="statut_clear" name="statut_clear" class="btn btn-default" @click="clear({ statut: '' })"><i class="fa fa-times"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -133,6 +133,7 @@
                                         <tr>
                                             <th class="tw-px-4 tw-py-2">Numéro Transaction</th>
                                             <th class="tw-px-4 tw-py-2">Mode Paiement</th>
+                                            <th class="tw-px-4 tw-py-2">Classe Paiement</th>
                                             <th class="tw-px-4 tw-py-2">Agence</th>
                                             <th class="tw-px-4 tw-py-2">Montant Total</th>
                                             <th class="tw-px-4 tw-py-2">Statut</th>
@@ -145,12 +146,13 @@
                                             class="tw-px-4 tw-border-b tw-border-dashed tw-border-gray-400 tw-text-gray-700 hover:tw-bg-gray-100"
                                         >
                                             <td class="tw-px-4 tw-py-2">@{{ record.numero_transaction }}</td>
-                                            <td class="tw-px-4 tw-py-2">@{{ record.mode_paiement }}</td>
+                                            <td class="tw-px-4 tw-py-2">@{{ record.modepaiement_titre }}</td>
+                                            <td class="tw-px-4 tw-py-2">@{{ record.classe_paiement }}</td>
                                             <td class="tw-px-4 tw-py-2">@{{ record.localisation_titre }}</td>
                                             <td class="tw-px-4 tw-py-2">@{{ record.montant_total }}</td>
                                             <td class="tw-px-4 tw-py-2">
                                                 <span v-if="record.workflow_currentstep_code == '0'" class="tw-text-xs tw-font-semibold tw-inline-block tw-py-1 tw-px-2 tw-rounded-full tw-text-green-600 tw-bg-green-200 last:tw-mr-0 tw-mr-1">@{{ record.workflow_currentstep_titre }}</span>
-                                                <span v-else-if="record.workflow_currentstep_code == 'step_0'" class="tw-text-xs tw-font-semibold tw-inline-block tw-py-1 tw-px-1 tw-rounded-full tw-text-purple-600 tw-bg-purple-200 last:tw-mr-0 tw-mr-1">@{{ record.workflow_currentstep_titre }}</span>
+                                                <span v-else-if="record.workflow_currentstep_code == 'step_0'" class="tw-text-xs tw-font-semibold tw-inline-block tw-py-1 tw-px-2 tw-rounded-full tw-text-purple-600 tw-bg-purple-200 last:tw-mr-0 tw-mr-1">@{{ record.workflow_currentstep_titre }}</span>
                                                 <span v-else-if="record.workflow_currentstep_code == 'step_1'" class="tw-text-xs tw-font-semibold tw-inline-block tw-py-1 tw-px-2 tw-rounded-full tw-text-indigo-600 tw-bg-indigo-200 last:tw-mr-0 tw-mr-1">@{{ record.workflow_currentstep_titre }}</span>
                                                 <span v-else-if="record.workflow_currentstep_code == 'step_2'" class="tw-text-xs tw-font-semibold tw-inline-block tw-py-1 tw-px-2 tw-rounded-full tw-text-blue-600 tw-bg-blue-200 last:tw-mr-0 tw-mr-1">@{{ record.workflow_currentstep_titre }}</span>
                                                 <span v-else class="tw-text-xs tw-font-semibold tw-inline-block tw-py-1 tw-px-2 tw-rounded-full tw-text-teal-600 tw-bg-teal-200 last:tw-mr-0 tw-mr-1">@{{ record.workflow_currentstep_titre }}</span>

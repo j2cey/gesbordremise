@@ -120,7 +120,7 @@
                                         <dl class="row">
                                             <dt class="col-sm-4">Date Valeur</dt>
                                             <dd class="col-sm-8">{{ bordereauremise.date_valeur | formatDate }}</dd>
-                                            <dt class="col-sm-4">Montant Déposé</dt>
+                                            <dt class="col-sm-4">Montant Validé</dt>
                                             <dd class="col-sm-8">{{ bordereauremise.montant_depose_finance }}</dd>
                                             <dt class="col-sm-4">Commentaire</dt>
                                             <dd class="col-sm-8">{{ bordereauremise.commentaire_finance }}</dd>
@@ -225,6 +225,7 @@
                 hasexecrole: this.hasexecrole_prop,
                 workflowexecForm: new Form(this.actionvalues_prop),
                 filename: 'Télécharger un fichier',
+                filefieldname: null,
                 selectedFile : null,
             };
         },
@@ -237,6 +238,7 @@
             },
             handleFileUpload(event) {
                 this.selectedFile = event.target.files[0];
+                this.filefieldname = event.target.name;
                 this.filename = (typeof this.selectedFile !== 'undefined') ? this.selectedFile.name : 'Télécharger un fichier';
             },
             validerEtape(execId) {
@@ -246,9 +248,9 @@
                 this.$emit('validate_reject')
             },
             submitForm(execId) {
-                const fd = this.addFileToForm()
+                const fd = this.addFileToForm(this.filefieldname)
 
-                console.log(this.workflowexecForm)
+                //console.log(this.workflowexecForm)
 
                 //.post(`/workflowexecs`, fd)
                 this.workflowexecForm
@@ -259,28 +261,32 @@
                     this.loading = false
                 });
             },
-            addFileToForm() {
+            addFileToForm(fieldname) {
 
                 if (typeof this.selectedFile !== 'undefined') {
                     const fd = new FormData();
-                    fd.append('step_files', this.selectedFile);
-                    console.log("image added", fd);
+                    fd.append(fieldname, this.selectedFile);
+                    //console.log("image added", fd);
                     return fd;
                 } else {
                     const fd = undefined;
-                    console.log("image not added", fd);
+                    //console.log("image not added", fd);
                     return fd;
                 }
             },
             updateData(data) {
-                console.log(data);
+                //console.log(data);
                 // MAJ du model
                 this.bordereauremise = data;
                 // MAJ de l'exec
                 //this.bordereauremise = data.exec;
                 // TODO: réévaluer le droit d'exécution du nouveau traitement
                 this.hasexecrole = false;
-                console.log(this.bordereauremise, this.hasexecrole);
+                //console.log(this.bordereauremise, this.hasexecrole);
+                window.noty({
+                    message: 'Traitement effectué avec succès',
+                    type: 'success'
+                })
             },
             showImage() {
                 this.$emit('show_image', this.bordereauremise.scan_bordereau)

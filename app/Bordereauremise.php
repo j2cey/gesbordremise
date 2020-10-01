@@ -26,7 +26,6 @@ use Illuminate\Support\Facades\DB;
  * @property string $localisation
  * @property string $changement_dernier_tarif
  * @property string $classe_paiement
- * @property string $mode_paiement
  * @property string $montant_total
  *
  * @property Carbon $date_depot_agence
@@ -39,10 +38,12 @@ use Illuminate\Support\Facades\DB;
  * @property string $commentaire_finance
  *
  * @property string $localisation_titre
+ * @property string $modepaiement_titre
  * @property string $workflow_currentstep_code
  * @property string $workflow_currentstep_titre
  *
  * @property integer|null $bordereauremise_loc_id
+ * @property integer|null $bordereauremise_modepaie_id
  *
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -57,6 +58,10 @@ class Bordereauremise extends BaseModel
 
     public function localisation() {
         return $this->belongsTo(BordereauremiseLoc::class, 'bordereauremise_loc_id');
+    }
+
+    public function modepaiement() {
+        return $this->belongsTo(BordereauremiseModepaie::class, 'bordereauremise_modepaie_id');
     }
 
     /**

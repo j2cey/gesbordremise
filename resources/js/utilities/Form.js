@@ -99,22 +99,25 @@ class Form {
         //axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         //axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 
-        if (typeof fd !== 'undefined') {
-            console.log('fd is not undefined', fd);
-            for (let property in this.originalData) {
-                fd.append(property, this[property]);
-                console.log(property, this[property]);
-            }
-            if (requestType === 'put') {
-                fd.append("_method", "PATCH");
-                console.log('fd method PATCH added', fd);
-            }
-        } else {
-            console.log('fd is undefined', fd)
-            fd = this.data();
-        }
-
         if (requestType === 'put') {
+
+            if (typeof fd === 'undefined') {
+                fd = new FormData();
+            }
+
+            for (let property in this.originalData) {
+                if (typeof this[property] === 'object' && this[property] !== null) {
+                    fd.append(property, JSON.stringify(this[property]));
+                } else if (this[property] === undefined || this[property] === null) {
+                    fd.append(property, null);
+                } else {
+                    fd.append(property, this[property]);
+                }
+                //console.log(property, this[property]);
+            }
+            //console.log('fd appended for put request', fd);
+            fd.append("_method", "PATCH");
+            //console.log('fd method PATCH added', fd);
 
             return new Promise((resolve, reject) => {
                 axios.post(url, fd)
@@ -153,6 +156,18 @@ class Form {
 
 
         } else {
+
+            if (typeof fd !== 'undefined') {
+                //console.log('fd is not undefined', fd);
+                for (let property in this.originalData) {
+                    fd.append(property, this[property]);
+                    //console.log(property, this[property]);
+                }
+            } else {
+                //console.log('fd is undefined', fd)
+                fd = this.data();
+            }
+
             return new Promise((resolve, reject) => {
                 axios[requestType](url, fd)
                     .then(response => {

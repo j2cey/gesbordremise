@@ -28,7 +28,6 @@ class CreateBordereauremisesTable extends Migration
             $table->string('localisation')->nullable()->comment('localisation');
             $table->string('changement_dernier_tarif')->nullable()->comment('changement dernier tarif');
             $table->string('classe_paiement')->nullable()->comment('classe de paiement');
-            $table->string('mode_paiement')->nullable()->comment('mode de paiement');
             $table->string('montant_total')->nullable()->comment('montant total');
             // Champs à modifier par le workflow (Agence)
             $table->timestamp('date_depot_agence')->nullable()->comment('date de depot agence');
@@ -44,8 +43,13 @@ class CreateBordereauremisesTable extends Migration
                 ->comment('référence de la localisation')
                 ->constrained()->onDelete('set null');
 
+            $table->foreignId('bordereauremise_modepaie_id')->nullable()
+                ->comment('référence du mode de paiement')
+                ->constrained()->onDelete('set null');
+
             //TODO: Retirer ces champs après normalisation
             $table->string('localisation_titre')->nullable()->comment('titre de la localisation');
+            $table->string('modepaiement_titre')->nullable()->comment('titre du mode de paiement');
             $table->string('workflow_currentstep_titre')->nullable()->comment('titre de l étape de traitement actuelle, le cas échéant.');
             $table->string('workflow_currentstep_code')->nullable()->comment('code de l étape de traitement actuelle, le cas échéant.');
         });
@@ -62,6 +66,7 @@ class CreateBordereauremisesTable extends Migration
         Schema::table($this->table_name, function (Blueprint $table) {
             $table->dropBaseForeigns();
             $table->dropForeign(['bordereauremise_loc_id']);
+            $table->dropForeign(['bordereauremise_modepaie_id']);
         });
         Schema::dropIfExists($this->table_name);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CleanRequestTrait;
 use App\Http\Requests\WorkflowStep\CreateWorkflowStepRequest;
 use App\WorkflowStep;
 use Illuminate\Database\Eloquent\Collection;
@@ -12,6 +13,7 @@ use Illuminate\Support\Str;
 
 class WorkflowStepController extends Controller
 {
+    use CleanRequestTrait;
     /**
      * Display a listing of the resource.
      *
@@ -46,6 +48,7 @@ class WorkflowStepController extends Controller
         $user = auth()->user();
 
         $formInput = $request->all();
+
         $posi = WorkflowStep::where('workflow_id', $formInput['workflow_id'])->count('id');
 
         $new_workflowstep = WorkflowStep::create([
@@ -92,20 +95,25 @@ class WorkflowStepController extends Controller
     public function update(Request $request, WorkflowStep $workflowstep)
     {
         $user = auth()->user();
-        $formInput = $request->all();
 
-        $workflowstep->update([
-            'titre' => $formInput['titre'],
-            'description' => $formInput['description'],
-            'workflow_id' => $formInput['workflow_id'],
-            'role_id' => $formInput['profile']['id'],
-        ]);
+        //$request->replace($request->all());
+        $formInput = $request->all();
 
         if ($request->has('oldIndex') && $request->has('newIndex')) {
             $this->reorder($workflowstep, $formInput['oldIndex'], $formInput['newIndex']);
-            $workflowsteps = WorkflowStep::orderBy('posi','ASC')->get();
-            return $workflowsteps->load(['profile','actions']);
+            $workflowsteps = WorkflowStep::where('workflow_id',$formInput['workflow_id'])->orderBy('posi','ASC')->get();
+            return $workflowsteps->load(['actions','profile']);
         } else {
+
+            $formInput['profile'] = json_decode($formInput['profile'], true);
+
+            $workflowstep->update([
+                'titre' => $formInput['titre'],
+                'description' => $formInput['description'],
+                'workflow_id' => $formInput['workflow_id'],
+                'role_id' => $formInput['profile']['id'],
+            ]);
+
             return $workflowstep->load(['actions','profile']);
         }
     }
@@ -118,17 +126,19 @@ class WorkflowStepController extends Controller
      */
     public function destroy(WorkflowStep $workflowstep)
     {
-        //
+        //TODO: Supprimer l'étape de Workflow
     }
 
     public function reorder(WorkflowStep $workflowstep, $oldIndex, $newIndex) {
         if ( ($newIndex - $oldIndex) < 0) {
             DB::table('workflow_steps')
+                ->where('workflow_id', $workflowstep->workflow_id)
                 ->where('posi', '>=', $newIndex)
                 ->where('posi', '<=', $oldIndex)
                 ->increment('posi', 1);
         } else {
             DB::table('workflow_steps')
+                ->where('workflow_id', $workflowstep->workflow_id)
                 ->where('posi', '>=', $oldIndex)
                 ->where('posi', '<=', $newIndex)
                 ->decrement('posi', 1);

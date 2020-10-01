@@ -16,18 +16,18 @@
             >
                 <i class="fa fa-align-justify handle"></i>
 
-                <span class="text">{{ element.titre }}</span>
+                <span class="text" data-toggle="collapse" data-parent="#workflowlist" :href="'#collapse-workflowstep-'+element.id">{{ element.titre }}</span>
                 <!-- Emphasis label -->
                 <small class="badge badge-pill badge-warning"><i class="fa fa-user"></i> {{ element.profile.name }}</small>
 
 
                 <!-- General tools such as edit or delete-->
                 <div class="tools">
-                    <i class="fa fa-edit" @click="editWorkflowstep(element)"></i>
+                    <i class="fa fa-pencil-square-o" @click="editWorkflowstep(element)"></i>
                     <button type="button" class="btn btn-tool" data-toggle="collapse" data-parent="#workflowlist" :href="'#collapse-workflowstep-'+element.id">
                         <i class="fas fa-minus"></i>
                     </button>
-                    <i class="fa fa-trash"></i>
+                    <i class="fa fa-trash-o"></i>
                 </div>
 
                 <!-- Action(s) de l'Etape -->
@@ -58,10 +58,9 @@
 </template>
 
 <script>
-    //import EventBusWfl from '../eventBus'
-    //import StepBus from './eventBus'
-    import EventBusStp from './stepBus'
+    import StepBus from './stepBus'
     import WorkflowActions from './actions/actions'
+    import ActionBus from "./actions/actionBus";
     let id = 3;
     import draggable from 'vuedraggable'
 
@@ -78,40 +77,24 @@
             draggable, WorkflowActions
         },
         mounted() {
-            EventBusStp.$on('workflowstep_to_add', (add_data) => {
-                // Step créée à insérer sur la liste
-                console.log('workflowstep_to_add from parent', add_data)
-                if (this.workflowId == add_data.workflowId) {
+            StepBus.$on('workflowaction_created', (add_data) => {
+                if (this.workflowId === add_data.workflowId) {
                     this.createStep(add_data.workflowstep)
                 }
             })
-            //EventBusWfl.$emit('workflowaction_to_add', {workflowaction, workflowstepId})
-            /*EventBusWfl.$on('rely_workflowaction_to_add', (add_data) => {
-                // Step créée à insérer sur la liste
-                console.log('rely_workflowaction_to_add received at steps', add_data)
-                //this.$emit('workflowaction_to_add', add_data)
-                let workflowaction = add_data.workflowaction
-                let workflowstepId = add_data.workflowstepId
-                EventBusStp.$emit('workflowaction_to_add', {workflowaction, workflowstepId})
-                //this.$emit('workflowaction_to_add', add_data)
-            })*/
 
-            EventBusStp.$on('workflowstep_to_update', (upd_data) => {
+            StepBus.$on('workflowstep_updated', (upd_data) => {
                 // Step modifiée à mettre à jour sur la liste
-                if (this.workflowId == upd_data.workflowId) {
+                //console.log('workflowstep_to_update received at steps', upd_data)
+                if (this.workflowId === upd_data.workflowId) {
                     this.updateStep(upd_data.workflowstep)
                 }
             })
-
-            /*this.$on('workflowaction_created', (workflowaction, workflowstepId) => {
-                // recoit nouvelle action créée
-                EventBusStp.$emit('workflowaction_to_add', {workflowaction, workflowstepId})
-            })*/
         },
         data() {
             return {
                 workflowsteps: this.workflowsteps_prop,
-                enabled: true,
+                enabled: true, // TODO: Nettoyer composant (rétirer les lignes de codes inutiles)
                 list: [
                     { name: "John", text: "", id: 0 },
                     { name: "Joao", text: "", id: 1 },
@@ -127,8 +110,10 @@
         },
         methods: {
             createNewAction(workflowstepId, key) {
-                console.log('rely_create_new_workflowaction -- sent from steps', workflowstepId, key)
-                this.$parent.$emit('rely_create_new_workflowaction', workflowstepId, key)
+                ActionBus.$emit('workflowaction_create', {workflowstepId, key})
+            },
+            editWorkflowstep(workflowstep) {
+                StepBus.$emit('workflowstep_edit', workflowstep, this.workflowId)
             },
             removeAt(idx) {
                 this.list.splice(idx, 1);
@@ -138,7 +123,9 @@
                 this.list.push({ name: "Juan " + id, id, text: "" });
             },
             orderChanged(evt) {
-                window.console.log(evt, evt.moved.element, evt.moved.oldIndex, evt.moved.newIndex);
+                //console.log('gonna change order',evt, evt.moved.element, evt.moved.oldIndex, evt.moved.newIndex,this.workflowsteps);
+                //console.log('lets change order:', this.workflowsteps);
+                const fd = undefined;
                 let changeForm = new Form({
                     'titre': evt.moved.element.titre,
                     'description': evt.moved.element.description,
@@ -149,28 +136,37 @@
                     'newIndex': evt.moved.newIndex,
                 });
                 changeForm
-                    .put(`/workflowsteps/${evt.moved.element.uuid}`)
+                    .put(`/workflowsteps/${evt.moved.element.uuid}`, fd)
                     .then(workflowsteps => {
+                        //console.log('orderChanged', workflowsteps);
                         this.workflowsteps = workflowsteps;
                     }).catch(error => {
                     this.loading = false
                 });
             },
             createStep(workflowstep) {
-                window.noty({
-                    message: 'Etape créée avec succès',
-                    type: 'success'
+                let workflowstepIndex = this.workflowsteps.findIndex(c => {
+                    return workflowstep.id === c.id
                 })
 
-                this.workflowsteps.push(workflowstep)
+                // si cette étape n'existe pas déjà, on l'insère dans la liste
+                if (workflowstepIndex === -1) {
+                    window.noty({
+                        message: 'Etape créée avec succès',
+                        type: 'success'
+                    })
+
+                    this.workflowsteps.push(workflowstep)
+                }
             },
             updateStep(workflowstep) {
                 // on récupère l'index de session modifiée
                 let stepIndex = this.workflowsteps.findIndex(s => {
-                    return workflowstep.id == s.id
+                    return workflowstep.id === s.id
                 })
 
                 this.workflowsteps.splice(stepIndex, 1, workflowstep)
+
                 window.noty({
                     message: 'Etape modifiée avec succès',
                     type: 'success'

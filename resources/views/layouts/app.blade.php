@@ -75,6 +75,11 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+        <vue-noty></vue-noty>
+        @guest
+            <vue-login></vue-login>
+        @endguest
     </div>
 </body>
 </html>

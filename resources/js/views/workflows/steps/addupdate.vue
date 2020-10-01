@@ -55,8 +55,8 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                    <button type="button" class="btn btn-primary" @click="updateWorkflowstep()" :disabled="!isValidCreateForm" v-if="editing">Enregistrer</button>
-                    <button type="button" class="btn btn-primary" @click="createWorkflowstep()" :disabled="!isValidCreateForm" v-else>Créer Etape</button>
+                    <button type="button" class="btn btn-primary" @click="updateWorkflowstep(workflowId)" :disabled="!isValidCreateForm" v-if="editing">Enregistrer</button>
+                    <button type="button" class="btn btn-primary" @click="createWorkflowstep(workflowId)" :disabled="!isValidCreateForm" v-else>Créer Etape</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -67,6 +67,8 @@
 
 <script>
     import Multiselect from 'vue-multiselect'
+    import StepBus from './stepBus'
+    import ActionBus from "./actions/actionBus";
 
     class Workflowstep {
         constructor(workflowstep) {
@@ -80,7 +82,7 @@
         name: "addupdateStep",
         components: { Multiselect },
         mounted() {
-            this.$parent.$on('create_new_workflowstep', (workflowId) => {
+            this.$parent.$on('workflowstep_create', (workflowId) => {
 
                 this.editing = false
                 this.workflowId = workflowId
@@ -91,12 +93,12 @@
                 $('#addUpdateWorkflowstep').modal()
             })
 
-            this.$parent.$on('edit_workflowstep_' + this.workflowId, ({ workflowstep }) => {
+            StepBus.$on('workflowstep_edit', (workflowstep, workflowId) => {
                 this.editing = true
                 this.workflowstep = new Workflowstep(workflowstep)
                 this.workflowstepForm = new Form(this.workflowstep)
                 this.workflowstepId = workflowstep.uuid
-                this.workflowId = workflowstep.workflow_id
+                this.workflowId = workflowId
 
                 $('#addUpdateWorkflowstep').modal()
             })
@@ -117,32 +119,49 @@
             }
         },
         methods: {
-            createWorkflowstep() {
+            createWorkflowstep(workflowId) {
                 this.loading = true
 
                 this.workflowstepForm
                     .post('/workflowsteps')
-                    .then(newworkflowstep => {
+                    .then(workflowstep => {
                         this.loading = false
-                        this.$parent.$emit('new_workflowstep_created', newworkflowstep, this.workflowId)
+                        //this.$parent.$emit('new_workflowstep_created', newworkflowstep, this.workflowId)
+                        StepBus.$emit('workflowaction_created', {workflowstep, workflowId})
                         $('#addUpdateWorkflowstep').modal('hide')
                     }).catch(error => {
                         this.loading = false
                     });
             },
-            updateWorkflowstep() {
+            updateWorkflowstep(workflowId) {
                 this.loading = true
 
+                const fd = this.addFileToForm()
+
                 this.workflowstepForm
-                    .put(`/workflowsteps/${this.workflowstepId}`)
-                    .then(updworkflowstep => {
+                    .put(`/workflowsteps/${this.workflowstepId}`, fd)
+                    .then(workflowstep => {
                         this.loading = false
-                        this.$parent.$emit('workflowstep_updated_' + this.workflowId, updworkflowstep)
+                        //let workflowId = this.workflowId
+                        StepBus.$emit('workflowstep_updated', {workflowstep, workflowId})
                         $('#addUpdateWorkflowstep').modal('hide')
                     }).catch(error => {
                     this.loading = false
                 });
-            }
+            },
+            addFileToForm() {
+
+                if (typeof this.selectedFile !== 'undefined') {
+                    const fd = new FormData();
+                    fd.append('step_files', this.selectedFile);
+                    //console.log("image added", fd);
+                    return fd;
+                } else {
+                    const fd = undefined;
+                    //console.log("image not added", fd);
+                    return fd;
+                }
+            },
         },
         computed: {
             roles_comp() {

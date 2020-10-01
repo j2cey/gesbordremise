@@ -6,7 +6,7 @@
     @include('layouts.admin02.nav.nav')
     <!-- /.navbar -->
 
-    <div class="content">
+    <div class="content-wrapper" style="min-height: 346px;">
         <div class="container">
             @yield('app_content')
         </div><!-- /.container-fluid -->

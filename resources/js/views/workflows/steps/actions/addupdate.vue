@@ -118,15 +118,23 @@
         },
         components: { Multiselect },
         mounted() {
-            ActionBus.$on('create_new_workflowaction', (create_data) => {
-                // Step créée à insérer sur la liste
-                console.log('create_new_workflowaction -- received at addupdate action', create_data)
+            ActionBus.$on('workflowaction_create', (create_data) => {
 
                 this.editing = false
                 this.workflowstepId = create_data.workflowstepId
                 this.workflowaction = new Workflowaction({})
                 this.workflowaction.workflow_step_id = create_data.workflowstepId
                 this.workflowactionForm = new Form(this.workflowaction)
+
+                $('#addUpdateWorkflowaction').modal()
+            })
+
+            ActionBus.$on('workflowaction_edit', (edit_data) => {
+                this.editing = true
+                this.workflowaction = new Workflowaction(edit_data.workflowaction)
+                this.workflowactionForm = new Form(this.workflowaction)
+                this.workflowactionId = edit_data.workflowaction.uuid
+                this.workflowstepId = edit_data.workflowstepId
 
                 $('#addUpdateWorkflowaction').modal()
             })
@@ -178,27 +186,27 @@
                 this.loading = true
 
                 //this.workflowactionForm.workflow_step_id = this.workflowactionId
-                console.log("createWorkflowaction", this.workflowactionId, this.workflowactionForm)
+                //console.log("createWorkflowaction", this.workflowactionId, this.workflowactionForm)
 
                 this.workflowactionForm
                     .post('/workflowactions')
                     .then(workflowaction => {
                         this.loading = false
-                        //this.$parent.$emit('workflowaction_created', newworkflowaction, this.workflowstepId)
-                        ActionBus.$emit('workflowaction_to_add', {workflowaction, workflowstepId})
+                        // on émet l'action créé dans le bus Action
+                        ActionBus.$emit('workflowaction_created', {workflowaction, workflowstepId})
                         $('#addUpdateWorkflowaction').modal('hide')
                     }).catch(error => {
                     this.loading = false
                 });
             },
-            updateWorkflowaction() {
+            updateWorkflowaction(workflowstepId) {
                 this.loading = true
 
                 this.workflowactionForm
                     .put(`/workflowactions/${this.workflowactionId}`)
-                    .then(updworkflowaction => {
+                    .then(workflowaction => {
                         this.loading = false
-                        this.$parent.$emit('workflowaction_updated', updworkflowaction)
+                        ActionBus.$emit('workflowaction_updated', {workflowaction, workflowstepId})
                         $('#addUpdateWorkflowaction').modal('hide')
                     }).catch(error => {
                     this.loading = false

@@ -25,6 +25,8 @@
 <!-- wrapper -->
 <div class="wrapper" id="app">
     @yield('content')
+
+    <vue-noty></vue-noty>
 </div>
 <!-- ./wrapper -->
 
@@ -40,6 +42,10 @@
 <script src="{{ asset('js/app.js') }}" defer></script>
 <!-- bs-custom-file-input -->
 <script src="{{ asset('AdminLTE/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}" defer></script>
+<!-- SweetAlert2 -->
+<script src="{{ asset('AdminLTE/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+<!-- Toastr -->
+<script src="{{ asset('AdminLTE/plugins/toastr/toastr.min.js') }}"></script>
 
 </body>
 
