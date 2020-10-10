@@ -55,6 +55,8 @@
                                 </div>
                             </div>
 
+{{--                            TODO: PB de rafraichissement des parametres de filtre--}}
+
                             <div class="tw-col-span-4 md:tw-col-span-2">
                                 <label
                                     for="localisation"
@@ -78,7 +80,7 @@
                                         <select-angle></select-angle>
                                     </div>
                                     <div class="input-group-append">
-                                        <button type="button" id="localisation_clear" name="localisation_clear" class="btn btn-default" @click="clear({ localisation: '' })"><i class="fa fa-times"></i></button>
+                                        <button type="button" id="localisation_clear" name="localisation_clear" class="btn btn-default" @click="[params.localisation= '', change()]"><i class="fa fa-times"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -105,7 +107,7 @@
                                         <select-angle></select-angle>
                                     </div>
                                     <div class="input-group-append">
-                                        <button type="button" id="statut_clear" name="statut_clear" class="btn btn-default" @click="clear({ statut: '' })"><i class="fa fa-times"></i></button>
+                                        <button type="button" id="statut_clear" name="statut_clear" class="btn btn-default" @click="[params.statut= '', change()]"><i class="fa fa-times"></i></button>
                                     </div>
                                 </div>
                             </div>

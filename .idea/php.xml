@@ -114,6 +114,9 @@
       <path value="$PROJECT_DIR$/vendor/predis/predis" />
       <path value="$PROJECT_DIR$/vendor/pelago/emogrifier" />
       <path value="$PROJECT_DIR$/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/vendor/tightenco/collect" />
+      <path value="$PROJECT_DIR$/vendor/adldap2/adldap2-laravel" />
+      <path value="$PROJECT_DIR$/vendor/adldap2/adldap2" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />

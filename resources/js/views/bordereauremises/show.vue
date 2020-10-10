@@ -284,6 +284,8 @@
                 this.hasexecrole = false;
                 //console.log(this.bordereauremise, this.hasexecrole);
                 window.noty({
+
+
                     message: 'Traitement effectué avec succès',
                     type: 'success'
                 })
