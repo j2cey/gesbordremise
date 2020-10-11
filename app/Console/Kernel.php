@@ -29,16 +29,21 @@ class Kernel extends ConsoleKernel
         /**
          * Importation des comptes LDAP
          */
-        $schedule->command('adldap:import', [
+        /*$schedule->command('adldap:import', [
             '--model' => "\App\LdapAccountImport",
             '--no-interaction',
-        ])->dailyAt('01:00');
+        ])->dailyAt('01:00');*/
 
         /**
          * Synchronisation des comptes LDAP importés
          */
-        $schedule->command('ldapaccount:sync')
-            ->dailyAt('02:00');
+        /*$schedule->command('ldapaccount:sync')
+            ->dailyAt('02:00');*/
+
+        /**
+         * Importation des Bordereaux de Remise
+         */
+        $schedule->command('borderemise:importfiles')->everyMinute();
     }
 
     /**
