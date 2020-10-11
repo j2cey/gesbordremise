@@ -14,9 +14,9 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::create(['name' => "admin",'email' => "admin@gt.com",'password' => bcrypt('admin123')]);
-        $user2 = User::create(['name' => "chef agence",'email' => "agence@gt.com",'password' => bcrypt('admin123')]);
-        $user3 = User::create(['name' => "finance",'email' => "finance@gt.com",'password' => bcrypt('admin123')]);
+        $user = User::create(['name' => "admin",'email' => "admin@gabontelecom.ga",'password' => bcrypt('admin123'), 'is_local' => 1]);
+        $user2 = User::create(['name' => "chef agence",'email' => "agence@gabontelecom.ga",'password' => bcrypt('admin123'), 'is_local' => 1]);
+        $user3 = User::create(['name' => "finance",'email' => "finance@gabontelecom.ga",'password' => bcrypt('admin123'), 'is_local' => 1]);
 
         $adminrole = Role::create(['name' => 'Admin']);
         $defaultrole = Role::create(['name' => 'Simple User']);
