@@ -1,5 +1,6 @@
 <?php
 
+use App\Status;
 use App\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
@@ -14,9 +15,9 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::create(['name' => "admin",'email' => "admin@gabontelecom.ga",'password' => bcrypt('admin123'), 'is_local' => 1]);
-        $user2 = User::create(['name' => "chef agence",'email' => "agence@gabontelecom.ga",'password' => bcrypt('admin123'), 'is_local' => 1]);
-        $user3 = User::create(['name' => "finance",'email' => "finance@gabontelecom.ga",'password' => bcrypt('admin123'), 'is_local' => 1]);
+        $user = User::create(['name' => "admin",'email' => "admin@gabontelecom.ga",'password' => bcrypt('admin123'), 'is_local' => 1, 'status_id' => Status::active()->first()->id]);
+        $user2 = User::create(['name' => "chef agence",'email' => "agence@gabontelecom.ga",'password' => bcrypt('admin123'), 'is_local' => 1, 'status_id' => Status::active()->first()->id]);
+        $user3 = User::create(['name' => "finance",'email' => "finance@gabontelecom.ga",'password' => bcrypt('admin123'), 'is_local' => 1, 'status_id' => Status::active()->first()->id]);
 
         $adminrole = Role::create(['name' => 'Admin']);
         $defaultrole = Role::create(['name' => 'Simple User']);
