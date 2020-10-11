@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Setting;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -47,5 +48,14 @@ class AppServiceProvider extends ServiceProvider
         });
 
         JsonResource::withoutWrapping();
+
+        /**
+         * tell Laravel that, when the App boots,
+         * which is after all other Services are already registered,
+         * we are gonna add to the config array our own settings
+         */
+        config([
+            'Settings' => Setting::getAllGrouped()
+        ]);
     }
 }

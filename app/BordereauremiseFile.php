@@ -5,6 +5,7 @@ namespace App;
 use App\Traits\BordereauremiseFile\ImportFileTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use PHPUnit\Util\Json;
 
 /**
  * Class BordereauremiseFile
@@ -32,7 +33,7 @@ use Illuminate\Support\Carbon;
  *
  * @property string $row_last_processed
  * @property integer $nb_try
- * @property string $report
+ * @property Json $report
  *
  * @property Carbon $suspended_at
  *

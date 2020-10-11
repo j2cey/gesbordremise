@@ -19,6 +19,7 @@ class UserSeeder extends Seeder
         $user3 = User::create(['name' => "finance",'email' => "finance@gt.com",'password' => bcrypt('admin123')]);
 
         $adminrole = Role::create(['name' => 'Admin']);
+        $defaultrole = Role::create(['name' => 'Simple User']);
         $agencerole = Role::create(['name' => 'Chef Agence']);
         $financerole = Role::create(['name' => 'Financier']);
 

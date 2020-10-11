@@ -41,9 +41,19 @@ return [
 
     'debug' => (bool) env('APP_DEBUG', false),
 
+    'users_images' => env('USERS_IMAGES', 'uploads/users/images'),
     'bordereauremises_scans' => env('BORDEREAUREMISES_SCANS', 'uploads/bordereauremises/scans'),
     'bordereauremises_files' => env('BORDEREAUREMISES_FILES', 'uploads/bordereauremises/files'),
     'bordereauremises_filesscanned' => env('BORDEREAUREMISES_FILESSCANNED', 'uploads/bordereauremises/filesscanned'),
+
+    'ldap_host' => env('LDAP_HOST', 'XXX.XXX.XXX.XXX'),
+    'ldap_port' => env('LDAP_PORT', 'XXX'),
+    'ldap_domain' => env('LDAP_DOMAIN', '@XXX'),
+    'ldap_base_dn' => env('LDAP_BASE_DN', 'XXX'),
+    'ldap_tree' => env('LDAP_TREE', 'XXX'),
+    'ldap_base_user' => env('LDAP_BASE_USER', 'XXX'),
+    'ldap_base_userpwd' => env('LDAP_BASE_USERPWD', 'XXX'),
+
     'RAW_FOLDER' => env('RAW_FOLDER', '/var/www/gesbordremise/public'),
 
     /*
