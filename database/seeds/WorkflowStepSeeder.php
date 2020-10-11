@@ -12,11 +12,32 @@ class WorkflowStepSeeder extends Seeder
      */
     public function run()
     {
-        WorkflowStep::create([
-            'titre' => "Traitement Terminé",
-            'code' => "0",
-            'description' => "Etape marquant la fin de tout Workflow",
-            'posi' => 0,
-        ]);
+        $workflowsteps = [
+            [
+                'titre' => "Traitement Terminé",
+                'code' => "0",
+                'description' => "Etape marquant la fin de tout Workflow",
+                'posi' => 0,
+            ],
+            [
+                'titre' => "Traitement Agence",
+                'code' => "step_0",
+                'description' => "Traitements niveau Agence",
+                'posi' => 0,
+                'workflow_id' => 1,
+                'role_id' => 3
+            ],
+            [
+                'titre' => "Traitement Finances",
+                'code' => "step_1",
+                'description' => "Traitements niveau Finances",
+                'posi' => 0,
+                'workflow_id' => 1,
+                'role_id' => 4
+            ],
+        ];
+        foreach ($workflowsteps as $workflowstep) {
+            WorkflowStep::create($workflowstep);
+        }
     }
 }
