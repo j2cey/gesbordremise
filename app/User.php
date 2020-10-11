@@ -15,6 +15,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property integer $id
  *
  * @property string $name
+ * @property string $username
  * @property string $email
  * @property Carbon $email_verified_at
  * @property string $password
