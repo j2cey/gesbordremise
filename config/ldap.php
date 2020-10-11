@@ -143,7 +143,7 @@ return [
                 |
                 */
 
-                'hosts' => explode(' ', env('LDAP_HOSTS', 'corp-dc1.corp.acme.org corp-dc2.corp.acme.org')),
+                'hosts' => explode(' ', env('LDAP_HOSTS', '192.168.5.228')),
 
                 /*
                 |--------------------------------------------------------------------------
@@ -198,8 +198,8 @@ return [
                 |
                 */
 
-                'username' => env('LDAP_USERNAME', 'username'),
-                'password' => env('LDAP_PASSWORD', 'secret'),
+                'username' => env('LDAP_USERNAME', 'gestockdsi@gabontelecom.ga'),
+                'password' => env('LDAP_PASSWORD', 'Libertis123'),
 
                 /*
                 |--------------------------------------------------------------------------
