@@ -53,7 +53,7 @@ class LoginController extends Controller
         $user = User::where('username',$username)->first();
 
         if($user){
-            if (!$user->is_actif) {
+            if (!$user->isActive()) {
                 throw ValidationException::withMessages([$this->username() => __('User has been desactivated.')]);
             }
         } else {

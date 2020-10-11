@@ -69,4 +69,43 @@ class User extends Authenticatable
     }
 
     #endregion
+
+    public function isActive() {
+        return $this->status->id === Status::active()->first()->id;
+    }
+
+    private function setUsername() {
+        if (empty($this->username)) {
+            $this->username = explode('@', $this->email)[0];
+        }
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function($model){
+            $model->setUsername();
+        });
+
+        self::created(function($model){
+            // ... code here
+        });
+
+        self::updating(function($model){
+            $model->setUsername();
+        });
+
+        self::updated(function($model){
+            // ... code here
+        });
+
+        self::deleting(function($model){
+            // ... code here
+        });
+
+        self::deleted(function($model){
+            // ... code here
+        });
+    }
 }
