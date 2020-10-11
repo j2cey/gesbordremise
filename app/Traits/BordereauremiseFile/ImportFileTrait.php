@@ -74,6 +74,7 @@ trait ImportFileTrait
         $this->nb_try += 1;
         // unmark as processing
         $this->import_processing = 0;
+        //$this->imported = ($this->nb_rows_processed >= $this->nb_rows ? 1 : 0);
         $this->save();
     }
 

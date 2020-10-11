@@ -44,7 +44,7 @@ class BordereauRemiseImportFiles extends Command
         $file_to_import = BordereauremiseFile::where('imported', 0)->where('import_processing', 0)->whereNull('suspended_at')->first();
 
         if ($file_to_import) {
-            $file_to_import->import(1);
+            $file_to_import->import(100);
             //event(new SmsresultEvent($file_to_import->planning->campaign->smsresult));
             \Log::info("borderemise:importfiles Traitement termine.");
             $this->info('borderemise:importfiles execute avec succes! 1 fichier traité.');

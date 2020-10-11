@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,6 +29,11 @@ Route::get('/home', function () {
 });
 
 Auth::routes();
+
+Route::prefix('ldap')->group(function(){
+    Route::get('/test', 'CustomLdapController@test')->name('ldaptest');
+    Route::get('/sync', 'CustomLdapController@sync')->name('ldapsync');
+});
 
 Route::get('/product', 'ProductController@index')->name('product');
 Route::get('/product/fetch', 'ProductController@fetch')->name('product.fetch');

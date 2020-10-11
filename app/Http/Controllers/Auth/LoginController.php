@@ -70,7 +70,7 @@ class LoginController extends Controller
                 Auth::login($user);
                 // Update du PWD LDAP local
                 $ldapaccount = $user->ldapaccount;
-                $ldapaccount->upadte( ['password' => Hash::make($credentials['password'])] );
+                $ldapaccount->update( ['password' => Hash::make($credentials['password'])] );
                 return redirect()->intended('/');
             }
         }

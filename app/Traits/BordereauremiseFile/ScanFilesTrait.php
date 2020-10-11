@@ -24,9 +24,17 @@ trait ScanFilesTrait
 
         foreach ($files as $file) {
 
+            $entete_premiere_ligne = true;
             $file_arr = file($file->getPathname());
 
-            $parts = (array_chunk($file_arr, $file_max_line));
+            if ($entete_premiere_ligne) {
+                //remove first line
+                $data = array_slice($file_arr, 1);
+            } else {
+                $data = $file;
+            }
+
+            $parts = (array_chunk($data, $file_max_line));
             $parts_count = count($parts);
 
             if ($parts_count > 0) {
