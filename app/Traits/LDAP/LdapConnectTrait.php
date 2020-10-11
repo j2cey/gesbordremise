@@ -101,4 +101,36 @@ trait LdapConnectTrait
         $this->adldapSyncUser("Agnes Grezillia ENAME OBIANG");*/
         //$this->adldapSyncUsers();
     }
+
+    function retrieves_users($conn)
+    {
+        $dn        = 'ou=,dc=,dc=';
+        $filter    = "(&(objectClass=user)(objectCategory=person)(sn=*))";
+        $justthese = array();
+
+        // enable pagination with a page size of 100.
+        $pageSize = 100;
+
+        $cookie = '';
+
+        do {
+            ldap_control_paged_result($conn, $pageSize, true, $cookie);
+
+            $result  = ldap_search($conn, $dn, $filter, $justthese);
+            $entries = ldap_get_entries($conn, $result);
+
+            if(!empty($entries)){
+                for ($i = 0; $i < $entries["count"]; $i++) {
+                    $data['usersLdap'][] = array(
+                        'name' => $entries[$i]["cn"][0],
+                        'username' => $entries[$i]["userprincipalname"][0]
+                    );
+                }
+            }
+            ldap_control_paged_result_response($conn, $result, $cookie);
+
+        } while($cookie !== null && $cookie != '');
+
+        return $data;
+    }
 }

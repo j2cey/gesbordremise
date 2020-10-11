@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Adldap\Adldap;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -40,9 +41,9 @@ class LdapAccountImport extends Command
     public function handle()
     {
         \Log::info("Cron en cours de traitement...");
-
+        Adldap::connect();
         // Tronquage de la table d'importation
-        DB::table('ldapaccountimports')->truncate();
+        DB::table('ldap_account_imports')->truncate();
 
         // Exécution de la commande d'importation
         Artisan::call('adldap:import', ['--model' => "\App\LdapAccountImport", '--no-interaction']);
