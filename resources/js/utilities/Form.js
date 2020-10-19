@@ -96,8 +96,8 @@ class Form {
      * @param fd
      */
     submit(requestType, url, fd) {
-        //axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        //axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 
         if (requestType === 'put') {
 
@@ -106,10 +106,16 @@ class Form {
             }
 
             for (let property in this.originalData) {
-                if (typeof this[property] === 'object' && this[property] !== null) {
+                if (property == null) {
+                    //
+                } else if (typeof this[property] === 'object' && this[property] !== null) {
                     fd.append(property, JSON.stringify(this[property]));
-                } else if (this[property] === undefined || this[property] === null) {
-                    fd.append(property, null);
+                } else if (this[property] === undefined || this[property] === null || this[property] === "null") {
+                    //fd.append(property, null);
+                } else if (this[property] === "true" || this[property] === true) {
+                    fd.append(property, true);
+                } else if (this[property] === "false" || this[property] === false) {
+                    //fd.append(property, false);
                 } else {
                     fd.append(property, this[property]);
                 }

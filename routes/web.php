@@ -35,6 +35,9 @@ Route::prefix('ldap')->group(function(){
     Route::get('/sync', 'CustomLdapController@sync')->name('ldapsync');
 });
 
+// Route pour test de Master/Details avec Vuejs et VueX
+Route::get('persons', 'PersonController@index');
+
 Route::get('/product', 'ProductController@index')->name('product');
 Route::get('/product/fetch', 'ProductController@fetch')->name('product.fetch');
 Route::get('/product/{product_id}/edit', 'ProductController@edit')->name('product.edit');
@@ -66,4 +69,8 @@ Route::get('bordereauremisetest','BordereauremiseController@bordereauremisetest'
 Route::resource('workflowexecs','WorkflowExecController')->middleware('auth');
 Route::resource('workflowexecactions','WorkflowExecActionController')->middleware('auth');
 
+Route::resource('workflowexecmodelsteps', 'WorkflowExecModelStepController')->middleware('auth');
+
 //Route::get('/home', 'HomeController@index')->name('home');
+
+Route::resource('settings','SettingController');

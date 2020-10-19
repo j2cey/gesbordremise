@@ -16,7 +16,9 @@ use App\WorkflowStep;
  */
 trait WorkflowExecTrait
 {
-    public function exec() {
+    use ExecTrait;
+
+    public function execworkflow() {
         // On créé une nouvelle exécution du Workflow (WorkflowExec)
         $new_exec = WorkflowExec::create([
             'workflow_id' => $this->id,
@@ -97,9 +99,5 @@ trait WorkflowExecTrait
         } else {
             return null;
         }
-    }
-
-    private function getLastModelId($model_type){
-        return $model_type::orderBy('id', 'DESC')->first()->id;
     }
 }

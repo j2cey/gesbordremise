@@ -18,6 +18,9 @@ use Illuminate\Support\Carbon;
  * @property string $model_type
  * @property string $model_title
  *
+ * @property integer|null $workflow_object_parent_id
+ * @property string|null $ref_field
+ *
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
@@ -27,5 +30,9 @@ class WorkflowObject extends BaseModel
 
     public function fields() {
         return $this->hasMany('App\WorkflowObjectField');
+    }
+
+    public function parent() {
+        return $this->belongsTo('App\WorkflowObject', 'workflow_object_parent_id');
     }
 }

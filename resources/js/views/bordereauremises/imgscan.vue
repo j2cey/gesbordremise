@@ -26,7 +26,7 @@
 
 <script>
     export default {
-        name: "img",
+        name: "imgscan",
         props: {
         },
         data() {

@@ -41,13 +41,14 @@ class BordereauRemiseImportFiles extends Command
      */
     public function handle()
     {
+        $nb_max_lines = config('Settings.bordereaux_remise.importation.nb_max_lines');
         $file_to_import = BordereauremiseFile::where('imported', 0)->where('import_processing', 0)->whereNull('suspended_at')->first();
 
         if ($file_to_import) {
-            $file_to_import->import(100);
+            $file_to_import->import($nb_max_lines);
             //event(new SmsresultEvent($file_to_import->planning->campaign->smsresult));
             \Log::info("borderemise:importfiles Traitement termine.");
-            $this->info('borderemise:importfiles execute avec succes! 1 fichier traité.');
+            $this->info('borderemise:importfiles execute avec succes! ' . $nb_max_lines . ' ligne(s) traitée(s).');
         } else {
             $this->info('Aucun fichier a traiter.');
         }

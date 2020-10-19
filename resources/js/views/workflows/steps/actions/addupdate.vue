@@ -67,6 +67,7 @@
                                     <span class="invalid-feedback d-block" role="alert" v-if="workflowactionForm.errors.has('description')" v-text="workflowactionForm.errors.get('description')"></span>
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input" id="field_required" name="field_required" autocomplete="field_required" autofocus placeholder="Champs Requis ?" v-model="workflowactionForm.field_required">
@@ -81,6 +82,77 @@
                                     <span class="invalid-feedback d-block" role="alert" v-if="workflowactionForm.errors.has('field_required_msg')" v-text="workflowactionForm.errors.get('field_required_msg')"></span>
                                 </div>
                             </div>
+
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="field_required_without" name="field_required_without" autocomplete="field_required_without" autofocus placeholder="Champs Requis sans le(s) champs spécifié(s) ?" v-model="workflowactionForm.field_required_without">
+                                    <label class="form-check-label" for="field_required_without">Champs Requis sans le(s) champ(s) suivant(s) :</label>
+                                    <span class="invalid-feedback d-block" role="alert" v-if="workflowactionForm.errors.has('field_required_without')" v-text="workflowactionForm.errors.get('field_required_without')"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row" v-if="workflowactionForm.field_required_without">
+                                <label for="m_select_action_field" class="col-sm-2 col-form-label">Liste des champs</label>
+                                <div class="col-sm-10">
+                                    <multiselect
+                                        id="m_select_without_field"
+                                        v-model="workflowactionForm.fieldsrequiredwithout"
+                                        selected.sync="workflowaction.fieldsrequiredwithout"
+                                        value=""
+                                        :options="objectfields"
+                                        :searchable="true"
+                                        :multiple="true"
+                                        label="field_label"
+                                        track-by="id"
+                                        key="id"
+                                        placeholder="Liste des champs"
+                                    >
+                                    </multiselect>
+                                    <span class="invalid-feedback d-block" role="alert" v-if="workflowactionForm.errors.has('fieldsrequiredwithout')" v-text="workflowactionForm.errors.get('fieldsrequiredwithout')"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row" v-if="workflowactionForm.field_required_without">
+                                <label for="field_required_without_msg" class="col-sm-2 col-form-label">Message Erreur</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="field_required_without_msg" name="field_required_without_msg" autocomplete="field_required_without_msg" placeholder="Message Erreur" v-model="workflowactionForm.field_required_without_msg">
+                                    <span class="invalid-feedback d-block" role="alert" v-if="workflowactionForm.errors.has('field_required_without_msg')" v-text="workflowactionForm.errors.get('field_required_without_msg')"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="field_required_with" name="field_required_with" autocomplete="field_required_with" autofocus placeholder="Champs Requis avec le(s) champs spécifié(s)" v-model="workflowactionForm.field_required_with">
+                                    <label class="form-check-label" for="field_required_with">Champs Requis avec le(s) champs suivant(s) :</label>
+                                    <span class="invalid-feedback d-block" role="alert" v-if="workflowactionForm.errors.has('field_required_with')" v-text="workflowactionForm.errors.get('field_required_with')"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row" v-if="workflowactionForm.field_required_with">
+                                <label for="m_select_action_field" class="col-sm-2 col-form-label">Liste des champs</label>
+                                <div class="col-sm-10">
+                                    <multiselect
+                                        id="m_select_with_field"
+                                        v-model="workflowactionForm.fieldsrequiredwith"
+                                        selected.sync="workflowaction.fieldsrequiredwith"
+                                        value=""
+                                        :options="objectfields"
+                                        :searchable="true"
+                                        :multiple="true"
+                                        label="field_label"
+                                        track-by="id"
+                                        key="id"
+                                        placeholder="Liste des champs"
+                                    >
+                                    </multiselect>
+                                    <span class="invalid-feedback d-block" role="alert" v-if="workflowactionForm.errors.has('fieldsrequiredwith')" v-text="workflowactionForm.errors.get('fieldsrequiredwith')"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row" v-if="workflowactionForm.field_required_with">
+                                <label for="field_required_with_msg" class="col-sm-2 col-form-label">Message Erreur</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="field_required_with_msg" name="field_required_with_msg" autocomplete="field_required_with_msg" placeholder="Message Erreur" v-model="workflowactionForm.field_required_with_msg">
+                                    <span class="invalid-feedback d-block" role="alert" v-if="workflowactionForm.errors.has('field_required_with_msg')" v-text="workflowactionForm.errors.get('field_required_with_msg')"></span>
+                                </div>
+                            </div>
+
                         </div>
                     </form>
 
@@ -108,8 +180,17 @@
             this.workflow_step_id = workflowaction.workflow_step_id || ''
             this.type = workflowaction.type || ''
             this.objectfield = workflowaction.objectfield || ''
+
             this.field_required = workflowaction.field_required || ''
             this.field_required_msg = workflowaction.field_required_msg || ''
+
+            this.field_required_without = workflowaction.field_required_without || ''
+            this.fieldsrequiredwithout = workflowaction.fieldsrequiredwithout || ''
+            this.field_required_without_msg = workflowaction.field_required_without_msg || ''
+
+            this.field_required_with = workflowaction.field_required_with || ''
+            this.fieldsrequiredwith = workflowaction.fieldsrequiredwith || ''
+            this.field_required_with_msg = workflowaction.field_required_with_msg || ''
         }
     }
     export default {

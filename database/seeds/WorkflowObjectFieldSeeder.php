@@ -30,16 +30,24 @@ class WorkflowObjectFieldSeeder extends Seeder
                 'workflow_object_id' => 1
             ],
             [
-                'db_field_name' => "date_valeur", 'field_label' => "Date Valeur", 'valuetype_datetime' => true,
-                'workflow_object_id' => 1
+                'db_field_name' => "date_valeur_finance", 'field_label' => "Date Valeur", 'valuetype_datetime' => true,
+                'workflow_object_id' => 2
             ],
             [
                 'db_field_name' => "montant_depose_finance", 'field_label' => "Montant Validé (Finances)", 'valuetype_integer' => true,
-                'workflow_object_id' => 1
+                'workflow_object_id' => 2
             ],
             [
                 'db_field_name' => "commentaire_finance", 'field_label' => "Commentaire Finance", 'valuetype_string' => true,
-                'workflow_object_id' => 1
+                'workflow_object_id' => 2
+            ],
+            [
+                'db_field_name' => "rejet_finances", 'field_label' => "Rejet Finances", 'valuetype_boolean' => true,
+                'workflow_object_id' => 2
+            ],
+            [
+                'db_field_name' => "motif_rejet_finances", 'field_label' => "Motif Rejet Finances", 'valuetype_string' => true,
+                'workflow_object_id' => 2
             ],
         ];
         foreach ($objectfields as $objectfield) {

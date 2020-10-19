@@ -67,4 +67,16 @@ class Workflow extends BaseModel
     }
 
     #endregion
+
+    public function nextStep($posi) {
+        $next_step = $this->steps()
+            ->where('posi', $posi + 1)
+            ->first();
+        if (! $next_step) {
+            // s'il n'y a pas d'étape à la suite de cette position,
+            // on est à la fin du workflow
+            $next_step = WorkflowStep::coded("0")->first();
+        }
+        return $next_step;
+    }
 }

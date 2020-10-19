@@ -11,6 +11,7 @@ class CreateBordereauremisesTable extends Migration
 
     public $table_name = 'bordereauremises';
     public $table_comment = 'bordereaux de remise';
+
     /**
      * Run the migrations.
      *
@@ -27,17 +28,13 @@ class CreateBordereauremisesTable extends Migration
             $table->string('numero_transaction')->nullable()->comment('numéro de transaction');
             $table->string('localisation')->nullable()->comment('localisation');
             $table->string('changement_dernier_tarif')->nullable()->comment('changement dernier tarif');
-            $table->string('classe_paiement')->nullable()->comment('classe de paiement');
-            $table->string('montant_total')->nullable()->comment('montant total');
+
+            $table->integer('montant_total')->nullable()->comment('montant total');
             // Champs à modifier par le workflow (Agence)
             $table->timestamp('date_depot_agence')->nullable()->comment('date de depot agence');
             $table->integer('montant_depose_agence')->nullable()->comment('montant déposé (agence)');
             $table->string('scan_bordereau')->nullable()->comment('fichier scan du bordereau');
             $table->string('commentaire_agence')->nullable()->comment('commentaire agence');
-            // Champs à modifier par le workflow (Finance)
-            $table->timestamp('date_valeur')->nullable()->comment('date valeur');
-            $table->integer('montant_depose_finance')->nullable()->comment('montant déposé (finance)');
-            $table->string('commentaire_finance')->nullable()->comment('commentaire finance');
 
             $table->foreignId('bordereauremise_loc_id')->nullable()
                 ->comment('référence de la localisation')
@@ -47,9 +44,15 @@ class CreateBordereauremisesTable extends Migration
                 ->comment('référence du mode de paiement')
                 ->constrained()->onDelete('set null');
 
+            $table->foreignId('bordereauremise_type_id')->nullable()
+                ->comment('référence du type de bordereau')
+                ->constrained('bordereauremise_types')->onDelete('set null');
+
             //TODO: Retirer ces champs après normalisation
             $table->string('localisation_titre')->nullable()->comment('titre de la localisation');
             $table->string('modepaiement_titre')->nullable()->comment('titre du mode de paiement');
+            $table->string('bordereauremise_type_titre')->nullable()->comment('titre du type de bordereau.');
+            $table->string('bordereauremise_type_code')->nullable()->comment('code du type de bordereau.');
             $table->string('workflow_currentstep_titre')->nullable()->comment('titre de l étape de traitement actuelle, le cas échéant.');
             $table->string('workflow_currentstep_code')->nullable()->comment('code de l étape de traitement actuelle, le cas échéant.');
         });
@@ -67,6 +70,7 @@ class CreateBordereauremisesTable extends Migration
             $table->dropBaseForeigns();
             $table->dropForeign(['bordereauremise_loc_id']);
             $table->dropForeign(['bordereauremise_modepaie_id']);
+            $table->dropForeign(['bordereauremise_type_id']);
         });
         Schema::dropIfExists($this->table_name);
     }

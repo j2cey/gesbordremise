@@ -2,7 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Traits\Workflow\HasWorkflowsOrActions;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -24,8 +24,7 @@ use Illuminate\Support\Facades\DB;
  * @property Carbon $date_remise
  * @property string $numero_transaction
  * @property string $localisation
- * @property string $changement_dernier_tarif
- * @property string $classe_paiement
+ * @property string $changement_dernier_tarift
  * @property string $montant_total
  *
  * @property Carbon $date_depot_agence
@@ -33,26 +32,27 @@ use Illuminate\Support\Facades\DB;
  * @property string $scan_bordereau
  * @property string $commentaire_agence
  *
- * @property Carbon $date_valeur
- * @property integer $montant_depose_finance
- * @property string $commentaire_finance
- *
  * @property string $localisation_titre
  * @property string $modepaiement_titre
+ * @property string $bordereauremise_type_titre
+ * @property string $bordereauremise_type_code
  * @property string $workflow_currentstep_code
  * @property string $workflow_currentstep_titre
  *
  * @property integer|null $bordereauremise_loc_id
  * @property integer|null $bordereauremise_modepaie_id
+ * @property integer|null $bordereauremise_type_id
  *
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
 class Bordereauremise extends BaseModel
 {
+    use HasWorkflowsOrActions;
+
     protected $guarded = [];
     protected $table = 'bordereauremises';
-    protected $with = ['localisation'];
+    //protected $with = ['localisation'];
 
     #region Eloquent Relationships
 
@@ -64,21 +64,12 @@ class Bordereauremise extends BaseModel
         return $this->belongsTo(BordereauremiseModepaie::class, 'bordereauremise_modepaie_id');
     }
 
-    /**
-     * Le(s) Workflow(s) rattaché(s) a ce type de modèle le cas échéant
-     * @return Collection|null
-     */
-    public function workflows() {
-        /*return $this->hasMany('App\Workflow', 'model_id')
-            ->where('model_type', 'App\Bordereauremise');*/
-        $workflows = Workflow::where('model_type', 'App\Bordereauremise')
-            ->get();
+    public function type() {
+        return $this->belongsTo(BordereauremiseType::class, 'bordereauremise_type_id');
+    }
 
-        if ($workflows) {
-            return $workflows;
-        } else {
-            return null;
-        }
+    public function lignes() {
+        return $this->hasMany('App\BordereauremiseLigne','bordereauremise_id');
     }
 
     public function workflowexecs() {
@@ -94,25 +85,6 @@ class Bordereauremise extends BaseModel
         //->whereNotNull('current_step_id');
     }
 
-    /**
-     * L'instance d'exécution du workflow rattaché, le cas échéant.
-     * @return WorkflowExec|\Illuminate\Database\Eloquent\Collection|HasMany
-     */
-    /*public function workflowexecs_old() {
-
-        $user = User::where('id', Auth::user()->id())->first();
-
-        //return $this->workflowexecs_all;
-
-        $workflowexecs = array();
-        foreach ($this->workflowexecs_all as $exec) {
-            if ($user->hasAnyRole([$exec->currentstep->profile->name, 'Admin'])) {
-                $workflowexecs[] = $exec;
-            }
-        }
-        return \Illuminate\Database\Eloquent\Collection::make($workflowexecs);
-    }*/
-
     #endregion
 
     public static function boot(){
@@ -120,12 +92,18 @@ class Bordereauremise extends BaseModel
 
         // Après création
         self::created(function($model){
-            $workflows = $model->workflows();
+
+            /*$workflows = $model->workflows();
             if ($workflows) {
                 foreach ($workflows as $workflow) {
-                    $workflow->exec();
+                    $workflow->execworkflow();
                 }
-            }
+            }*/
+            // Launch workflows
+            $model->launchWorkflows();
+
+            // Launch actions
+            $model->launchWorkflowActions();
         });
     }
 }

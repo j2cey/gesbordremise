@@ -135,7 +135,7 @@
                                         <tr>
                                             <th class="tw-px-4 tw-py-2">Numéro Transaction</th>
                                             <th class="tw-px-4 tw-py-2">Mode Paiement</th>
-                                            <th class="tw-px-4 tw-py-2">Classe Paiement</th>
+                                            <th class="tw-px-4 tw-py-2">Type</th>
                                             <th class="tw-px-4 tw-py-2">Agence</th>
                                             <th class="tw-px-4 tw-py-2">Montant Total</th>
                                             <th class="tw-px-4 tw-py-2">Statut</th>
@@ -149,7 +149,7 @@
                                         >
                                             <td class="tw-px-4 tw-py-2">@{{ record.numero_transaction }}</td>
                                             <td class="tw-px-4 tw-py-2">@{{ record.modepaiement_titre }}</td>
-                                            <td class="tw-px-4 tw-py-2">@{{ record.classe_paiement }}</td>
+                                            <td class="tw-px-4 tw-py-2">@{{ record.bordereauremise_type_titre }}</td>
                                             <td class="tw-px-4 tw-py-2">@{{ record.localisation_titre }}</td>
                                             <td class="tw-px-4 tw-py-2">@{{ record.montant_total }}</td>
                                             <td class="tw-px-4 tw-py-2">

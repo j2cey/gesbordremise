@@ -19,8 +19,10 @@ use PHPUnit\Util\Json;
  * @property string|null $tags
  * @property integer|null $status_id
  *
- * @property integer|null $workflow_exec_step_id
+ * @property integer|null $workflow_exec_id
  * @property integer|null $workflow_action_id
+ * @property string|null $model_type
+ * @property integer|null $model_id
  *
  * @property string|null $motif_rejet
  * @property Json $report
@@ -35,8 +37,8 @@ class WorkflowExecAction extends BaseModel
 
     #region Eloquent Relationships
 
-    public function execstep() {
-        return $this->belongsTo('App\WorkflowExecStep', 'workflow_exec_step_id');
+    public function exec() {
+        return $this->belongsTo('App\WorkflowExec', 'workflow_exec_id');
     }
 
     public function action() {

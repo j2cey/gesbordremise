@@ -45,10 +45,7 @@ class BordereauremiseSearch extends Search
                         $q->where('workflowexec.current_step_id', '=', $statut);
                     });*/
             }
-            $query
-                ->with(['localisation' => function($q) {
-                    $q->select('titre');
-                }]);
+            $query->with('localisation');
         }
 
         return $query;

@@ -25,6 +25,7 @@ class CreateWorkflowActionsTable extends Migration
 
             $table->string('titre')->comment('intitule de l action');
             $table->string('description')->nullable()->comment('description de l action');
+            $table->string('model_type')->nullable()->comment('type du modèle lié');
 
             $table->foreignId('workflow_action_type_id')->nullable()
                 ->comment('référence du type d action')
@@ -40,6 +41,13 @@ class CreateWorkflowActionsTable extends Migration
 
             $table->boolean('field_required')->default(false)->comment('determine si le champs est requis');
             $table->string('field_required_msg')->nullable()->comment('message d erreur si le champs est requis');
+
+            $table->boolean('field_required_without')->default(false)->comment('champ requis uniquement lorsque l un des autres champs spécifiés n est pas présent.');
+            $table->string('field_required_without_msg')->nullable()->comment('message d erreur pour required_without');
+
+            $table->boolean('field_required_with')->default(false)->comment('champ requis si l un des autres champs spécifiés est présent.');
+            $table->string('field_required_with_msg')->nullable()->comment('message d erreur pour required_with');
+
         });
         $this->setTableComment($this->table_name,$this->table_comment);
     }

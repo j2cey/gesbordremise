@@ -73,6 +73,8 @@ import 'vue2-datepicker/index.css';
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+Vue.component('person-index', require('./views/persons/index').default);
+
 Vue.component('vue-noty', require('./components/Noty').default);
 Vue.component('vue-login', require('./views/Login').default);
 Vue.component('VueCtkDateTimePicker', VueCtkDateTimePicker);

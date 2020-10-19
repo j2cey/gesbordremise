@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use PHPUnit\Util\Json;
 
@@ -39,6 +38,10 @@ class WorkflowExecStep extends BaseModel
 
     public function step() {
         return $this->belongsTo('App\WorkflowStep', 'workflow_step_id');
+    }
+
+    public function execactions() {
+        return $this->hasMany('App\WorkflowExecAction', 'workflow_exec_step_id');
     }
 
     public function execstatus() {

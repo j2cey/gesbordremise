@@ -23,7 +23,9 @@ use Spatie\Permission\Models\Role;
  * @property integer|null $current_step_role_id
  * @property integer|null $workflow_id
  * @property string $model_type
- * @property integer $model_id
+ * @property integer|null $model_id
+ *
+ * @property bool $traitement_effectif
  *
  * @property string|null $motif_rejet
  * @property Json $report
@@ -43,8 +45,26 @@ class WorkflowExec extends BaseModel
     }
 
     public function currentstep() {
-        // Auth::user()->id
         return $this->belongsTo('App\WorkflowStep','current_step_id');
+    }
+
+    public function currexecsteps() {
+        return $this->hasMany('App\WorkflowExecModelStep','workflow_exec_id')
+            ->where('workflow_step_id', $this->current_step_id)
+            ->where('traitement_effectif', 0)
+            ;
+    }
+
+    public function execactions() {
+        return $this->hasMany('App\WorkflowExecAction','workflow_exec_id');
+    }
+
+    public function currentstepactions() {
+        return $this->hasMany('App\WorkflowExecAction','workflow_exec_id')
+            ->whereHas('action', function ($q) {
+                $q->where('workflow_step_id', $this->current_step_id);
+            })
+            ;
     }
 
     public function currentstepuser() {
@@ -65,6 +85,27 @@ class WorkflowExec extends BaseModel
 
     public function currentsteprole() {
         return $this->belongsTo(Role::class, 'current_step_role_id');
+    }
+
+    public function nextStep() {
+        return $this->workflow->nextStep($this->currentstep->posi);
+    }
+
+    public function Traiter() {
+        $nb_currsteps_non_traitees = DB::table('workflow_exec_model_steps')
+            ->where('workflow_exec_id', $this->id)
+            ->where('workflow_step_id', $this->current_step_id)
+            ->where('traitement_effectif', 0)
+            ->count('id');
+        if ( $nb_currsteps_non_traitees === 0) {
+            // si toutes les occurences de l'étape en cours sont traitées,
+            // on récupère l'étape suivante
+            $next_step = $this->nextStep();
+            $this->update([
+                'traitement_effectif' => $next_step->code == "0" ? 1 : 0, // le traitement est effectif si l'étape suivante est l'étape de fin (code = 0)
+                'current_step_id' => $next_step->id,
+            ]);
+        }
     }
 
     public static function boot(){

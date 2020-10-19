@@ -22,12 +22,16 @@ class CreateSettingsTable extends Migration
         Schema::create($this->table_name, function (Blueprint $table) {
             $table->id();
 
-            $table->string('group')->comment('groupe');
+            //$table->string('group')->comment('groupe');
             $table->string('name')->comment('clé');
             $table->string('value')->nullable()->comment('valeur');
             $table->string('type')->default("string")->comment('type de la donnée (valeur)');
             $table->string('array_sep')->default(",")->comment('séparateur de tableau le cas échéant');
             $table->string('description')->nullable()->comment('description');
+
+            $table->foreignId('group_id')->nullable()
+                ->comment('reference du goupe de l entée (le cas échéant)')
+                ->constrained('settings')->onDelete('set null');
 
             $table->timestamps();
         });
@@ -41,6 +45,9 @@ class CreateSettingsTable extends Migration
      */
     public function down()
     {
+        Schema::table($this->table_name, function (Blueprint $table) {
+            $table->dropForeign(['group_id']);
+        });
         Schema::dropIfExists($this->table_name);
     }
 }

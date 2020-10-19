@@ -154,7 +154,7 @@ class BordereauremiseController extends Controller
     {
         $bordereauremise = Bordereauremise::where('id',$bordereauremise->id)
             ->first()
-            ->load(['workflowexec','workflowexec.currentstep','workflowexec.currentstep.actions','workflowexec.currentstep.actions.type','workflowexec.currentstep.actions.objectfield','workflowexec.currentstep.profile','workflowexec.workflowstatus']);
+            ->load(['lignes','workflowexec','workflowexec.currentstep','workflowexec.currentstep.actions','workflowexec.currentstep.actions.type','workflowexec.currentstep.actions.objectfield','workflowexec.currentstep.profile','workflowexec.workflowstatus']);
 
         $actionvalues = [];
         if ($bordereauremise->workflowexec && $bordereauremise->workflowexec->currentstep) {
@@ -181,30 +181,162 @@ class BordereauremiseController extends Controller
         $exec_step_profile = $bordereauremise->workflowexec->currentstep->profile;
         $bordereauremise = Bordereauremise::where('id',$bordereauremise->id)
             ->first()
-            ->load(['localisation','workflowexec','workflowexec.currentstep','workflowexec.currentstep.actions','workflowexec.currentstep.actions.type','workflowexec.currentstep.actions.objectfield','workflowexec.currentstep.profile','workflowexec.workflowstatus']);
+            ->load(['type','localisation', 'modepaiement', 'lignes', 'lignes.currmodelstep','lignes.currmodelstep.exec','lignes.currmodelstep.step']);
+            //->load(['type','lignes','localisation','workflowexec']);//,'workflowexec.currentstepactions','workflowexec.currentstep','workflowexec.currentstep.actions','workflowexec.currentstep.actions.type','workflowexec.currentstep.actions.objectfield','workflowexec.currentstep.profile','workflowexec.workflowstatus']);
+            //->load(['type','lignes','localisation','workflowexec','workflowexec.currentstep','workflowexec.currentstep.actions','workflowexec.currentstep.actions.type','workflowexec.currentstep.actions.objectfield','workflowexec.currentstep.profile','workflowexec.workflowstatus']);
+
+        $bordereauremise->load(['currmodelstep','currmodelstep.exec','currmodelstep.step','currmodelstep.actions']);
+
         $hasexecrole = $exec_step_profile ? ( $user->hasRole([$exec_step_profile->name]) ? 1 : 0 ) : 0;
-        //dd($hasexecrole);
-        /*if ($user->hasRole([$exec_step_profile->name])) {
-            $bordereauremise = Bordereauremise::where('id',$bordereauremise->id)
-                ->first()
-                ->load(['localisation','workflowexec','workflowexec.currentstep','workflowexec.currentstep.actions','workflowexec.currentstep.actions.type','workflowexec.currentstep.actions.objectfield','workflowexec.currentstep.profile','workflowexec.workflowstatus']);
-        } else {
-            $bordereauremise = Bordereauremise::where('id',$bordereauremise->id)
-                ->without('workflowexec')->first();
 
-            $bordereauremise->load(['localisation']);
-        }*/
+        //dd($bordereauremise);
+
+        //$bordereauremise->load('execactions','execactions.action');
+
         $actionvalues = [];
-        if ($bordereauremise->workflowexec && $bordereauremise->workflowexec->currentstep) {
+        // Check et récupère les currents execactions dans le bordereau
+        /*if ($bordereauremise->workflowexec && $bordereauremise->workflowexec->currentstep) {
 
-            foreach ($bordereauremise->workflowexec->currentstep->actions as $action) {
-                $actionvalues[$action->objectfield->db_field_name] = null;
+            $current_step = $bordereauremise->workflowexec->currentstep;
+
+            // Récupération des execactions du bordereau
+            foreach ($bordereauremise->execactions as $execaction) {
+                if ($current_step->id === $execaction->action->workflow_step_id) {
+                    $actionvalues = $this->addToActionValue($actionvalues, $execaction, $execaction->action->objectfield);
+                }
+            }
+
+            // Récupération des execactions des lignes du bordereau
+            foreach ($bordereauremise->lignes as $ligne) {
+                foreach ($ligne->execactions as $execaction) {
+                    if ($current_step->id === $execaction->action->workflow_step_id) {
+                        $actionvalues = $this->addToActionValue($actionvalues, $execaction, $execaction->action->objectfield);
+                    }
+                }
+            }
+            //$actionvalues['setvalue'] = null;
+            //$actionvalues['motif_rejet'] = null;
+        }*/
+        //dd($bordereauremise,$actionvalues);
+        /*if ($bordereauremise->workflowexec && $bordereauremise->workflowexec->currentstep) {
+
+            foreach ($bordereauremise->workflowexec->currentstepactions as $execaction) {
+                $actionvalues = $this->addActionValue($actionvalues, $execaction->model_id, $execaction->action->objectfield, null);
+                //$actionvalues[$execaction->action->objectfield->db_field_name] = null;
             }
             $actionvalues['setvalue'] = null;
             $actionvalues['motif_rejet'] = null;
-        }
+        }*/
+
+        //dd($bordereauremise->workflowexec->currentstepactions,$actionvalues);
+
+        /*if ($bordereauremise->workflowexec && $bordereauremise->workflowexec->currentstep) {
+
+            foreach ($bordereauremise->workflowexec->currentstep->actions as $action) {
+                if ($action->objectfield->object->parent) {
+                    // si l'action doit être exécutée sur un objet enfant
+                    // on doit boucler sur tous les enfants du parent
+                    $models = $action->objectfield->object->model_type::where($action->objectfield->object->ref_field, $bordereauremise->workflowexec->model_id)->get();
+                    foreach ($models as $model) {
+                        $actionvalues = $this->addActionValue($actionvalues,$model->id,$action->objectfield);
+                    }
+                } else {
+                    $actionvalues = $this->addActionValue($actionvalues,$bordereauremise->workflowexec->model_id,$action->objectfield);
+                }
+            }
+            $actionvalues['setvalue'] = null;
+            $actionvalues['motif_rejet'] = null;
+        }*/
+
+        //dd($actionvalues);
 
         return view('bordereauremises.edit', ['bordereauremise' => $bordereauremise, 'actionvalues' => json_encode($actionvalues), 'hasexecrole' => $hasexecrole]);
+    }
+
+    private function addToActionValue($actionvalues, $execaction, $objectfield) {
+        $model_added = false;
+        for ($i = 0; $i < count($actionvalues); $i++) {
+            if ($actionvalues[$i]['model_id'] === $execaction->model_id && $actionvalues[$i]['model_type'] === $objectfield->object->model_type) {
+                // Elément existant
+                if (! isset($actionvalues[$i]['actions'][$objectfield->db_field_name])) {
+                    // le champs n'est pas déjà représenté pour cet objet
+                    $actionvalues[$i]['actions'][$objectfield->db_field_name] = $this->actionValuesFieldRow($execaction->id,$objectfield);
+                    $model_added = true;
+                }
+            }
+        }
+        if (! $model_added) {
+            $actionvalues[] = $this->actionValuesRow($execaction->id, $execaction->model_id, $objectfield);
+        }
+
+        return $actionvalues;
+    }
+
+    private function actionValuesRow($execaction_id, $model_id, $objectfield) {
+        $actionvalues_row = [
+            'model_id' => $model_id,
+            'model_type' => $objectfield->object->model_type,
+            'actions' => [
+                $objectfield->db_field_name => $this->actionValuesFieldRow($execaction_id,$objectfield),
+            ]
+        ];
+
+        return $actionvalues_row;
+    }
+
+    private function actionValuesFieldRow($execaction_id,$objectfield) {
+        return [
+            'execaction_id' => $execaction_id,
+            'value' => null,
+            'valuetype' => [
+                'valuetype_string' => $objectfield->valuetype_string,
+                'valuetype_integer' => $objectfield->valuetype_integer,
+                'valuetype_boolean' => $objectfield->valuetype_boolean,
+                'valuetype_datetime' => $objectfield->valuetype_datetime,
+                'valuetype_image' => $objectfield->valuetype_image,
+            ]
+        ];
+    }
+
+    private function addActionValue($actionvalues, $model_id, $objectfield, $value = null) {
+        $model_added = false;
+        for ($i = 0; $i < count($actionvalues); $i++) {
+            if ($actionvalues[$i]['model_id'] === $model_id && $actionvalues[$i]['model_type'] === $objectfield->object->model_type) {
+                // Elément existant
+                if (! isset($actionvalues[$i][$objectfield->db_field_name])) {
+                    // le champs n'est pas déjà représenté pour cet objet
+                    $actionvalues[$i][$objectfield->db_field_name] = [
+                        'value' => $value,
+                        'valuetype' => [
+                            'valuetype_string' => $objectfield->valuetype_string,
+                            'valuetype_integer' => $objectfield->valuetype_integer,
+                            'valuetype_boolean' => $objectfield->valuetype_boolean,
+                            'valuetype_datetime' => $objectfield->valuetype_datetime,
+                            'valuetype_image' => $objectfield->valuetype_image,
+                        ]
+                    ];
+                    $model_added = true;
+                }
+            }
+        }
+        if (! $model_added) {
+            $actionvalues[] = [
+                'model_id' => $model_id,
+                'model_type' => $objectfield->object->model_type,
+                $objectfield->db_field_name => [
+                    'value' => $value,
+                    'valuetype' => [
+                        'valuetype_string' => $objectfield->valuetype_string,
+                        'valuetype_integer' => $objectfield->valuetype_integer,
+                        'valuetype_boolean' => $objectfield->valuetype_boolean,
+                        'valuetype_datetime' => $objectfield->valuetype_datetime,
+                        'valuetype_image' => $objectfield->valuetype_image,
+                    ]
+                ]
+            ];
+        }
+
+        return $actionvalues;
     }
 
     /**

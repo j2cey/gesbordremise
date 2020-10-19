@@ -4,7 +4,6 @@ namespace App;
 
 use App\Traits\EmailAddress\HasEmailAddresses;
 use App\Traits\PhoneNum\HasPhoneNums;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
@@ -32,7 +31,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
-class Employe extends Model
+class Employe extends BaseModel
 {
     use HasEmailAddresses, HasPhoneNums;
     protected $guarded = [];

@@ -23,5 +23,6 @@ class DatabaseSeeder extends Seeder
         $this->call(WorkflowStepSeeder::class);
         $this->call(WorkflowActionSeeder::class);
         $this->call(TypeDepartementSeeder::class);
+        $this->call(BordereauremiseTypeSeeder::class);
     }
 }

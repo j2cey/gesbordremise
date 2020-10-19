@@ -14,7 +14,59 @@ class SettingController extends Controller
      */
     public function index()
     {
-        //
+        $all_settings = Setting::all()->toArray();
+
+        //dd($all_settings);
+
+        $tree = $this->buildTree($all_settings);
+        $tree_clean = $this->cleanTree($tree);
+        dd($tree,$tree_clean);
+    }
+
+    function buildTree(array $elements, $parentId = 0) {
+        $branch = array();
+
+        foreach ($elements as $element) {
+            if ($element['group_id'] == $parentId) {
+                $children = $this->buildTree($elements, $element['id']);
+                if ($children) {
+                    $element['children'] = $children;
+                }
+                $branch[$element['name']] = $element;
+            }
+        }
+
+        return $branch;
+    }
+
+    private function cleanTree($tree) {
+        $final_tree = [];
+        foreach ($tree as $key => $item) {
+            if (isset($item['children'])) {
+                $final_tree[$key]['default'] = $item['value'];
+                $final_tree[$item['name']] = $this->cleanTree($item['children']);
+            } else {
+                $final_tree[$key] = isset($item['value']) ? $this->getParsedValue($item) : $item;
+            }
+        }
+        return $final_tree;
+    }
+
+    private function getParsedValue($setting) {
+        if ($setting['value'] === null) {
+            return $setting['value'];
+        } elseif ($setting['type'] === "string") {
+            return $setting['value'];
+        } elseif ($setting['type'] === "integer") {
+            return (int)$setting['value'];
+        } elseif ($setting['type'] === "bool") {
+            return (bool)$setting['value'];
+        } elseif ($setting['type'] === "float") {
+            return (float)$setting['value'];
+        } elseif ($setting['type'] === "array") {
+            return explode($setting['array_sep'], $setting['value']);
+        }
+        return $setting['value'];
     }
 
     /**

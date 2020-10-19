@@ -23,7 +23,7 @@ class WorkflowController extends Controller
 
     public function fetch() {
         $workflows = Workflow::all();
-        $workflows->load(['object','steps','steps.profile','steps.actions','steps.actions.type','steps.actions.objectfield']);
+        $workflows->load(['object','steps','steps.profile','steps.actions','steps.actions.type','steps.actions.objectfield','steps.actions.fieldsrequiredwithout','steps.actions.fieldsrequiredwith']);
         return $workflows;
     }
 
@@ -63,7 +63,7 @@ class WorkflowController extends Controller
             'model_type' => $formInput['object']['model_type'],
         ]);*/
 
-        return $new_workflow->load(['object','steps','steps.profile','steps.actions','steps.actions.type','steps.actions.objectfield']);
+        return $new_workflow->load(['object','steps','steps.profile','steps.actions','steps.actions.type','steps.actions.objectfield','steps.actions.fieldsrequiredwithout','steps.actions.fieldsrequiredwith']);
     }
 
     /**
@@ -115,7 +115,7 @@ class WorkflowController extends Controller
             'model_type' => $formInput['object']['model_type'],
         ]);
 
-        return $workflow->load(['object','steps','steps.profile','steps.actions','steps.actions.type','steps.actions.objectfield']);
+        return $workflow->load(['object','steps','steps.profile','steps.actions','steps.actions.type','steps.actions.objectfield','steps.actions.fieldsrequiredwithout','steps.actions.fieldsrequiredwith']);
     }
 
     /**

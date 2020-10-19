@@ -35,6 +35,8 @@ class CreateWorkflowExecsTable extends Migration
                 ->comment('référence du statut de workflow')
                 ->constrained()->onDelete('set null');
 
+            $table->boolean('traitement_effectif')->default(false)->comment('détermine si le traitement est traitée');
+
             $table->string('model_type')->comment('type du modèle référencé');
             $table->bigInteger('model_id')->comment('référence de l instance du modèle');
             $table->string('motif_rejet')->nullable()->comment('motif rejet le cas échéant');

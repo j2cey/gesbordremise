@@ -3,7 +3,6 @@
 namespace App;
 
 use App\Traits\BordereauremiseFile\ImportFileTrait;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use PHPUnit\Util\Json;
 

@@ -25,6 +25,12 @@ class CreateWorkflowObjectsTable extends Migration
 
             $table->string('model_type')->comment('type du modele');
             $table->string('model_title')->comment('titre du modele');
+
+            $table->foreignId('workflow_object_parent_id')->nullable()
+                ->comment('reference de l objet parent')
+                ->constrained('workflow_objects')->onDelete('set null');
+
+            $table->string('ref_field')->nullable()->comment('champs référence');
         });
         $this->setTableComment($this->table_name,$this->table_comment);
     }

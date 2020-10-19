@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\WorkflowAction\CreateWorkflowActionRequest;
 use App\Http\Requests\WorkflowAction\UpdateWorkflowActionRequest;
 use App\WorkflowAction;
+use App\WorkflowObject;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -19,7 +20,7 @@ class WorkflowActionController extends Controller
     public function index()
     {
         $workflowactions = WorkflowAction::all();
-        $workflowactions->load(['type','objectfield']);
+        $workflowactions->load(['type','objectfield','fieldsrequiredwithout','fieldsrequiredwith']);
 
         return $workflowactions;
     }
@@ -47,6 +48,8 @@ class WorkflowActionController extends Controller
 
         //$val_bfor = $formInput['field_required'];
         $formInput['field_required'] = $this->getCheckValue($formInput, 'field_required');
+        $formInput['field_required_without'] = $this->getCheckValue($formInput, 'field_required_without');
+        $formInput['field_required_with'] = $this->getCheckValue($formInput, 'field_required_with');
 
         //dd($val_bfor,$formInput);
 
@@ -58,9 +61,18 @@ class WorkflowActionController extends Controller
             'workflow_object_field_id' => $formInput['objectfield']['id'],
             'field_required' => $formInput['field_required'],
             'field_required_msg' => $formInput['field_required_msg'],
+
+            'field_required_without' => $formInput['field_required_without'],
+            'field_required_without_msg' => $formInput['field_required_without_msg'],
+
+            'field_required_with' => $formInput['field_required_with'],
+            'field_required_with_msg' => $formInput['field_required_with_msg'],
         ]);
 
-        return $new_workflowaction->load(['type','objectfield']);
+        $this->attachFieldsrequiredwithout($new_workflowaction, $formInput['field_required_without'], $formInput['fieldsrequiredwithout']);
+        $this->attachFieldsrequiredwith($new_workflowaction, $formInput['field_required_with'], $formInput['fieldsrequiredwith']);
+
+        return $new_workflowaction->load(['type','objectfield','fieldsrequiredwithout','fieldsrequiredwith']);
     }
 
     /**
@@ -97,19 +109,18 @@ class WorkflowActionController extends Controller
         $user = auth()->user();
         $formInput = $request->all();
 
-        /*foreach ($formInput as $key => $value) {
-            if ($value === "null") {
-                $request->replace([$key => null]);
-            }
-        }*/
-
         // TODO: Valider l'Action à Modifier
 
         $formInput['type'] = json_decode($formInput['type'], true);
         $formInput['objectfield'] = json_decode($formInput['objectfield'], true);
 
+        $formInput['fieldsrequiredwithout'] = json_decode($formInput['fieldsrequiredwithout'], true);
+        $formInput['fieldsrequiredwith'] = json_decode($formInput['fieldsrequiredwith'], true);
+
         //$val_bfor = $formInput['field_required'];
         $formInput['field_required'] = $this->getCheckValue($formInput, 'field_required');
+        $formInput['field_required_without'] = $this->getCheckValue($formInput, 'field_required_without');
+        $formInput['field_required_with'] = $this->getCheckValue($formInput, 'field_required_with');
 
         //dd($val_bfor,$formInput);
 
@@ -121,9 +132,18 @@ class WorkflowActionController extends Controller
             'workflow_object_field_id' => $formInput['objectfield']['id'],
             'field_required' => $formInput['field_required'],
             'field_required_msg' => $formInput['field_required_msg'],
+
+            'field_required_without' => $formInput['field_required_without'],
+            'field_required_without_msg' => $formInput['field_required_without_msg'],
+
+            'field_required_with' => $formInput['field_required_with'],
+            'field_required_with_msg' => $formInput['field_required_with_msg'],
         ]);
 
-        return $workflowaction->load(['type','objectfield']);
+        $this->syncFieldsrequiredwithout($workflowaction, $formInput['fieldsrequiredwithout']);
+        $this->syncFieldsrequiredwith($workflowaction, $formInput['fieldsrequiredwith']);
+
+        return $workflowaction->load(['type','objectfield','fieldsrequiredwithout','fieldsrequiredwith']);
     }
 
     /**
@@ -147,5 +167,41 @@ class WorkflowActionController extends Controller
         } else {
             return 0;
         }
+    }
+
+    private function attachFieldsrequiredwithout($workflowaction, $field_required_without, $fieldsrequiredwithout) {
+        // field required without, fields list
+        if ($field_required_without) {
+            $fieldsrequiredwithout_ids = array_map( function (array $arr){
+                return $arr['id'];
+            },$fieldsrequiredwithout );
+            $workflowaction->fieldsrequiredwithout()->attach($fieldsrequiredwithout_ids);
+        }
+    }
+
+    private function syncFieldsrequiredwithout($workflowaction, $fieldsrequiredwithout) {
+        // field required without, fields list
+        $fieldsrequiredwithout_ids = array_map( function (array $arr){
+            return $arr['id'];
+        },$fieldsrequiredwithout );
+        $workflowaction->fieldsrequiredwithout()->sync($fieldsrequiredwithout_ids);
+    }
+
+    private function attachFieldsrequiredwith($workflowaction, $field_required_with, $fieldsrequiredwith) {
+        // field required with, fields list
+        if ($field_required_with) {
+            $fieldsrequiredwith_ids = array_map( function (array $arr){
+                return $arr['id'];
+            },$fieldsrequiredwith );
+            $workflowaction->fieldsrequiredwith()->attach($fieldsrequiredwith_ids);
+        }
+    }
+
+    private function syncFieldsrequiredwith($workflowaction, $fieldsrequiredwith) {
+        // field required with, fields list
+        $fieldsrequiredwith_ids = array_map( function (array $arr){
+            return $arr['id'];
+        },$fieldsrequiredwith );
+        $workflowaction->fieldsrequiredwith()->sync($fieldsrequiredwith_ids);
     }
 }

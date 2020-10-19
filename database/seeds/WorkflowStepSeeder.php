@@ -31,7 +31,7 @@ class WorkflowStepSeeder extends Seeder
                 'titre' => "Traitement Finances",
                 'code' => "step_1",
                 'description' => "Traitements niveau Finances",
-                'posi' => 0,
+                'posi' => 1,
                 'workflow_id' => 1,
                 'role_id' => 4
             ],

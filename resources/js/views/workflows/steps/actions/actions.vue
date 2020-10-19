@@ -42,8 +42,48 @@
                         </dd>
                         <dt class="col-sm-4">Description</dt>
                         <dd class="col-sm-8">{{ action.description }}</dd>
-                        <dt class="col-sm-4">Facultatif ?</dt>
-                        <dd class="col-sm-8">
+
+                        <!--Champs Facultatif Si les champs sont renseignés-->
+                        <dt v-if="action.field_required_without" class="col-sm-4"><span class="text-sm">Champs Facultatif si:</span></dt>
+                        <dd v-if="action.field_required_without" class="col-sm-8">
+                            <small>
+                              <span class="text-lighter hidden-sm-down">
+                                  <span  v-for="(field, index) in action.fieldsrequiredwithout" v-if="action.fieldsrequiredwithout" class="badge badge-info">
+                                      {{ field.field_label }}
+                                  </span>
+                              </span>
+                            </small>
+                        </dd>
+                        <dd v-if="action.field_required_without" class="col-sm-8 offset-sm-4">
+                            <small>
+                              <span class="text-lighter text-red hidden-sm-down">
+                                {{ action.field_required_without_msg }}
+                              </span>
+                            </small>
+                        </dd>
+
+                        <!--Champs Obligatoire Si les champs sont renseignés-->
+                        <dt v-if="action.field_required_with" class="col-sm-4"><span class="text-sm">Champs Obligatoire si:</span></dt>
+                        <dd v-if="action.field_required_with" class="col-sm-8">
+                            <small>
+                              <span class="text-lighter hidden-sm-down">
+                                  <span  v-for="(field, index) in action.fieldsrequiredwith" v-if="action.fieldsrequiredwith" class="badge badge-warning">
+                                      {{ field.field_label }}
+                                  </span>
+                              </span>
+                            </small>
+                        </dd>
+                        <dd v-if="action.field_required_with" class="col-sm-8 offset-sm-4">
+                            <small>
+                              <span class="text-lighter text-red hidden-sm-down">
+                                {{ action.field_required_with_msg }}
+                              </span>
+                            </small>
+                        </dd>
+
+                        <!--Champs Réquis-->
+                        <dt v-if="!action.field_required_without && !action.field_required_with" class="col-sm-4">Facultatif ?</dt>
+                        <dd v-if="!action.field_required_without && !action.field_required_with" class="col-sm-8">
                             <small>
                               <span class="text-lighter hidden-sm-down">
                                   <span v-if="action.field_required" class="badge badge-pill badge-danger">non</span>
@@ -51,7 +91,7 @@
                               </span>
                             </small>
                         </dd>
-                        <dd class="col-sm-8 offset-sm-4" v-if="action.field_required">
+                        <dd v-if="!action.field_required_without && !action.field_required_with && action.field_required" class="col-sm-8 offset-sm-4">
                             <small>
                               <span class="text-lighter text-red hidden-sm-down">
                                 {{ action.field_required_msg }}
