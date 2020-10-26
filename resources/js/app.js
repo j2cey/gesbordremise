@@ -70,6 +70,9 @@ import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
 //import 'vue2-datepicker/locale/fr-fr';
 
+// necessaire pour rendre un modal draggable (doit d'abord être installé: 'npm install --save jquery-ui-dist')
+import 'jquery-ui-dist/jquery-ui';
+
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 

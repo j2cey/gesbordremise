@@ -168,9 +168,14 @@
             </div>
             <!-- /.card -->
 
-            <div class="card" v-if="canExec">
+            <div class="card" v-if="hasexecrole">
                 <div class="card-header">
-                    <h3 class="card-title">Traitement(s) à Effecuer</h3>
+                    <h3 class="card-title">Traitement(s) à Effecuer:
+                        <span v-if="actionsToExec < 3" class="badge badge-pill badge-success">{{ actionsToExec }}</span>
+                        <span v-else-if="actionsToExec < 6" class="badge badge-pill badge-primary">{{ actionsToExec }}</span>
+                        <span v-else-if="actionsToExec < 11" class="badge badge-pill badge-warning">{{ actionsToExec }}</span>
+                        <span v-else class="badge badge-pill badge-danger">{{ actionsToExec }}</span>
+                    </h3>
 
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
@@ -180,7 +185,7 @@
                 <div class="card-body">
 
                     <div class="card-body table-responsive p-0" style="height: 200px;">
-                        <table class="table table-head-fixed text-nowrap">
+                        <table class="table table-head-fixed table-hover text-nowrap">
                             <thead>
                             <tr>
                                 <th>Statut</th>
@@ -201,7 +206,7 @@
                                 <td></td>
                                 <td>{{ bordereauremise.montant_total }}</td>
                                 <td>
-                                    <a href="#" @click.prevent="traiterEtape(bordereauremise.currmodelstep.uuid)">
+                                    <a href="#" @click.prevent="traiterEtape(bordereauremise.currmodelstep.uuid,bordereauremise.type.titre,bordereauremise.modepaiement.titre,bordereauremise.montant_total)">
                                         <i class="fa fa-pencil-square-o text-green" aria-hidden="true"></i>
                                     </a>
                                 </td>
@@ -216,7 +221,7 @@
                                 <td>{{ ligne.reference }}</td>
                                 <td>{{ ligne.montant }}</td>
                                 <td v-if="ligne.currmodelstep">
-                                    <a href="#" @click.prevent="traiterEtape(ligne.currmodelstep.uuid)">
+                                    <a href="#" @click.prevent="traiterEtape(ligne.currmodelstep.uuid,ligne.classe_paiement, ligne.reference, ligne.montant)">
                                         <i class="fa fa-pencil-square-o text-green" aria-hidden="true"></i>
                                     </a>
                                 </td>
@@ -272,57 +277,12 @@
             };
         },
         methods: {
-            initActionvaluesArray() {
-                let actionvalues = []
-                for (var i = 0; i < this.exec_prop.currentstep.actions; i++) {
-
-                }
-            },
-            handleFileUpload(event) {
-                this.selectedFile = event.target.files[0];
-                this.filefieldname = event.target.name;
-                this.filename = (typeof this.selectedFile !== 'undefined') ? this.selectedFile.name : 'Télécharger un fichier';
-            },
-            validerEtape(execId) {
-                this.submitForm(execId);
-            },
-            rejeterEtape() {
-                this.$emit('validate_reject')
-            },
-            submitForm(execId) {
-                const fd = this.addFileToForm(this.filefieldname)
-
-                //console.log(this.workflowexecForm)
-
-                //.post(`/workflowexecs`, fd)
-                this.workflowexecForm
-                    .put(`/workflowexecs/${execId}`, fd)
-                    .then(data => {
-                        this.updateData(data);
-                    }).catch(error => {
-                    this.loading = false
-                });
-            },
-            addFileToForm(fieldname) {
-
-                if (typeof this.selectedFile !== 'undefined') {
-                    const fd = new FormData();
-                    fd.append(fieldname, this.selectedFile);
-                    //console.log("image added", fd);
-                    return fd;
-                } else {
-                    const fd = undefined;
-                    //console.log("image not added", fd);
-                    return fd;
-                }
-            },
             updateData(data) {
                 //console.log(data);
                 // MAJ du model
                 this.bordereauremise = data;
                 // MAJ de l'exec
                 //this.bordereauremise = data.exec;
-                // TODO: réévaluer le droit d'exécution du nouveau traitement
                 this.hasexecrole = false;
                 //console.log(this.bordereauremise, this.hasexecrole);
                 window.noty({
@@ -333,7 +293,13 @@
             showImage() {
                 this.$emit('show_image', this.bordereauremise.scan_bordereau)
             },
-            traiterEtape(id) {
+            traiterEtape(id,classe_paiement,reference,montant) {
+
+                let moredata = {
+                    'Paiement': classe_paiement,
+                    'Reference': reference,
+                    'Montant': montant
+                }
 
                 axios.get(`/workflowexecmodelsteps/${id}`)
                     .then(({data}) => {
@@ -341,13 +307,120 @@
                         let actionvalues = data.actionvalues
                         let execmodelstep = data.data
 
-                        this.$emit('traiter_etape', {execmodelstep, actionvalues})
+                        this.$emit('traiter_etape', {execmodelstep, actionvalues, moredata})
                     });
+            },
+            async canExecStep(stepid) {
+
+                axios.get(`/canexecstep/${stepid}`)
+
+                    .then(resp => {
+                        console.log('get canexecstep: ', resp.data)
+                        if (resp) {
+                            return resp.data.hasroles === 1;
+                        } else {
+                            return false;
+                        }
+                    })
+                    .catch(err => {
+                        console.log('get canexecstep error: ', err);
+                        return false;
+                    })
+
             }
         },
         computed: {
-            canExec() {
-                return this.hasexecrole;
+            actionsToExec() {
+                let curr_step_actions_count = 0
+
+                // post actionstoexec
+                let actionstoexecForm = new Form(
+                    { 'objects': [ this.bordereauremise, ...this.bordereauremise.lignes ]}
+                )
+                actionstoexecForm
+                    .post('/actionstoexec')
+                    .then(resp => {
+                        curr_step_actions_count = resp.actionstoexec
+                        console.log('post actionstoexec: ', curr_step_actions_count)
+                        return curr_step_actions_count;
+                    }).catch(error => {
+                        console.log('post actionstoexec error: ', error);
+                        return 0;
+                });
+            },
+            actionsToExec_old() {
+                let curr_step_actions_count = 0
+
+                // post actionstoexec
+                let actionstoexecForm = new Form(
+                    { 'objects': [this.bordereauremise, ...this.bordereauremise.lignes ]}
+                )
+                actionstoexecForm
+                    .post('/actionstoexec')
+                    .then(data => {
+                        console.log('post actionstoexec: ', data)
+                    }).catch(error => {
+                        console.log('post actionstoexec error: ', error)
+                });
+
+                // get canexecstep
+                let newhasexecrole = true;
+
+                if (this.hasexecrole) {
+                    if (this.bordereauremise.currmodelstep) {
+                        if (this.bordereauremise.currmodelstep.workflow_step_id === this.bordereauremise.currmodelstep.exec.current_step_id) {
+
+                            axios.get(`/canexecstep/${this.bordereauremise.currmodelstep.exec.current_step_id}`)
+
+                                .then(resp => {
+                                    if (resp) {
+                                        newhasexecrole = newhasexecrole && (resp.data.hasroles === 1)
+                                        if (newhasexecrole) {
+                                            curr_step_actions_count = 1;
+                                        }
+                                        console.log('canexecthisstep (bordereauremise): ', newhasexecrole, curr_step_actions_count )
+                                    } else {
+                                        newhasexecrole = false;
+                                    }
+                                })
+                                .catch(err => {
+                                    console.log('get canexecstep error: ', err);
+                                    newhasexecrole = false;
+                                })
+                        }
+                    }
+                    if (this.bordereauremise.lignes) {
+                        for (let i in this.bordereauremise.lignes) {
+                            let ligne = this.bordereauremise.lignes[i]
+                            if (ligne.currmodelstep && ligne.currmodelstep.workflow_step_id === ligne.currmodelstep.exec.current_step_id) {
+
+                                axios.get(`/canexecstep/${ligne.currmodelstep.exec.current_step_id}`)
+
+                                    .then(resp => {
+                                        console.log('get canexecstep: ', resp.data)
+                                        if (resp) {
+                                            console.log('canexecthisstep (ligne ' + i + '): ', resp.data.hasroles)
+                                            newhasexecrole = newhasexecrole && (resp.data.hasroles === 1)
+                                            if (newhasexecrole) {
+                                                curr_step_actions_count = curr_step_actions_count + 1;
+                                            }
+                                        } else {
+                                            newhasexecrole = false;
+                                        }
+                                    })
+                                    .catch(err => {
+                                        console.log('get canexecstep error: ', err);
+                                        newhasexecrole = false;
+                                    })
+                            }
+                        }
+                    }
+                } else {
+                    newhasexecrole = false;
+                }
+                this.hasexecrole = newhasexecrole;
+                console.log('actionsToExec: ', this.hasexecrole, curr_step_actions_count);
+                return curr_step_actions_count;
             },
             scanUrl() {
                 if (this.bordereauremise.scan_bordereau) {

@@ -45,17 +45,22 @@ class BordereauremiseLigne extends BaseModel
         // Après création
         self::created(function($model){
 
-            /*$workflows = $model->workflows();
-            if ($workflows) {
-                foreach ($workflows as $workflow) {
-                    $workflow->execworkflow();
-                }
-            }*/
             // Launch workflows
             $model->launchWorkflows();
 
             // Launch actions
             $model->launchWorkflowActions();
+        });
+
+        // Avant enregistrement
+        self::saving(function($model){
+            // Formaliser le rejet (le cas échéant)
+           if ($model->rejet_finances) {
+               // on met le montant à zéro
+               $model->montant_depose_finance = 0;
+               // on récupère la date du jour
+               $model->date_valeur_finance = Carbon::now();
+           }
         });
     }
 }

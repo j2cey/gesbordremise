@@ -152,4 +152,14 @@ class RoleController extends Controller
     public function permissions() {
         return Permission::all();
     }
+
+    public function hasrole($roleid) {
+        $user = auth()->user();
+
+        $role = Role::where('id', $roleid)->first();
+
+        $hasrole = $role ? ( $user->hasRole([$role->name]) ? 1 : 0 ) : 0;
+
+        return $hasrole;
+    }
 }

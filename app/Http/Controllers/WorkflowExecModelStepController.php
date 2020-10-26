@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Bordereauremise;
+use App\WorkflowExec;
 use App\WorkflowExecModelStep;
 use App\WorkflowStep;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class WorkflowExecModelStepController extends Controller
 {
@@ -120,14 +122,14 @@ class WorkflowExecModelStepController extends Controller
         }
 
         // TODO: voir comment gérer dynamiquement le modèle traité (et son parent si besoin)
-        if ($currmodelstep->model_type === "App\BordereauremiseFile") {
+        if ($currmodelstep->model_type === "App\BordereauremiseLigne") {
             $model_sub = $currmodelstep->model_type::where('id', $currmodelstep->model_id)->first();
             $model = Bordereauremise::where('id', $model_sub->bordereauremise_id)->first();
         } else {
             $model = $currmodelstep->model_type::where('id', $currmodelstep->model_id)->first();
         }
-        $model->load(['type','localisation', 'modepaiement', 'lignes', 'lignes.currmodelstep','lignes.currmodelstep.step']);
-        $model->load(['currmodelstep','currmodelstep.step','currmodelstep.actions']);
+        $model->load(['type','localisation', 'modepaiement', 'lignes', 'lignes.currmodelstep','lignes.currmodelstep.exec','lignes.currmodelstep.step']);
+        $model->load(['currmodelstep','currmodelstep.exec','currmodelstep.step','currmodelstep.actions']);
 
         return $model;
     }
@@ -141,5 +143,49 @@ class WorkflowExecModelStepController extends Controller
     public function destroy(WorkflowExecModelStep $workflowexecmodelstep)
     {
         //
+    }
+
+    public function canexecstep($stepid) {
+
+        $user = auth()->user();
+
+        $exec_step = WorkflowStep::where('id', $stepid)->first();
+        $exec_step->load('profile');
+
+        $hasexecrole = $exec_step ? ( $user->hasRole([$exec_step->profile->name]) ? 1 : 0 ) : 0;
+
+        //dd($stepid, $hasexecrole, $exec_step);
+
+        $data = ['hasroles' => $hasexecrole];
+
+        return response()->json($data);
+        //return $hasexecrole;
+    }
+
+    public function actionstoexec(Request $request) {
+
+        $user = auth()->user();
+        $formInput = $request->all();
+        $data = ['actionstoexec' => 0];
+
+        if ($request->has('objects')) {
+            $objects = $formInput['objects'];
+            foreach ($objects as $object) {
+                if ($object['currmodelstep']) {
+                    if ($object['currmodelstep']['exec']) {
+                        $exec = $object['currmodelstep']['exec'];
+                    } else {
+                        $exec = WorkflowExec::where('id',$object['currmodelstep']['workflow_exec_id'])->toArray();
+                    }
+                    if ($object['currmodelstep']['workflow_step_id'] === $exec['current_step_id']) {
+                        $exec_step = WorkflowStep::where('id', $exec['current_step_id'])->first();
+                        $exec_step->load('profile');
+
+                        $data['actionstoexec'] += $exec_step ? ( $user->hasRole([$exec_step->profile->name]) ? 1 : 0 ) : 0;
+                    }
+                }
+            }
+        }
+        return response()->json($data);
     }
 }

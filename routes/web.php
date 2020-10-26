@@ -45,6 +45,7 @@ Route::get('/product/{product_id}/destroy', 'ProductController@destroy')->name('
 
 Route::get('permissions','RoleController@permissions')->middleware('auth');
 Route::resource('roles','RoleController')->middleware('auth');
+Route::get('hasrole/{roleid}','RoleController@hasrole')->middleware('auth');
 Route::resource('users','UserController')->middleware('auth');
 
 Route::resource('workflows','WorkflowController')->middleware('auth');
@@ -70,6 +71,8 @@ Route::resource('workflowexecs','WorkflowExecController')->middleware('auth');
 Route::resource('workflowexecactions','WorkflowExecActionController')->middleware('auth');
 
 Route::resource('workflowexecmodelsteps', 'WorkflowExecModelStepController')->middleware('auth');
+Route::get('canexecstep/{stepid}', 'WorkflowExecModelStepController@canexecstep')->middleware('auth');
+Route::post('actionstoexec', 'WorkflowExecModelStepController@actionstoexec')->middleware('auth');
 
 //Route::get('/home', 'HomeController@index')->name('home');
 

@@ -5,7 +5,14 @@
                 <div class="modal-header">
                     <div class="user-block">
                         <span class="username text-sm text-purple" v-if="execmodelstep.step">{{ execmodelstep.step.titre }}</span>
-                        <span class="description" v-if="execmodelstep.step">{{ execmodelstep.step.description }}</span>
+                        <span class="description" v-if="moredata">
+                            <dl class="row">
+                                <span v-for="(value, propertyName) in moredata" class="text-lighter hidden-sm-down">
+                                    <dt class="col-lg-6"><small><strong>{{ propertyName }}</strong></small></dt>
+                                    <dd class="col-lg-6">{{ value }}</dd>
+                                </span>
+                            </dl>
+                        </span>
                     </div>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -76,6 +83,7 @@
 
                 this.actionvalues = step_data.actionvalues
                 this.execmodelstep = step_data.execmodelstep
+                this.moredata = step_data.moredata
                 //this.workflowexecForm = new Form({ 'actionvalues': this.actionvalues })
                 this.workflowexecForm = new Form(step_data.actionvalues)
 
@@ -84,17 +92,22 @@
                 // reset modal if it isn't visible
                 if (!($('.modal.in').length)) {
                     $('.modal-dialog').css({
-                        top: 0,
-                        left: 0
+                        top: 50,
+                        left: 50
                     });
                 }
                 $('#treatModelStep').modal({
                     backdrop: false,
+                    keyboard: false,
                     show: true
                 });
 
                 $('.modal-dialog').draggable({
-                    handle: ".modal-header"
+                    handle: ".modal-header",   //  Can only click on the head to drag
+                    cursor: 'move',
+                    refreshPositions: false,
+                    scroll: false,
+                    //containment: "parent"
                 });
             })
         },
@@ -105,6 +118,7 @@
             return {
                 execmodelstep: {},
                 actionvalues: {},
+                moredata: {},
                 workflowexecForm: new Form({ 'actionvalues': this.actionvalues }),
                 filename: 'Télécharger un fichier',
                 filefieldname: null,
@@ -184,5 +198,9 @@
         width: 100%;
         margin: 0;
         padding: 10px;
+    }
+
+    .modal-header{      /* not necessary but imo important for user */
+        cursor: move;
     }
 </style>

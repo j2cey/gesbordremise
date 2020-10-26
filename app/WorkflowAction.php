@@ -246,9 +246,15 @@ class WorkflowAction extends BaseModel
                 // Type DateTime
                 $model->{$this->objectfield->db_field_name} = $val; // Carbon::parse($formInput[$action->objectfield->db_field_name]);
             } elseif ($this->objectfield->valuetype_image) {
+                // Type Image
                 $model->{$this->objectfield->db_field_name} = $this->verifyAndStoreImage($request, $this->objectfield->db_field_name, $images_dir);
             } elseif ($this->objectfield->valuetype_string) {
+                // Type string
                 $str_val = ($val === "null" || $val === null) ? "" : $val;
+                $model->{$this->objectfield->db_field_name} = $str_val;
+            } elseif ($this->objectfield->valuetype_integer) {
+                // Type integer
+                $str_val = ($val === "null" || $val === null || $val === null) ? 0 : (int)$val;
                 $model->{$this->objectfield->db_field_name} = $str_val;
             } else {
                 $model->{$this->objectfield->db_field_name} = $val;
