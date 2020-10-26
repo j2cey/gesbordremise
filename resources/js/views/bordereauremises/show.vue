@@ -171,10 +171,10 @@
             <div class="card" v-if="hasexecrole">
                 <div class="card-header">
                     <h3 class="card-title">Traitement(s) à Effecuer:
-                        <span v-if="actionsToExec < 3" class="badge badge-pill badge-success">{{ actionsToExec }}</span>
-                        <span v-else-if="actionsToExec < 6" class="badge badge-pill badge-primary">{{ actionsToExec }}</span>
-                        <span v-else-if="actionsToExec < 11" class="badge badge-pill badge-warning">{{ actionsToExec }}</span>
-                        <span v-else class="badge badge-pill badge-danger">{{ actionsToExec }}</span>
+                        <span v-if="nbactionstoexec < 3" class="badge badge-pill badge-success">{{ nbactionstoexec }}</span>
+                        <span v-else-if="nbactionstoexec < 6" class="badge badge-pill badge-primary">{{ nbactionstoexec }}</span>
+                        <span v-else-if="nbactionstoexec < 11" class="badge badge-pill badge-warning">{{ nbactionstoexec }}</span>
+                        <span v-else class="badge badge-pill badge-danger">{{ nbactionstoexec }}</span>
                     </h3>
 
                     <div class="card-tools">
@@ -257,7 +257,7 @@
             ImgShow, StepTreatment
         },
         created() {
-            console.log(this.bordereauremise_prop);
+
         },
         mounted() {
             this.$on('etape_traitee', (data) => {
@@ -273,7 +273,7 @@
                 workflowexecForm: new Form({ 'actionvalues': this.actionvalues_prop }),
                 filename: 'Télécharger un fichier',
                 filefieldname: null,
-                selectedFile : null
+                selectedFile : null,
             };
         },
         methods: {
@@ -283,7 +283,12 @@
                 this.bordereauremise = data;
                 // MAJ de l'exec
                 //this.bordereauremise = data.exec;
-                this.hasexecrole = false;
+                let actionstoexec = this.actionsToExec();
+                if (actionstoexec) {
+                    this.hasexecrole = true;
+                } else {
+                    this.hasexecrole = false;
+                }
                 //console.log(this.bordereauremise, this.hasexecrole);
                 window.noty({
                     message: 'Traitement effectué avec succès',
@@ -327,9 +332,7 @@
                         return false;
                     })
 
-            }
-        },
-        computed: {
+            },
             actionsToExec() {
                 let curr_step_actions_count = 0
 
@@ -344,24 +347,14 @@
                         console.log('post actionstoexec: ', curr_step_actions_count)
                         return curr_step_actions_count;
                     }).catch(error => {
-                        console.log('post actionstoexec error: ', error);
-                        return 0;
+                    console.log('post actionstoexec error: ', error);
+                    return 0;
                 });
             },
-            actionsToExec_old() {
+        },
+        computed: {
+            nbactionstoexec() {
                 let curr_step_actions_count = 0
-
-                // post actionstoexec
-                let actionstoexecForm = new Form(
-                    { 'objects': [this.bordereauremise, ...this.bordereauremise.lignes ]}
-                )
-                actionstoexecForm
-                    .post('/actionstoexec')
-                    .then(data => {
-                        console.log('post actionstoexec: ', data)
-                    }).catch(error => {
-                        console.log('post actionstoexec error: ', error)
-                });
 
                 // get canexecstep
                 let newhasexecrole = true;
@@ -369,57 +362,20 @@
                 if (this.hasexecrole) {
                     if (this.bordereauremise.currmodelstep) {
                         if (this.bordereauremise.currmodelstep.workflow_step_id === this.bordereauremise.currmodelstep.exec.current_step_id) {
-
-                            axios.get(`/canexecstep/${this.bordereauremise.currmodelstep.exec.current_step_id}`)
-
-                                .then(resp => {
-                                    if (resp) {
-                                        newhasexecrole = newhasexecrole && (resp.data.hasroles === 1)
-                                        if (newhasexecrole) {
-                                            curr_step_actions_count = 1;
-                                        }
-                                        console.log('canexecthisstep (bordereauremise): ', newhasexecrole, curr_step_actions_count )
-                                    } else {
-                                        newhasexecrole = false;
-                                    }
-                                })
-                                .catch(err => {
-                                    console.log('get canexecstep error: ', err);
-                                    newhasexecrole = false;
-                                })
+                            curr_step_actions_count = 1;
                         }
                     }
                     if (this.bordereauremise.lignes) {
                         for (let i in this.bordereauremise.lignes) {
                             let ligne = this.bordereauremise.lignes[i]
                             if (ligne.currmodelstep && ligne.currmodelstep.workflow_step_id === ligne.currmodelstep.exec.current_step_id) {
-
-                                axios.get(`/canexecstep/${ligne.currmodelstep.exec.current_step_id}`)
-
-                                    .then(resp => {
-                                        console.log('get canexecstep: ', resp.data)
-                                        if (resp) {
-                                            console.log('canexecthisstep (ligne ' + i + '): ', resp.data.hasroles)
-                                            newhasexecrole = newhasexecrole && (resp.data.hasroles === 1)
-                                            if (newhasexecrole) {
-                                                curr_step_actions_count = curr_step_actions_count + 1;
-                                            }
-                                        } else {
-                                            newhasexecrole = false;
-                                        }
-                                    })
-                                    .catch(err => {
-                                        console.log('get canexecstep error: ', err);
-                                        newhasexecrole = false;
-                                    })
+                                curr_step_actions_count = curr_step_actions_count + 1;
                             }
                         }
                     }
                 } else {
                     newhasexecrole = false;
                 }
-                this.hasexecrole = newhasexecrole;
-                console.log('actionsToExec: ', this.hasexecrole, curr_step_actions_count);
                 return curr_step_actions_count;
             },
             scanUrl() {

@@ -151,7 +151,7 @@
                                             <td class="tw-px-4 tw-py-2">@{{ record.modepaiement_titre }}</td>
                                             <td class="tw-px-4 tw-py-2">@{{ record.bordereauremise_type_titre }}</td>
                                             <td class="tw-px-4 tw-py-2">@{{ record.localisation_titre }}</td>
-                                            <td class="tw-px-4 tw-py-2">@{{ record.montant_total }}</td>
+                                            <td class="tw-px-4 tw-py-2">@{{ record.montant_total | formatNumber }}</td>
                                             <td class="tw-px-4 tw-py-2">
                                                 <span v-if="record.workflow_currentstep_code == '0'" class="tw-text-xs tw-font-semibold tw-inline-block tw-py-1 tw-px-2 tw-rounded-full tw-text-green-600 tw-bg-green-200 last:tw-mr-0 tw-mr-1">@{{ record.workflow_currentstep_titre }}</span>
                                                 <span v-else-if="record.workflow_currentstep_code == 'step_0'" class="tw-text-xs tw-font-semibold tw-inline-block tw-py-1 tw-px-2 tw-rounded-full tw-text-purple-600 tw-bg-purple-200 last:tw-mr-0 tw-mr-1">@{{ record.workflow_currentstep_titre }}</span>

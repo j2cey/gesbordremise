@@ -55,6 +55,12 @@ Vue.filter('formatDate', function(value) {
     }
 })
 
+var numeral = require("numeral");
+
+Vue.filter("formatNumber", function (value) {
+    return numeral(value).format("0,0"); // displaying other groupings/separators is possible, look at the docs
+});
+
 import VueCtkDateTimePicker from 'vue-ctk-date-time-picker';
 import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
 
