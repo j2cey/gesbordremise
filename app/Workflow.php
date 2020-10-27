@@ -75,7 +75,7 @@ class Workflow extends BaseModel
         if (! $next_step) {
             // s'il n'y a pas d'étape à la suite de cette position,
             // on est à la fin du workflow
-            $next_step = WorkflowStep::coded("0")->first();
+            $next_step = WorkflowStep::coded("step_end")->first();
         }
         return $next_step;
     }

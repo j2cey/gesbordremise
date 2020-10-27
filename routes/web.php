@@ -77,3 +77,18 @@ Route::post('actionstoexec', 'WorkflowExecModelStepController@actionstoexec')->m
 //Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('settings','SettingController');
+
+Route::get('dashboards','DashboardController@index')
+    ->name('dashboards.index')
+    ->middleware('auth');
+Route::get('dashboards/fetch','DashboardController@fetch')
+    ->name('dashboards.fetch')
+    ->middleware('auth');
+Route::get('dashboards/fetchagence/{id}','DashboardController@fetchagence')
+    ->name('dashboards.fetchagence')
+    ->middleware('auth');
+
+
+Route::get('bordereauremiselocs.fetch','BordereauremiseLocController@fetch')
+    ->name('bordereauremiselocs.fetch')
+    ->middleware('auth');

@@ -162,6 +162,7 @@
                                                         <th>Montant</th>
                                                         <th>Date Valeur</th>
                                                         <th>Montant Validé</th>
+                                                        <th>Commentaire</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -179,6 +180,15 @@
                                                             <td>{{ ligne.montant }}</td>
                                                             <td>{{ ligne.date_valeur_finance | formatDate }}</td>
                                                             <td>{{ ligne.montant_depose_finance }}</td>
+                                                            <td>
+                                                                <span v-if="ligne.rejet_finances" class="text-red">
+                                                                    {{ ligne.motif_rejet_finances }}
+                                                                </span>
+                                                                <span v-else-if="ligne.date_valeur_finance" class="text-green">
+                                                                    {{ ligne.commentaire_finance }}
+                                                                </span>
+                                                                <span v-else class="text-blue">Non Traité</span>
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -392,4 +402,34 @@
 
                 if (this.bordereauremise.currmodelstep) {
                     if (this.bordereauremise.currmodelstep.workflow_step_id === this.bordereauremise.currmodelstep.exec.current_step_id) {
-  
+                        if (this.bordereauremise.currmodelstep.exec.currentstep.profile.id === this.userprofile.id) {
+                            curr_step_actions_count = 1;
+                        }
+                    }
+                }
+                if (this.bordereauremise.lignes) {
+                    for (let i in this.bordereauremise.lignes) {
+                        let ligne = this.bordereauremise.lignes[i]
+                        if (ligne.currmodelstep && ligne.currmodelstep.workflow_step_id === ligne.currmodelstep.exec.current_step_id) {
+                            if (ligne.currmodelstep.exec.current_step_role_id === this.userprofile.id) {
+                                curr_step_actions_count = curr_step_actions_count + 1;
+                            }
+                        }
+                    }
+                }
+                return curr_step_actions_count;
+            },
+            scanUrl() {
+                if (this.bordereauremise.scan_bordereau) {
+                    return '/uploads/bordereauremises/scans/' + this.bordereauremise.scan_bordereau
+                } else {
+                    return ""
+                }
+            }
+        }
+    }
+</script>
+
+<style scoped>
+
+</style>

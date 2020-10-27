@@ -48,6 +48,10 @@ class CreateBordereauremisesTable extends Migration
                 ->comment('référence du type de bordereau')
                 ->constrained('bordereauremise_types')->onDelete('set null');
 
+            $table->foreignId('bordereauremise_etat_id')->nullable()
+                ->comment('référence de l etat de bordereau')
+                ->constrained('bordereauremise_etats')->onDelete('set null');
+
             //TODO: Retirer ces champs après normalisation
             $table->string('localisation_titre')->nullable()->comment('titre de la localisation');
             $table->string('modepaiement_titre')->nullable()->comment('titre du mode de paiement');
@@ -71,6 +75,7 @@ class CreateBordereauremisesTable extends Migration
             $table->dropForeign(['bordereauremise_loc_id']);
             $table->dropForeign(['bordereauremise_modepaie_id']);
             $table->dropForeign(['bordereauremise_type_id']);
+            $table->dropForeign(['bordereauremise_etat_id']);
         });
         Schema::dropIfExists($this->table_name);
     }

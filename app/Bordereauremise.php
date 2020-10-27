@@ -43,6 +43,8 @@ use Illuminate\Support\Facades\DB;
  * @property integer|null $bordereauremise_modepaie_id
  * @property integer|null $bordereauremise_type_id
  *
+ * @property integer|null $bordereauremise_etat_id
+ *
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
@@ -68,6 +70,10 @@ class Bordereauremise extends BaseModel
         return $this->belongsTo(BordereauremiseType::class, 'bordereauremise_type_id');
     }
 
+    public function etat() {
+        return $this->belongsTo(BordereauremiseEtat::class, 'bordereauremise_etat_id');
+    }
+
     public function lignes() {
         return $this->hasMany('App\BordereauremiseLigne','bordereauremise_id');
     }
@@ -87,8 +93,67 @@ class Bordereauremise extends BaseModel
 
     #endregion
 
+    #region Custom functions
+
+    public function setEtat() {
+        // "Attente Traitement", 'code' => "state_1"
+        // "Traitement En Cours", 'code' => "state_2"
+        // "Validé Sans Ecart", 'code' => "state_3"
+        // "Validé Avec Ecart Positif", 'code' => "state_4"
+        // "Validé Avec Ecart Négatif", 'code' => "state_5"
+        // "Rejété", 'code' => "state_6"
+
+        $nb_all = 0;
+        $nb_en_attente = 0;
+        $nb_en_cours = 0;
+        $nb_valide = 0;
+        $nb_valide_pos = 0;
+        $nb_valide_neg = 0;
+        $nb_rejetes = 0;
+
+        foreach ($this->lignes as $ligne) {
+            $nb_all += 1;
+            if ($ligne->etat->code === "state_1") {
+                $nb_en_attente += 1;
+            } elseif ($ligne->etat->code === "state_2") {
+                $nb_en_cours += 1;
+            } elseif ($ligne->etat->code === "state_3") {
+                $nb_valide += 1;
+            } elseif ($ligne->etat->code === "state_4") {
+                $nb_valide_pos += 1;
+            } elseif ($ligne->etat->code === "state_5") {
+                $nb_valide_neg += 1;
+            } else {
+                $nb_rejetes += 1;
+            }
+        }
+
+        if ($nb_all === $nb_rejetes) {
+            $this->bordereauremise_etat_id = BordereauremiseEtat::coded('state_6')->first()->id;
+        } elseif ($nb_all === $nb_valide_neg) {
+            $this->bordereauremise_etat_id = BordereauremiseEtat::coded('state_5')->first()->id;
+        } elseif ($nb_all === $nb_valide_pos) {
+            $this->bordereauremise_etat_id = BordereauremiseEtat::coded('state_4')->first()->id;
+        } elseif ($nb_all === $nb_valide) {
+            $this->bordereauremise_etat_id = BordereauremiseEtat::coded('state_3')->first()->id;
+        } elseif ($nb_all === $nb_en_cours) {
+            $this->bordereauremise_etat_id = BordereauremiseEtat::coded('state_2')->first()->id;
+        } else {
+            $this->bordereauremise_etat_id = BordereauremiseEtat::coded('state_1')->first()->id;
+        }
+
+    }
+
+    #endregion
+
     public static function boot(){
         parent::boot();
+
+        // Avant creation
+        self::creating(function($model){
+            // on initialise l état
+            $model->bordereauremise_etat_id = BordereauremiseEtat::coded('state_1')->first()->id;
+        });
 
         // Après création
         self::created(function($model){

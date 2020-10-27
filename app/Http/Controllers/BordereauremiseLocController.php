@@ -17,6 +17,13 @@ class BordereauremiseLocController extends Controller
         //
     }
 
+    public function fetch()
+    {
+        $bordereauremiseLocs = BordereauremiseLoc::orderBy('titre','ASC')->get();
+
+        return $bordereauremiseLocs;
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -44,7 +51,7 @@ class BordereauremiseLocController extends Controller
      * @param  \App\BordereauremiseLoc  $bordereauremiseLoc
      * @return \Illuminate\Http\Response
      */
-    public function show(BordereauremiseLoc $bordereauremiseLoc)
+    public function show(BordereauremiseLoc $bordereauremiseloc)
     {
         //
     }
@@ -52,10 +59,10 @@ class BordereauremiseLocController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\BordereauremiseLoc  $bordereauremiseLoc
+     * @param  \App\BordereauremiseLoc  $bordereauremiseloc
      * @return \Illuminate\Http\Response
      */
-    public function edit(BordereauremiseLoc $bordereauremiseLoc)
+    public function edit(BordereauremiseLoc $bordereauremiseloc)
     {
         //
     }
@@ -64,10 +71,10 @@ class BordereauremiseLocController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\BordereauremiseLoc  $bordereauremiseLoc
+     * @param  \App\BordereauremiseLoc  $bordereauremiseloc
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, BordereauremiseLoc $bordereauremiseLoc)
+    public function update(Request $request, BordereauremiseLoc $bordereauremiseloc)
     {
         //
     }
@@ -75,10 +82,10 @@ class BordereauremiseLocController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\BordereauremiseLoc  $bordereauremiseLoc
+     * @param  \App\BordereauremiseLoc  $bordereauremiseloc
      * @return \Illuminate\Http\Response
      */
-    public function destroy(BordereauremiseLoc $bordereauremiseLoc)
+    public function destroy(BordereauremiseLoc $bordereauremiseloc)
     {
         //
     }

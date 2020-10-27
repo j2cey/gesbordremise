@@ -31,6 +31,10 @@ class CreateBordereauremiseLignesTable extends Migration
             $table->string('reference')->nullable()->comment('classe de paiement de la ligne');
             $table->integer('montant')->nullable()->comment('montant de la ligne');
 
+            $table->foreignId('bordereauremise_etat_id')->nullable()
+                ->comment('référence de l etat de la ligne bordereau')
+                ->constrained('bordereauremise_etats')->onDelete('set null');
+
             // Champs à modifier par le workflow (Finance)
             $table->timestamp('date_valeur_finance')->nullable()->comment('date valeur');
             $table->integer('montant_depose_finance')->nullable()->comment('montant déposé (finance)');
@@ -51,6 +55,7 @@ class CreateBordereauremiseLignesTable extends Migration
         Schema::table($this->table_name, function (Blueprint $table) {
             $table->dropBaseForeigns();
             $table->dropForeign(['bordereauremise_id']);
+            $table->dropForeign(['bordereauremise_etat_id']);
         });
         Schema::dropIfExists($this->table_name);
     }

@@ -13,9 +13,7 @@
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <router-link tag="a" to="/dashboard" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i> Dashboard
-                    </router-link>
+                    <a href="/dashboards" class="nav-link"><i class="nav-icon fas fa-tachometer-alt"></i> Dashboard</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Bordereaux Remise</a>

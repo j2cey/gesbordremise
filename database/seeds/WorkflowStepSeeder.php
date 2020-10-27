@@ -15,7 +15,7 @@ class WorkflowStepSeeder extends Seeder
         $workflowsteps = [
             [
                 'titre' => "Traitement Terminé",
-                'code' => "0",
+                'code' => "step_end",
                 'description' => "Etape marquant la fin de tout Workflow",
                 'posi' => 0,
             ],

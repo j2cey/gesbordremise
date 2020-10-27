@@ -102,7 +102,7 @@ class WorkflowExec extends BaseModel
             // on récupère l'étape suivante
             $next_step = $this->nextStep();
             $this->update([
-                'traitement_effectif' => $next_step->code == "0" ? 1 : 0, // le traitement est effectif si l'étape suivante est l'étape de fin (code = 0)
+                'traitement_effectif' => $next_step->code == "step_end" ? 1 : 0, // le traitement est effectif si l'étape suivante est l'étape de fin (code = 0)
                 'current_step_id' => $next_step->id,
             ]);
         }
