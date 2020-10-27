@@ -178,14 +178,16 @@ class BordereauremiseController extends Controller
     public function edit(Bordereauremise $bordereauremise)
     {
         $user = auth()->user();
+        $userprofile = $user->roles()->first();
+
         $exec_step_profile = $bordereauremise->workflowexec->currentstep->profile;
         $bordereauremise = Bordereauremise::where('id',$bordereauremise->id)
             ->first()
-            ->load(['type','localisation', 'modepaiement', 'lignes', 'lignes.currmodelstep','lignes.currmodelstep.exec','lignes.currmodelstep.step']);
+            ->load(['type','localisation', 'modepaiement', 'lignes', 'lignes.currmodelstep','lignes.currmodelstep.exec','lignes.currmodelstep.exec.currentstep','lignes.currmodelstep.exec.currentstep.profile','lignes.currmodelstep.step']);
             //->load(['type','lignes','localisation','workflowexec']);//,'workflowexec.currentstepactions','workflowexec.currentstep','workflowexec.currentstep.actions','workflowexec.currentstep.actions.type','workflowexec.currentstep.actions.objectfield','workflowexec.currentstep.profile','workflowexec.workflowstatus']);
             //->load(['type','lignes','localisation','workflowexec','workflowexec.currentstep','workflowexec.currentstep.actions','workflowexec.currentstep.actions.type','workflowexec.currentstep.actions.objectfield','workflowexec.currentstep.profile','workflowexec.workflowstatus']);
 
-        $bordereauremise->load(['currmodelstep','currmodelstep.exec','currmodelstep.step','currmodelstep.actions']);
+        $bordereauremise->load(['currmodelstep','currmodelstep.exec','currmodelstep.exec.currentstep','currmodelstep.exec.currentstep.profile','currmodelstep.step','currmodelstep.actions']);
 
         $hasexecrole = $exec_step_profile ? ( $user->hasRole([$exec_step_profile->name]) ? 1 : 0 ) : 0;
 
@@ -250,7 +252,7 @@ class BordereauremiseController extends Controller
 
         //dd($actionvalues);
 
-        return view('bordereauremises.edit', ['bordereauremise' => $bordereauremise, 'actionvalues' => json_encode($actionvalues), 'hasexecrole' => $hasexecrole]);
+        return view('bordereauremises.edit', ['bordereauremise' => $bordereauremise, 'actionvalues' => json_encode($actionvalues), 'hasexecrole' => $hasexecrole, 'userprofile' => $userprofile]);
     }
 
     private function addToActionValue($actionvalues, $execaction, $objectfield) {

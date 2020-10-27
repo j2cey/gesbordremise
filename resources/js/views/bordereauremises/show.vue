@@ -125,20 +125,39 @@
                                     <!-- /.card-header -->
                                     <div class="card-body">
                                         <div v-if="bordereauremise.type.code === 'BT_0'">
-                                            <dl class="row">
-                                                <dt class="col-sm-4">Date Valeur</dt>
-                                                <dd class="col-sm-8">{{ bordereauremise.lignes[0].date_valeur_finance | formatDate }}</dd>
-                                                <dt class="col-sm-4">Montant Validé</dt>
-                                                <dd class="col-sm-8">{{ bordereauremise.lignes[0].montant_depose_finance }}</dd>
-                                                <dt class="col-sm-4">Commentaire</dt>
-                                                <dd class="col-sm-8">{{ bordereauremise.lignes[0].commentaire_finance }}</dd>
-                                            </dl>
+
+
+                                            <dl class="row" v-if="bordereauremise.lignes[0].rejet_finances">
+
+                                                    <dt class="col-sm-4">Statut</dt>
+                                                    <dd class="8"><span class="badge badge-danger">Rejété</span></dd>
+                                                    <dt class="col-sm-4">Date Rejet</dt>
+                                                    <dd class="col-sm-8">{{ bordereauremise.lignes[0].date_valeur_finance | formatDate }}</dd>
+                                                    <dt class="col-sm-4">Motif Réjét</dt>
+                                                    <dd class="col-sm-8">{{ bordereauremise.lignes[0].motif_rejet_finances }}</dd>
+
+                                                </dl>
+                                            <dl class="row" v-else-if="bordereauremise.lignes[0].date_valeur_finance">
+                                                    <dd class="8"><span class="badge badge-success">Validé</span></dd>
+                                                    <dt class="col-sm-4">Date Valeur</dt>
+                                                    <dd class="col-sm-8">{{ bordereauremise.lignes[0].date_valeur_finance | formatDate }}</dd>
+                                                    <dt class="col-sm-4">Montant Validé</dt>
+                                                    <dd class="col-sm-8">{{ bordereauremise.lignes[0].montant_depose_finance }}</dd>
+                                                    <dt class="col-sm-4">Commentaire</dt>
+                                                    <dd class="col-sm-8">{{ bordereauremise.lignes[0].commentaire_finance }}</dd>
+                                                </dl>
+                                                <dl class="row" v-else>
+                                                    <dt class="col-sm-4">Statut</dt>
+                                                    <dd class="8"><span class="badge badge-primary">Non Traité</span></dd>
+                                                </dl>
+
                                         </div>
                                         <div v-else>
                                             <div class="card-body table-responsive p-0" style="height: 200px;">
                                                 <table class="table table-head-fixed text-nowrap">
                                                     <thead>
                                                     <tr>
+                                                        <th>Statut</th>
                                                         <th>Réf. Chèque</th>
                                                         <th>Montant</th>
                                                         <th>Date Valeur</th>
@@ -147,6 +166,15 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr v-for="(ligne, index) in bordereauremise.lignes" v-if="bordereauremise.lignes">
+                                                            <td>
+                                                                <span v-if="ligne.rejet_finances" class="badge badge-danger">
+                                                                    Rejété
+                                                                </span>
+                                                                <span v-else-if="ligne.date_valeur_finance" class="badge badge-success">
+                                                                    Validé
+                                                                </span>
+                                                                <span v-else class="badge badge-primary">Non Traité</span>
+                                                            </td>
                                                             <td>{{ ligne.reference }}</td>
                                                             <td>{{ ligne.montant }}</td>
                                                             <td>{{ ligne.date_valeur_finance | formatDate }}</td>
@@ -168,7 +196,7 @@
             </div>
             <!-- /.card -->
 
-            <div class="card" v-if="hasexecrole">
+            <div class="card" v-if="nbactionstoexec">
                 <div class="card-header">
                     <h3 class="card-title">Traitement(s) à Effecuer:
                         <span v-if="nbactionstoexec < 3" class="badge badge-pill badge-success">{{ nbactionstoexec }}</span>
@@ -251,7 +279,8 @@
         props: {
             bordereauremise_prop: {},
             actionvalues_prop: {},
-            hasexecrole_prop: 0
+            hasexecrole_prop: 0,
+            userprofile_prop: {} // TODO: Recevoir tous les profiles de l utilisateur et écrire une fonction pour évaluer le droit
         },
         components: {
             ImgShow, StepTreatment
@@ -274,6 +303,7 @@
                 filename: 'Télécharger un fichier',
                 filefieldname: null,
                 selectedFile : null,
+                userprofile: this.userprofile_prop
             };
         },
         methods: {
@@ -284,7 +314,8 @@
                 // MAJ de l'exec
                 //this.bordereauremise = data.exec;
                 let actionstoexec = this.actionsToExec();
-                if (actionstoexec) {
+                console.log('updateData - actionstoexec: ', actionstoexec)
+                if (actionstoexec > 0) {
                     this.hasexecrole = true;
                 } else {
                     this.hasexecrole = false;
@@ -315,7 +346,7 @@
                         this.$emit('traiter_etape', {execmodelstep, actionvalues, moredata})
                     });
             },
-            async canExecStep(stepid) {
+            canExecStep(stepid) {
 
                 axios.get(`/canexecstep/${stepid}`)
 
@@ -359,36 +390,6 @@
                 // get canexecstep
                 let newhasexecrole = true;
 
-                if (this.hasexecrole) {
-                    if (this.bordereauremise.currmodelstep) {
-                        if (this.bordereauremise.currmodelstep.workflow_step_id === this.bordereauremise.currmodelstep.exec.current_step_id) {
-                            curr_step_actions_count = 1;
-                        }
-                    }
-                    if (this.bordereauremise.lignes) {
-                        for (let i in this.bordereauremise.lignes) {
-                            let ligne = this.bordereauremise.lignes[i]
-                            if (ligne.currmodelstep && ligne.currmodelstep.workflow_step_id === ligne.currmodelstep.exec.current_step_id) {
-                                curr_step_actions_count = curr_step_actions_count + 1;
-                            }
-                        }
-                    }
-                } else {
-                    newhasexecrole = false;
-                }
-                return curr_step_actions_count;
-            },
-            scanUrl() {
-                if (this.bordereauremise.scan_bordereau) {
-                    return '/uploads/bordereauremises/scans/' + this.bordereauremise.scan_bordereau
-                } else {
-                    return ""
-                }
-            }
-        }
-    }
-</script>
-
-<style scoped>
-
-</style>
+                if (this.bordereauremise.currmodelstep) {
+                    if (this.bordereauremise.currmodelstep.workflow_step_id === this.bordereauremise.currmodelstep.exec.current_step_id) {
+  
